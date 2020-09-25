@@ -1,18 +1,12 @@
 from flask import Flask
 
-# globally accessible libraries
-# db = SQLAlchemy()
-
 def create_app():
     """Initialize the core application"""
     app = Flask(__name__, instance_relative_config=False)
-    app.config.from_object('config.DevConfig')
+    app.config.from_object('config.Config')
 
     # required to encrypt session
     app.secret_key = app.config['SECRET_KEY']
-
-    # initialize plugins
-    # db.init_app(app)
 
     with app.app_context():
         # import parts of the app

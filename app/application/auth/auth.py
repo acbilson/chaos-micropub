@@ -120,7 +120,7 @@ def get_user_uri(token):
     return response.json()['blog']
 
 def get_redirect_uri():
-    return f"{app.config['SITE']}{url_for('auth_bp.callback')}"
+    return f"{app.config['ME']}{url_for('auth_bp.callback')}"
 
 def retrieve_endpoints():
     return {

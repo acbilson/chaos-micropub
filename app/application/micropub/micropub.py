@@ -83,7 +83,7 @@ tags = [{tags}]
         cmd = f"{app.config['DEPLOY_FILE']} {filename}.md"
         output = os.system(cmd)
 
-        return redirect(app.config['HOME'])
+        return redirect(app.config['BASE_SITE'])
 
 def parse_to_list(text):
     return "\""+'","'.join(text.split(' '))+"\""

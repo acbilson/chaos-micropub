@@ -1,23 +1,21 @@
-#from os import environ
+from urllib.parse import urlparse
 from application import create_app
 
 app = create_app()
 
 env = app.config['FLASK_ENV']
-host = app.config['HOST']
-port = app.config['PORT']
-site = app.config['SITE']
-debug = True
+local = app.config['LOCAL']
+remote = app.config['REMOTE']
 
-if env == 'production':
-    debug = False
+local_url = urlparse(local)
+host, port = local_url.netloc.split(':')
 
-print(f"Flask app running at {host}:{port} in {env}")
-print(f"View the site at {site}")
+print(f"Flask app running in {env} at {local}")
+print(f"View the site at {remote}")
 
 if __name__ == "__main__":
     app.run(
         host=host,
         port=port,
-        debug=debug
+        debug=(env == 'development')
         )
