@@ -54,9 +54,6 @@ def create():
         if 'current_date' not in request.form:
             return "no date was passed to this endpoint. aborting."
 
-        # removes token to require auth every time
-        session.pop('access_token')
-
         now = datetime.fromisoformat(request.form['current_date'])
         filename = now.strftime('%Y%m%d-%H%M%S')
         date = now.isoformat()

@@ -14,8 +14,6 @@ state = app.config['SESSION_SECRET']
 # 3. GET  /callback sends auth code to token endpoint, stores token in session, then redirects to final route.
 # 4. GET  /create   does whatever I want
 
-# TODO: add verifications as decorators
-
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
