@@ -8,7 +8,8 @@ WORKDIR /app
 COPY ./requirements.txt .
 RUN pip3 install -r requirements.txt
 
-RUN mkdir -p /home/micropub/app
+COPY ./scripts /scripts
+RUN mkdir -p /dist/comments
 
 EXPOSE 8080
 ENTRYPOINT ["python3", "wsgi.py"]

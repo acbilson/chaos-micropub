@@ -1,7 +1,9 @@
 from flask import Blueprint, request, url_for, redirect, session
 from flask import current_app as app
 from pathlib import Path
+import sys
 import os
+import subprocess
 import re
 from datetime import datetime
 
@@ -15,7 +17,7 @@ def health():
 @micropub_bp.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'GET':
-        if 'access_token' not in session:
+        if not app.config['DEBUG'] and 'access_token' not in session:
             return redirect(url_for('auth_bp.login'))
 
         return """
@@ -47,7 +49,7 @@ def create():
 </html>
         """.format(url_for('micropub_bp.create'), url_for('static', filename='js/micropub.js'))
     else:
-        if 'access_token' not in session:
+        if not app.config['DEBUG'] and 'access_token' not in session:
             return redirect(url_for('auth_bp.login'))
         if 'content' not in request.form:
             return "no content was passed to this endpoint. aborting."
@@ -68,7 +70,7 @@ def create():
         if 'tags' in request.form:
             tags = parse_to_list(request.form['tags'])
 
-        new_file_path = Path(f"{app.config['CONTENT_PATH']}/{filename}.md")
+        new_file_path = Path(f"{app.config['CONTENT_PATH']}/comments/{filename}.md")
         content = f"""+++
 categories = ["{category}"]
 date = "{date}"
@@ -80,10 +82,21 @@ tags = [{tags}]
         with open(new_file_path, 'x') as f:
             f.write(content)
 
-        cmd = f"{app.config['DEPLOY_FILE']} {filename}.md"
-        output = os.system(cmd)
+        run_deploy_script(filename)
 
         return redirect(app.config['BASE_SITE'])
+
+def run_deploy_script(filename):
+    try:
+        cmd = f"{app.config['DEPLOY_FILE']} {filename}.md"
+        completed_proc = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if completed_proc.returncode < 0:
+            print("Child was terminated by signal", -completed_proc.returncode, file=sys.stderr)
+        else:
+            print("Child returned: ", completed_proc.returncode, file=sys.stderr)
+            print("Script returned: ", completed_proc.stdout, file=sys.stderr)
+    except OSError as e:
+        print("Execution failed:", e, file=sys.stderr)
 
 def parse_to_list(text):
     return "\""+'","'.join(text.split(' '))+"\""
