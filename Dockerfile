@@ -1,15 +1,11 @@
-FROM debian:buster-slim
+FROM python:alpine as develop
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install vim python3 python3-pip -y
+COPY ./app/flask-dance/requirements.txt .
+RUN pip install -r requirements.txt
 
 WORKDIR /app
-
-COPY ./requirements.txt .
-RUN pip3 install -r requirements.txt
-
-COPY ./scripts /scripts
-RUN mkdir -p /dist/comments
+COPY ./app/flask-dance/ .
 
 EXPOSE 8080
-ENTRYPOINT ["python3", "wsgi.py"]
+
+ENTRYPOINT ["flask", "run"]

@@ -1,0 +1,12 @@
+export FLASK_ENV=development
+export SESSION_SECRET=mysessionsecret
+export SECRET_KEY=mysecretkey
+export CLIENT_ID=myoauthclientid
+export CLIENT_SECRET=myoauthclientsecret
+
+export LOCAL=localhost
+export REMOTE=https://somewhere.else
+export BASE_SITE=whatthis?
+
+export CONTENT_PATH=/home
+export DEPLOY_FILE=/home
