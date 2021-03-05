@@ -1,0 +1,40 @@
+.entry-form {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin: 2%;
+}
+
+.categories {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.category {
+    margin: 0 10px;
+}
+
+.tags {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    margin-top: 1%;
+}
+
+.tag {
+    width: 80%;
+    margin: 0 10px;
+}
+
+.content {
+    width: 100%;
+    margin-top: 1%;
+}
+
+.buttons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    margin-top: 1%;
+}

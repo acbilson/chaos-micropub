@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Of Chaos and Order - Create</title>
+  <link href="{{ style }}" type="text/css" rel="stylesheet">
+  <link href="{{ normalize_style }}" type="text/css" rel="stylesheet">
+</head>
+  <body>
+    <form action="{{ create_route }}" method="POST" class="entry-form">
+
+      <div class="categories">
+        <input type="radio" name="category" value="personal" class="category">Personal</input>
+        <input type="radio" name="category" value="spiritual" class="category">Spiritual</input>
+        <input type="radio" name="category" value="business" class="category">Business</input>
+        <input type="radio" name="category" value="technology" class="category">Technology</input>
+        <input type="radio" name="category" value="resources" class="category">Resources</input>
+      </div>
+
+      <div class="tags">
+        <label for="tags">Tags:</label>
+        <input type="text" name="tags" class="tag">
+      </div>
+
+      <div>
+        <textarea name="content" rows=20 class="content"></textarea>
+      </div>
+
+      <div class="buttons">
+        <input id="date" type="text" name="current_date" value="" hidden>
+        <button type="submit">Publish</button>
+      </div>
+    </form>
+      <script type="text/javascript" src="{{ script }}"></script>
+  </body>
+</html>

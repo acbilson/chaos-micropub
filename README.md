@@ -1,2 +1,2 @@
 # chaos-micropub
-An IndieWeb micropub server.
+An ~IndieWeb~ original micropub server.

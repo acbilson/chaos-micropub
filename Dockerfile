@@ -1,11 +1,14 @@
-FROM python:alpine as develop
-
-COPY ./app/flask-dance/requirements.txt .
-RUN pip install -r requirements.txt
+FROM python:alpine as build
 
 WORKDIR /app
-COPY ./app/flask-dance/ .
+COPY ./src/requirements.txt .
+RUN pip install -r requirements.txt
+COPY ./src .
+RUN mkdir -p /home/comments
+COPY ./scripts/git-deploy.sh /usr/bin/
 
-EXPOSE 8080
-
-ENTRYPOINT ["flask", "run"]
+FROM build as develop
+ENV OAUTHLIB_INSECURE_TRANSPORT 1
+ENV FLASK_APP main
+EXPOSE 5000
+ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]

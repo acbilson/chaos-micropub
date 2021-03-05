@@ -1,3 +1,0 @@
-Flask
-flask-dance
-python-dotenv
