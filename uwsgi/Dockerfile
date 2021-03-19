@@ -15,6 +15,9 @@ COPY ./src/requirements.txt .
 RUN pip install -r requirements.txt
 COPY ./src .
 
+# remove build dependencies
+RUN apk del python3-dev build-base linux-headers
+
 # create path for new comments
 RUN mkdir -p /home/comments
 
