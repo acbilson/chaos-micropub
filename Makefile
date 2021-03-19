@@ -12,6 +12,11 @@ dev: build ## runs a local dev server
 build-deploy: ## builds a version to be used for deployment
 	docker build -f dockerfile.prod -t acbilson/chaos-micropub-nginx .
 
+.PHONY: build-prod
+build-prod: ## builds a production version of my containers
+	sudo podman build -f uwsgi/Dockerfile -t acbilson/chaos-micropub-uwsgi .; \
+	sudo podman build -f nginx/Dockerfile -t acbilson/chaos-micropub-nginx .
+
 .PHONY: build-uwsgi
 build-uwsgi: ## builds a uwsgi production-ready container
 	docker build -f uwsgi/Dockerfile -t acbilson/chaos-micropub-uwsgi .
@@ -24,6 +29,15 @@ build-nginx: ## builds a nginx container to serve my app
 run-uwsgi: build-uwsgi ## runs a local uwsgi container
 	docker run --rm -p 5000:5000 acbilson/chaos-micropub-uwsgi
 
+.PHONY: start
+start: build-prod ## runs a local production pod
+	sudo podman pod create -p 3000:3000 -n pod1; \
+  sudo podman run -dt --pod pod1 localhost/acbilson/chaos-micropub-uwsgi; \
+  sudo podman run -dt --pod pod1 localhost/acbilson/chaos-micropub-nginx
+
+.PHONY: stop
+stop: ## stops a local production pod
+	sudo podman pod stop pod1 && sudo podman pod rm pod1
 
 .PHONY: deploy
 deploy: build-deploy ## runs a local production server
