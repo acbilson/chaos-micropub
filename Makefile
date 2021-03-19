@@ -12,6 +12,19 @@ dev: build ## runs a local dev server
 build-deploy: ## builds a version to be used for deployment
 	docker build -f dockerfile.prod -t acbilson/chaos-micropub-nginx .
 
+.PHONY: build-uwsgi
+build-uwsgi: ## builds a uwsgi production-ready container
+	docker build -f uwsgi/Dockerfile -t acbilson/chaos-micropub-uwsgi .
+
+.PHONY: build-nginx
+build-nginx: ## builds a nginx container to serve my app
+	docker build -f nginx/Dockerfile -t acbilson/chaos-micropub-nginx .
+
+.PHONY: run-uwsgi
+run-uwsgi: build-uwsgi ## runs a local uwsgi container
+	docker run --rm -p 5000:5000 acbilson/chaos-micropub-uwsgi
+
+
 .PHONY: deploy
 deploy: build-deploy ## runs a local production server
 	docker run --rm -p 5002:80 acbilson/chaos-micropub-nginx
@@ -20,6 +33,10 @@ deploy: build-deploy ## runs a local production server
 clean: ## cleans the docker images
 	docker rmi acbilson/chaos-micropub-dev && \
   docker rmi acbilson/chaos-micropub-nginx
+
+.PHONY: copy-env
+copy-env: ## copies ignored file for storage
+	cp src/.env ~/safe/micropub/.env
 
 .PHONY: help
 help: ## show this help

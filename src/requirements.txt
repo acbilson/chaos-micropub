@@ -1,6 +1,7 @@
-beautifulsoup4
 Flask
+uwsgi
 flask-dance
+beautifulsoup4
 mf2py
 python-dotenv
 requests
