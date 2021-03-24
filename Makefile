@@ -1,56 +1,48 @@
 .POSIX:
 
-.PHONY: build
-build: ## builds a version to be used for local development
-	docker build --target develop -t acbilson/chaos-micropub-dev .
+.PHONY: config-dev
+config-dev: copy-env ## configures dev templates from env file
+	cp template/build-site.sh uwsgi/build-site.sh; \
+	cp template/micropub.ini uwsgi/micropub.ini
 
-.PHONY: dev
-dev: build ## runs a local dev server
-	docker run --rm -p 5000:5000 acbilson/chaos-micropub-dev
+.PHONY: config-prod
+config-prod: ## configures prod templates from env file
+	cp template/build-site.sh uwsgi/build-site.sh; \
+	cp template/micropub.ini uwsgi/micropub.ini
 
-.PHONY: build-deploy
-build-deploy: ## builds a version to be used for deployment
-	docker build -f dockerfile.prod -t acbilson/chaos-micropub-nginx .
+.PHONY: build-dev
+build-dev: config-dev ## builds a version to be used for development
+	docker build -f uwsgi/Dockerfile -t acbilson/micropub:alpine-3.12 .
 
 .PHONY: build-prod
-build-prod: ## builds a production version of my containers
-	sudo podman build -f uwsgi/Dockerfile -t acbilson/chaos-micropub-uwsgi .; \
-	sudo podman build -f nginx/Dockerfile -t acbilson/chaos-micropub-nginx .
+build-prod: config-prod ## builds a version to be used for production
+	sudo podman build -f uwsgi/Dockerfile -t acbilson/micropub:alpine-3.12 .
 
-.PHONY: build-uwsgi
-build-uwsgi: ## builds a uwsgi production-ready container
-	docker build -f uwsgi/Dockerfile -t acbilson/chaos-micropub-uwsgi .
+.PHONY: start-dev
+start-dev: build-dev ## runs a local development version
+	docker run --rm -d -p 5000:80 --env-file .env --name micropub \
+		-v ~/source/alexbilson.dev/hugo/config:/etc/hugo \
+		-v ~/source/chaos-content:/mnt/chaos/content \
+		-v ~/source/chaos-theme:/mnt/chaos/themes/chaos \
+		acbilson/micropub:alpine-3.12
 
-.PHONY: build-nginx
-build-nginx: ## builds a nginx container to serve my app
-	docker build -f nginx/Dockerfile -t acbilson/chaos-micropub-nginx .
+.PHONY: start-prod
+start-prod: ## run a production version
+	echo 'production micropub will be deployed across multiple containers'
 
-.PHONY: run-uwsgi
-run-uwsgi: build-uwsgi ## runs a local uwsgi container
-	docker run --rm -p 5000:5000 acbilson/chaos-micropub-uwsgi
-
-.PHONY: start
-start: build-prod ## runs a local production pod
-	sudo podman pod create -p 3000:3000 -n pod1; \
-  sudo podman run -dt --pod pod1 localhost/acbilson/chaos-micropub-uwsgi; \
-  sudo podman run -dt --pod pod1 localhost/acbilson/chaos-micropub-nginx
-
-.PHONY: stop
-stop: ## stops a local production pod
-	sudo podman pod stop pod1 && sudo podman pod rm pod1
-
-.PHONY: deploy
-deploy: build-deploy ## runs a local production server
-	docker run --rm -p 5002:80 acbilson/chaos-micropub-nginx
+.PHONY: test
+test: ## tests development docker image
+	curl http://localhost:5000/health --verbose; \
+  sleep 1 && docker logs micropub
 
 .PHONY: clean
-clean: ## cleans the docker images
-	docker rmi acbilson/chaos-micropub-dev && \
-  docker rmi acbilson/chaos-micropub-nginx
+clean: ## cleans remnants of the build process
+	docker rm micropub;
+	rm uwsgi/build-site.sh
 
 .PHONY: copy-env
-copy-env: ## copies ignored file for storage
-	cp src/.env ~/safe/micropub/.env
+copy-env: ## copies env for backup
+	mkdir -p ~/safe/micropub && cp .env ~/safe/micropub/env.bk
 
 .PHONY: help
 help: ## show this help

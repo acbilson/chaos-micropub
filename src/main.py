@@ -4,11 +4,12 @@ from app import create_app
 app = create_app()
 
 env = app.config['FLASK_ENV']
-host = app.config['HOST']
-port = app.config['PORT']
+site = app.config['SITE']
+host = '0.0.0.0'
+port = '80'
 
 print(f"Flask app running in {env} at {host}:{port}")
-print(f"View the site at localhost:5000")
+print(f"View the site at {site}")
 
 if __name__ == "__main__":
     app.run(

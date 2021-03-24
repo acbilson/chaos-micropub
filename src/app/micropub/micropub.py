@@ -61,7 +61,7 @@ def create():
       if "tags" in request.form:
         tags = parse_to_list(request.form["tags"])
 
-      new_file_path = Path(f"{app.config['CONTENT_PATH']}/comments/{filename}.md")
+      new_file_path = Path(f"/mnt/chaos/content/comments/{filename}.md")
       content = f"""+++
 categories = ["{category}"]
 date = "{date}"
@@ -73,14 +73,14 @@ tags = [{tags}]
       with open(new_file_path, "x") as f:
         f.write(content)
 
-      run_deploy_script(filename)
+      run_build_script()
 
       return redirect(app.config["SITE"])
 
 
-def run_deploy_script(filename):
+def run_build_script():
   try:
-    cmd = f"{app.config['DEPLOY_FILE']} {filename}.md"
+    cmd = f"/usr/local/bin/build-site.sh"
     completed_proc = subprocess.run(
       cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
     )
