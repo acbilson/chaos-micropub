@@ -1,4 +1,4 @@
-FROM python:3.9.2-alpine3.12
+FROM python:3.9.2-alpine3.12 as build
 
 # used by app to determine where the client-side code lives
 ENV STATIC_PATH /app/app/static
@@ -9,11 +9,16 @@ RUN apk add python3-dev build-base linux-headers pcre-dev
 # install requirements
 WORKDIR /app
 COPY ./src/requirements.txt .
-RUN pip install -r requirements.txt
-COPY ./src .
+RUN pip install --user -r requirements.txt
 
-# remove build dependencies
-RUN apk del python3-dev build-base linux-headers
+FROM python:3.9.2-alpine3.12 as run
+COPY --from=build /root/.local /root/.local
+
+# reinstalls a few dependencies
+RUN apk add pcre-dev
+
+# install source code
+COPY ./src .
 
 # load deployment script
 COPY ./uwsgi/build-site.sh /usr/local/bin/
@@ -22,4 +27,4 @@ COPY ./uwsgi/build-site.sh /usr/local/bin/
 COPY ./uwsgi/micropub.ini /etc/uwsgi/
 
 EXPOSE 5000
-ENTRYPOINT ["uwsgi", "--ini", "/etc/uwsgi/micropub.ini"]
+ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/uwsgi/micropub.ini"]
