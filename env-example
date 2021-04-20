@@ -1,7 +1,6 @@
-export FLASK_ENV=development
-export SITE=http://localhost:5000
-
-export FLASK_SECRET_KEY=mysecretkey
-export SESSION_SECRET=mysessionsecret
-export CLIENT_ID=myoauthclientid
-export CLIENT_SECRET=myoauthclientsecret
+FLASK_ENV=development
+SITE=http://localhost:5000
+FLASK_SECRET_KEY=mysecretkey
+SESSION_SECRET=mysessionsecret
+CLIENT_ID=myoauthclientid
+CLIENT_SECRET=myoauthclientsecret
