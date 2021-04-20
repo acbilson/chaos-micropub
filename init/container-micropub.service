@@ -13,7 +13,7 @@ Environment=PODMAN_SYSTEMD_UNIT=%n
 Restart=on-failure
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/container-micropub.pid %t/container-micropub.ctr-id
-ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-micropub.pid --cidfile %t/container-micropub.ctr-id --cgroups=no-conmon --replace --rm -d -p 3000:80 --env-file /mnt/msata/source/chaos-micropub/.env --name micropub -v /mnt/msata/source/alexbilson.dev/hugo/config:/etc/hugo -v /mnt/msata/source/chaos-content:/mnt/chaos/content -v /mnt/msata/source/chaos-theme/mnt/chaos/themes/chaos acbilson/micropub:alpine-3.12
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-micropub.pid --cidfile %t/container-micropub.ctr-id --cgroups=no-conmon --replace --rm -d -p 3000:80 --env-file /mnt/msata/source/chaos-micropub/.env --name micropub -v /mnt/msata/source/alexbilson.dev/hugo/config:/etc/hugo -v /mnt/msata/source/chaos-content:/mnt/chaos/content -v /mnt/msata/source/chaos-theme:/mnt/chaos/themes/chaos -v /mnt/msata/var/www/test:/var/www/site acbilson/micropub:alpine-3.12
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/container-micropub.ctr-id -t 10
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/container-micropub.ctr-id
 PIDFile=%t/container-micropub.pid

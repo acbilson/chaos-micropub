@@ -15,7 +15,7 @@ FROM python:3.9.2-alpine3.12 as run
 COPY --from=build /root/.local /root/.local
 
 # reinstalls a few dependencies
-RUN apk add pcre-dev
+RUN apk add pcre-dev hugo
 
 # install source code
 COPY ./src .
