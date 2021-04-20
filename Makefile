@@ -33,7 +33,7 @@ start-prod: ## run a production version
 .PHONY: test
 test: ## tests development docker image
 	curl http://localhost:5000/health --verbose; \
-  sleep 1 && docker logs micropub
+  sleep 1 && docker logs -n 5 micropub
 
 .PHONY: clean
 clean: ## cleans remnants of the build process
