@@ -6,11 +6,7 @@ chaos-micropub began as an IndieWeb micropub server and retains the name, but to
 
 # Configuration
 
-The entire workflow can be accomplished via Make, however, there is an initial configuration step necessary to get started.
-
-For an interactive configuration, run:
-
-`make init`
+The entire workflow can be accomplished via Make, however, you'll need to configure the scripts on which Make depends by creating a .env file. `env-example` supplies the required variables.
 
 
 # Developer Process
@@ -34,6 +30,7 @@ The processor architecture and container tooling I use in production differs fro
 
 Docker image: acbilson/micropub-dev:alpine-3.12
 Hugo config: config-dev.toml
+Hugo build script: build-site.sh
 Hugo theme: [acbilson/chaos-theme](https://github.com/acbilson/chaos-theme.git)
 Markdown content: [acbilson/chaos-content](https://github.com/acbilson/chaos-content.git)
 
@@ -41,7 +38,8 @@ Markdown content: [acbilson/chaos-content](https://github.com/acbilson/chaos-con
 
 - Docker
 - Make
-- OpenSSH
+- bash
+- envsubst
 
 ## Build
 
@@ -49,14 +47,13 @@ To build a local Docker developer image, run:
 
 `make build`
 
-The developer image runs the Flask application directly without UWSGI to take advantage of file change refresh.
-
+The developer image runs the Flask application directly without UWSGI to take advantage of file change refresh. Also, authentication is disabled in the developer image so I don't need a Github OAuth provider for local development.
 
 ## Run
 
 To start the developer container, run:
 
-`make start-dev`
+`make start`
 
 ## Test - TODO
 
@@ -71,6 +68,8 @@ Unit tests are run on the developer image with the following command:
 
 Docker image: acbilson/micropub-uat:alpine-3.12
 Hugo config: config.toml
+Hugo build script: build-site.sh
+UWSGI config: micropub.ini
 Hugo theme: [acbilson/chaos-theme](https://github.com/acbilson/chaos-theme.git)
 Markdown content: [acbilson/chaos-content](https://github.com/acbilson/chaos-content.git)
 
@@ -78,33 +77,31 @@ Markdown content: [acbilson/chaos-content](https://github.com/acbilson/chaos-con
 
 A production-like uat server with:
 
-- A container program that can build Dockerfiles and run containers
+- Podman
 - OpenSSH
+- bash
 
-## Build - TODO
+## Build
 
-To build a Docker verify image on the uat server, run:
+To build a Docker verify image on the UAT server, run:
 
 `make build-uat`
 
-## Run - TODO
+## Deploy
 
-To deploy the UAT environment, run:
+To deploy the image on the UAT server, run:
 
 `make deploy-uat`
 
 The UAT image runs the Flask application behind UWSGI to mimic the production instance.
 
-## Test - TODO
+## Test
 
-Smoke tests are run on the production image with:
+Smoke tests are run on the UAT container with:
 
 `make smoketest`
 
-Smoke tests depend on the presence of two Docker images to mimic the production environment:
-
-- nginx:alpine-stable
-- acbilson/webhook-uat:alpine-3.12
+Right now, this only performs a health check.
 
 
 # Deploy
@@ -113,6 +110,9 @@ Smoke tests depend on the presence of two Docker images to mimic the production 
 
 Docker image: acbilson/micropub:alpine-3.12
 Hugo config: config-uat.toml
+Hugo build script: build-site.sh
+UWSGI config: micropub.ini
+Systemd service file: container-micropub.service
 Hugo theme: [acbilson/chaos-theme](https://github.com/acbilson/chaos-theme.git)
 Markdown content: [acbilson/chaos-content](https://github.com/acbilson/chaos-content.git)
 
@@ -120,9 +120,11 @@ Markdown content: [acbilson/chaos-content](https://github.com/acbilson/chaos-con
 
 A production server with:
 
-- A container program that can build Dockerfiles and run containers
+- Podman
 - OpenSSH
-- A web proxy to broadcast this service to the public Web
+- bash
+- systemd
+- A web proxy like Nginx to broadcast this service to the public Web
 
 ## Build
 
@@ -136,4 +138,4 @@ To start the production service, run:
 
 `make deploy`
 
-The production image runs the Flask application behind UWSGI, which allows for multi-threading and interfaces with my web proxy.
+The production image runs the Flask application behind UWSGI, which allows for multi-threading and interfaces with my web proxy. The container is managed by systemd.
