@@ -11,5 +11,6 @@ docker run --rm \
   -v ${CONTENT_PATH}/chaos-content:/mnt/chaos/content \
   -v ${THEME_PATH}/chaos-theme:/mnt/chaos/themes/chaos \
   -v ${SITE_PATH}/site:/var/www/site \
+  -v ${SOURCE_PATH}/src:/mnt/src \
   --name micropub \
   acbilson/micropub-dev:alpine-3.12

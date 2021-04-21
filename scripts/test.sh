@@ -11,7 +11,7 @@ unit)
 
 smoke)
   echo "confirms health check"
-	curl ${UAT_SITE}/health --verbose
+	curl ${UAT_SITE}/healthcheck --verbose
 ;;
 
 *)

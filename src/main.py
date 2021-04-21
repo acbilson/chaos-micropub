@@ -5,10 +5,10 @@ app = create_app()
 
 env = app.config['FLASK_ENV']
 site = app.config['SITE']
-host = '0.0.0.0'
-port = '80'
+host = app.config['HOST']
+port = app.config['PORT']
 
-print(f"Flask app running in {env} at {host}:{port}")
+print(f"Flask app running in {env} mode at {host}:{port}")
 print(f"View the site at {site}")
 
 if __name__ == "__main__":

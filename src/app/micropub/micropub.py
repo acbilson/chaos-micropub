@@ -12,24 +12,15 @@ from datetime import datetime
 micropub_bp = Blueprint("micropub_bp", __name__)
 
 
-@micropub_bp.route("/health", methods=["GET"])
+@micropub_bp.route("/healthcheck", methods=["GET"])
 def health():
   return Response(status=200)
-
-
-@micropub_bp.route("/test", methods=["GET"])
-def test():
-  if not github.authorized:
-    return redirect(url_for("github.login"))
-  resp = github.get("/user")
-  assert resp.ok
-  return "You are @{login} on GitHub".format(login=resp.json()["login"])
 
 
 @micropub_bp.route("/", methods=["GET", "POST"])
 def create():
   if request.method == "GET":
-    if not github.authorized:
+    if not app.debug and not github.authorized:
       return redirect(url_for("github.login"))
     else:
       return render_template('create.html',
@@ -39,7 +30,7 @@ def create():
         script=url_for("static", filename="js/micropub.js")
       )
   else:
-    if not github.authorized:
+    if not app.debug and not github.authorized:
       return redirect(url_for("github.login"))
     else:
       if "content" not in request.form:
