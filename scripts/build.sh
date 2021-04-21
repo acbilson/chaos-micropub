@@ -6,6 +6,10 @@ ENVIRONMENT=$1
 case $ENVIRONMENT in
 
 dev)
+  mkdir dist && \
+    envsubst < template/build-site.sh > dist/build-site.sh && \
+    envsubst < template/config-dev.toml > dist/config.toml
+
   docker build -f Dockerfile \
     --target=dev \
     --build-arg EXPOSED_PORT=${EXPOSED_PORT} \

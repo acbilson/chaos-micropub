@@ -28,7 +28,7 @@ build: clean ## builds a local development Docker image
 
 .PHONY: start
 start: ## starts a local development Docker container
-	. ./scripts/start.sh dev
+	. ./scripts/start.sh
 
 .PHONY: unittest
 unittest: ## runs unit tests in a local development Docker container

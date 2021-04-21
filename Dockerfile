@@ -21,7 +21,11 @@ RUN apk add pcre-dev hugo
 COPY ./src .
 
 # load deployment script
-COPY ./uwsgi/build-site.sh /usr/local/bin/
+COPY ./dist/build-site.sh /usr/local/bin/
+
+# load hugo config
+RUN mkdir -p /etc/hugo
+COPY ./dist/config.toml /etc/hugo/
 
 ############
 # Development
@@ -29,7 +33,8 @@ COPY ./uwsgi/build-site.sh /usr/local/bin/
 
 FROM base as dev
 ENV FLASK_ENV development
-ENTRYPOINT ["flask", "run"]
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]
 
 #####
 # UAT
