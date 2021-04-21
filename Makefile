@@ -49,8 +49,6 @@ deploy-uat: ## deploys a remote UAT environment
 .PHONY: smoketest
 smoketest: ## runs smoke tests against the remote UAT environment
 	. ./scripts/test.sh smoke
-	curl http://localhost:5000/health --verbose; \
-  sleep 1 && docker logs -n 5 micropub
 
 #####################
 # Deployment Workflow
