@@ -36,6 +36,7 @@ PRD_CLIENT_SECRET=myprodclientsecret
 CONTENT_PATH=/path/to/markdown/content
 THEME_PATH=/path/to/hugo/theme
 SITE_PATH=/path/to/hugo/output
+SOURCE_PATH=/path/to/micropub/src
 
 UAT_CONTENT_PATH=/path/to/markdown/content
 UAT_THEME_PATH=/path/to/hugo/theme
