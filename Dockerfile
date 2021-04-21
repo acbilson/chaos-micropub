@@ -38,7 +38,7 @@ COPY ./dist/micropub.ini /etc/micropub
 
 FROM base as dev
 
-# mounts source code volume here
+# mount source code volume here
 WORKDIR /mnt/src
 
 ENV FLASK_ENV development
@@ -49,6 +49,7 @@ ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]
 #####
 
 FROM base as uat
+WORKDIR /app/src
 ENV FLASK_ENV production
 ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]
 
@@ -57,5 +58,6 @@ ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]
 ############
 
 FROM base as prod
+WORKDIR /app/src
 ENV FLASK_ENV production
 ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]

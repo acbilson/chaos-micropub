@@ -5,8 +5,8 @@ app = create_app()
 
 env = app.config['FLASK_ENV']
 site = app.config['SITE']
-host = app.config['HOST']
-port = app.config['PORT']
+host = app.config['FLASK_HOST']
+port = app.config['FLASK_PORT']
 
 print(f"Flask app running in {env} mode at {host}:{port}")
 print(f"View the site at {site}")
