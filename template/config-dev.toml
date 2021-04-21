@@ -1,4 +1,4 @@
-baseURL = "${DEV_SITE}"
+baseURL = "http://localhost:8080"
 languageCode = "en-us"
 title = "Of Chaos and Order"
 author = "Alex Bilson"

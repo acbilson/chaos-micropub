@@ -1,4 +1,4 @@
-baseURL = "${UAT_SITE}"
+baseURL = "https://uat.alexbilson.dev"
 languageCode = "en-us"
 title = "Of Chaos and Order"
 author = "Alex Bilson"

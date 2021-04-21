@@ -1,4 +1,4 @@
-baseURL = "${PRD_SITE}"
+baseURL = "https://alexbilson.dev"
 languageCode = "en-us"
 title = "Of Chaos and Order"
 author = "Alex Bilson"

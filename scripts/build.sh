@@ -49,7 +49,7 @@ prod)
   mkdir -p dist/dist && \
     envsubst < template/build-site.sh > dist/dist/build-site.sh && \
     envsubst < template/micropub.ini > dist/dist/micropub.ini && \
-    envsubst < template/config-prod.toml > dist/dist/config.toml \
+    envsubst < template/config-prod.toml > dist/dist/config.toml && \
     envsubst < template/container-micropub.service > dist/container-micropub.service
 
   echo "copies files to distribute..."
