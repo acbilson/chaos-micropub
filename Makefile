@@ -8,10 +8,6 @@
 init: ## initializes the project configuration
 	. ./scripts/init.sh
 
-.PHONY: clean
-clean: ## cleans remnants of the build process
-	. ./scripts/clean.sh
-
 .PHONY: help
 help: ## show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | \
@@ -21,6 +17,10 @@ help: ## show this help
 ######################
 # Development Workflow
 ######################
+
+.PHONY: clean
+clean: ## cleans remnants of the build process
+	. ./scripts/clean.sh dev
 
 .PHONY: build
 build: clean ## builds a local development Docker image
@@ -38,13 +38,21 @@ unittest: ## runs unit tests in a local development Docker container
 # UAT Workflow
 ##############
 
+.PHONY: clean-uat
+clean-uat: clean ## cleans remnants of the build process on the UAT machine
+	. ./scripts/clean.sh uat
+
 .PHONY: build-uat
-build-uat: clean ## builds a remote UAT Docker image
+build-uat: clean-uat ## builds a remote UAT Docker image
 	. ./scripts/build.sh uat
 
 .PHONY: deploy-uat
 deploy-uat: ## deploys a remote UAT environment
 	. ./scripts/deploy.sh uat
+
+.PHONY: stop-uat
+stop-uat: ## stops a remote UAT environment
+	. ./scripts/stop.sh uat
 
 .PHONY: smoketest
 smoketest: ## runs smoke tests against the remote UAT environment
@@ -54,8 +62,12 @@ smoketest: ## runs smoke tests against the remote UAT environment
 # Deployment Workflow
 #####################
 
+.PHONY: clean-prod
+clean-prod: clean ## cleans remnants of the build process on the production machine
+	. ./scripts/clean.sh prod
+
 .PHONY: build-prod
-build-prod: clean ## builds a remote production Docker image
+build-prod: clean-prod ## builds a remote production Docker image
 	. ./scripts/build.sh prod
 
 .PHONY: deploy

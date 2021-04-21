@@ -27,6 +27,10 @@ COPY ./dist/build-site.sh /usr/local/bin/
 RUN mkdir -p /etc/hugo
 COPY ./dist/config.toml /etc/hugo/
 
+# load uwsgi config
+RUN mkdir -p /etc/micropub
+COPY ./dist/micropub.ini /etc/micropub
+
 ############
 # Development
 #############
@@ -41,8 +45,8 @@ ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]
 #####
 
 FROM base as uat
-ENV FLASK_ENV development
-ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/uwsgi/micropub.ini"]
+ENV FLASK_ENV uat
+ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]
 
 ############
 # Production
@@ -50,4 +54,4 @@ ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/uwsgi/micropub.ini"]
 
 FROM base as prod
 ENV FLASK_ENV production
-ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/uwsgi/micropub.ini"]
+ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]

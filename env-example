@@ -1,6 +1,46 @@
-FLASK_ENV=development
-SITE=http://localhost:5000
-FLASK_SECRET_KEY=mysecretkey
-SESSION_SECRET=mysessionsecret
-CLIENT_ID=myoauthclientid
-CLIENT_SECRET=myoauthclientsecret
+########
+# Global
+########
+
+# remote hosts
+# I use an ssh config file to specify the user/ip combination
+# for ssh interaction. These are hosts specified in ~/.ssh/config
+PROD_HOST=web
+UAT_HOST=web
+
+# Session keys
+FLASK_SECRET_KEY="mysecretflaskkey"
+SESSION_SECRET="mysessionsecret"
+
+######################
+# Environment-Specific
+######################
+
+# The port exposed by the service.
+EXPOSED_PORT=5000
+UAT_EXPOSED_PORT=5001
+
+# The public-facing url. May be routed behind a proxy. Must match OAuth redirect.
+DEV_SITE=http://localhost:${EXPOSED_PORT}
+UAT_SITE=http://uat-env:${UAT_EXPOSED_PORT}
+PRD_SITE=https://prod-env
+
+
+# OAuth authentication keys
+UAT_CLIENT_ID=myuatclientid
+UAT_CLIENT_SECRET=myuatclientsecret
+PRD_CLIENT_ID=myprodclientid
+PRD_CLIENT_SECRET=myprodclientsecret
+
+# paths
+CONTENT_PATH=/path/to/markdown/content
+THEME_PATH=/path/to/hugo/theme
+SITE_PATH=/path/to/hugo/output
+
+UAT_CONTENT_PATH=/path/to/markdown/content
+UAT_THEME_PATH=/path/to/hugo/theme
+UAT_SITE_PATH=/path/to/hugo/output
+
+PRD_CONTENT_PATH=/path/to/markdown/content
+PRD_THEME_PATH=/path/to/hugo/theme
+PRD_SITE_PATH=/path/to/hugo/output
