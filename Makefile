@@ -4,10 +4,6 @@
 # Additional Tasks
 ##################
 
-.PHONY: init
-init: ## initializes the project configuration
-	. ./scripts/init.sh
-
 .PHONY: help
 help: ## show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | \
