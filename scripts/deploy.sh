@@ -15,19 +15,15 @@ uat)
       -e "CLIENT_SECRET=${UAT_CLIENT_SECRET}" \
       -e "FLASK_SECRET_KEY=${FLASK_SECRET_KEY}" \
       -e "SESSION_SECRET=${SESSION_SECRET}" \
-      -v ${UAT_CONTENT_PATH}/chaos-content:/mnt/chaos/content \
-      -v ${UAT_THEME_PATH}/chaos-theme:/mnt/chaos/themes/chaos \
-      -v ${UAT_SITE_PATH}/uat:/var/www/site \
+      -v ${PRD_CONTENT_PATH}/chaos-content:/mnt/chaos/content \
       --name micropub-uat \
       acbilson/micropub-uat:alpine-3.12
 ;;
 
 prod)
-  echo "deploying systemctl service file..."
-  scp dist/container-micropub.service ${PROD_HOST}:/etc/system/systemd/
-
   echo "enabling micropub service..."
-  ssh -t ${PROD_HOST} sudo systemctl daemon-reload && sudo systemctl enable container-micropub.service
+  ssh -t ${PROD_HOST} sudo systemctl daemon-reload
+  ssh -t ${PROD_HOST} sudo systemctl enable --now container-micropub.service
 ;;
 
 *)

@@ -1,6 +1,7 @@
 ########
 # Global
 ########
+set -a # exports vars - docker needs no export, but bash scripts do
 
 # remote hosts
 # I use an ssh config file to specify the user/ip combination
@@ -34,14 +35,5 @@ PRD_CLIENT_SECRET=myprodclientsecret
 
 # paths
 CONTENT_PATH=/path/to/markdown/content
-THEME_PATH=/path/to/hugo/theme
 SITE_PATH=/path/to/hugo/output
 SOURCE_PATH=/path/to/micropub/src
-
-UAT_CONTENT_PATH=/path/to/markdown/content
-UAT_THEME_PATH=/path/to/hugo/theme
-UAT_SITE_PATH=/path/to/hugo/output
-
-PRD_CONTENT_PATH=/path/to/markdown/content
-PRD_THEME_PATH=/path/to/hugo/theme
-PRD_SITE_PATH=/path/to/hugo/output

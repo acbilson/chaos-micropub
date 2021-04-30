@@ -13,7 +13,7 @@ Environment=PODMAN_SYSTEMD_UNIT=%n
 Restart=on-failure
 TimeoutStopSec=70
 ExecStartPre=/bin/rm -f %t/container-micropub.pid %t/container-micropub.ctr-id
-ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-micropub.pid --cidfile %t/container-micropub.ctr-id --cgroups=no-conmon --replace --rm -d -p ${EXPOSED_PORT}:80 -e "SITE=${PRD_SITE}" -e "CLIENT_ID=${PRD_CLIENT_ID}" -e "CLIENT_SECRET=${PRD_CLIENT_SECRET}" -e "FLASK_SECRET_KEY=${FLASK_SECRET_KEY}" -e "SESSION_SECRET=${SESSION_SECRET}" --name micropub -v ${PRD_CONTENT_PATH}/chaos-content:/mnt/chaos/content -v ${PRD_THEME_PATH}/chaos-theme:/mnt/chaos/themes/chaos -v ${PRD_SITE_PATH}/alexbilson.dev:/var/www/site acbilson/micropub:alpine-3.12
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/container-micropub.pid --cidfile %t/container-micropub.ctr-id --cgroups=no-conmon --replace --rm -d -p ${EXPOSED_PORT}:80 -e "SITE=${PRD_SITE}" -e "CLIENT_ID=${PRD_CLIENT_ID}" -e "CLIENT_SECRET=${PRD_CLIENT_SECRET}" -e "FLASK_SECRET_KEY=${FLASK_SECRET_KEY}" -e "SESSION_SECRET=${SESSION_SECRET}" --name micropub -v ${PRD_CONTENT_PATH}/chaos-content:/mnt/chaos/content -v ${PRD_SITE_PATH}/alexbilson.dev:/var/www/site acbilson/micropub:alpine-3.12
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/container-micropub.ctr-id -t 10
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/container-micropub.ctr-id
 PIDFile=%t/container-micropub.pid

@@ -3,6 +3,8 @@ from flask_dance.contrib.github import github
 from flask import current_app as app
 from pathlib import Path
 import sys
+import pwd
+import grp
 import os
 import subprocess
 import re
@@ -64,16 +66,20 @@ tags = [{tags}]
       with open(new_file_path, "x") as f:
         f.write(content)
 
-      run_build_script()
+      run_build_script(new_file_path)
 
       return redirect(app.config["SITE"])
 
 
-def run_build_script():
+def run_build_script(file_path):
   try:
-    cmd = f"/usr/local/bin/build-site.sh"
+    cmd = ["/usr/local/bin/build-site.sh", f"{file_path}"]
     completed_proc = subprocess.run(
-      cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+      cmd,
+      shell=False,
+      stdout=subprocess.PIPE,
+      stderr=subprocess.STDOUT,
+      universal_newlines=True
     )
     if completed_proc.returncode < 0:
       print(
@@ -83,7 +89,8 @@ def run_build_script():
       )
     else:
       print("Child returned: ", completed_proc.returncode, file=sys.stderr)
-      print("Script returned: ", completed_proc.stdout, file=sys.stderr)
+      print("Script returned: ")
+      print(completed_proc.stdout, file=sys.stderr)
   except OSError as e:
     print("Execution failed:", e, file=sys.stderr)
 

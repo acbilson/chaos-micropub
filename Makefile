@@ -69,3 +69,7 @@ build-prod: clean-prod ## builds a remote production Docker image
 .PHONY: deploy
 deploy: ## deploys the remote production Docker image
 	. ./scripts/deploy.sh prod
+
+.PHONY: stop
+stop: ## stops the remote prod service
+	. ./scripts/stop.sh prod

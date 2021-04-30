@@ -8,8 +8,6 @@ docker run --rm \
   -e "CLIENT_SECRET=${UAT_CLIENT_SECRET}" \
   -e "FLASK_SECRET_KEY=${FLASK_SECRET_KEY}" \
   -e "SESSION_SECRET=${SESSION_SECRET}" \
-  -v ${CONTENT_PATH}/chaos-content:/mnt/chaos/content \
-  -v ${THEME_PATH}/chaos-theme:/mnt/chaos/themes/chaos \
   -v ${SITE_PATH}/site:/var/www/site \
   -v ${SOURCE_PATH}/src:/mnt/src \
   --name micropub \

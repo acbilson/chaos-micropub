@@ -8,9 +8,8 @@ case $ENVIRONMENT in
 dev)
   echo "creates files from template..."
   mkdir dist && \
-    envsubst < template/build-site.sh > dist/build-site.sh && \
-    envsubst < template/micropub.ini > dist/micropub.ini && \
-    envsubst < template/config-dev.toml > dist/config.toml
+    cp template/build-site.sh dist/build-site.sh && \
+    envsubst < template/micropub.ini > dist/micropub.ini
 
   echo "builds development image..."
   docker build -f Dockerfile \
@@ -22,9 +21,8 @@ dev)
 uat)
   echo "creates files from template..."
   mkdir -p dist/dist && \
-    envsubst < template/build-site.sh > dist/dist/build-site.sh && \
-    envsubst < template/micropub.ini > dist/dist/micropub.ini && \
-    envsubst < template/config-dev.toml > dist/dist/config.toml
+    cp template/build-site.sh dist/dist/build-site.sh && \
+    envsubst < template/micropub.ini > dist/dist/micropub.ini
 
   echo "copies files to distribute..."
   cp Dockerfile dist/
@@ -47,9 +45,8 @@ uat)
 prod)
   echo "creates files from template..."
   mkdir -p dist/dist && \
-    envsubst < template/build-site.sh > dist/dist/build-site.sh && \
+    cp template/build-site.sh dist/dist/build-site.sh && \
     envsubst < template/micropub.ini > dist/dist/micropub.ini && \
-    envsubst < template/config-prod.toml > dist/dist/config.toml && \
     envsubst < template/container-micropub.service > dist/container-micropub.service
 
   echo "copies files to distribute..."

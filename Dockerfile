@@ -15,22 +15,18 @@ FROM python:3.9.2-alpine3.12 as base
 COPY --from=build /root/.local /root/.local
 
 # (re)installs a few dependencies
-RUN apk add pcre-dev hugo
-
-# install source code
-COPY ./src /app/src
+RUN apk add pcre-dev git
 
 # load deployment script
 COPY ./dist/build-site.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/build-site.sh
 
-# load hugo config
-RUN mkdir -p /etc/hugo
-COPY ./dist/config.toml /etc/hugo/
-
 # load uwsgi config
 RUN mkdir -p /etc/micropub
 COPY ./dist/micropub.ini /etc/micropub
+
+# install source code
+COPY ./src /app/src
 
 #############
 # Development
