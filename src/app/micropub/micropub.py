@@ -50,15 +50,19 @@ def create():
         category = request.form["category"]
 
       tags = ""
-
       if "tags" in request.form:
         tags = parse_to_list(request.form["tags"])
+
+      comments = ''
+      if "comments" in request.form and request.form["comments"] == 'on':
+        comments = 'comments = true'
 
       new_file_path = Path(f"/mnt/chaos/content/comments/{filename}.md")
       content = f"""+++
 categories = ["{category}"]
 date = "{date}"
 tags = [{tags}]
+{comments}
 +++
 {request.form['content']}
       """

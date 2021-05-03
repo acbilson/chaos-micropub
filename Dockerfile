@@ -34,6 +34,9 @@ COPY ./src /app/src
 
 FROM base as dev
 
+# makes comment directory
+RUN mkdir -p /mnt/chaos/content/comments
+
 # mount source code volume here
 WORKDIR /mnt/src
 
