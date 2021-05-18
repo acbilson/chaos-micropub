@@ -1,38 +1,53 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Of Chaos and Order - Create</title>
-  <link href="{{ style }}" type="text/css" rel="stylesheet">
-  <link href="{{ normalize_style }}" type="text/css" rel="stylesheet">
+    <title>Of Chaos and Order - Create</title>
+    <link href="{{ style }}" type="text/css" rel="stylesheet">
+    <link href="{{ normalize_style }}" type="text/css" rel="stylesheet">
 </head>
-  <body>
+
+<body>
     <form action="{{ create_route }}" method="POST" class="entry-form">
 
-      <div class="categories">
-        <input type="radio" name="category" value="personal" class="category">Personal</input>
-        <input type="radio" name="category" value="spiritual" class="category">Spiritual</input>
-        <input type="radio" name="category" value="business" class="category">Business</input>
-        <input type="radio" name="category" value="technology" class="category">Technology</input>
-        <input type="radio" name="category" value="resources" class="category">Resources</input>
+      <p>Select an overall category for this comment:</p>
+       <div class="categories">
+            <div><input id="personal" type="radio" name="category" value="personal" class="category" /><label for="personal">Personal</label></div>
+            <div><input id="spiritual" type="radio" name="category" value="spiritual" class="category" /><label for="spiritual">Spiritual</label></div>
+            <div><input id="business" type="radio" name="category" value="business" class="category" /><label for="business">Business</label></div>
+            <div><input id="technology" type="radio" name="category" value="technology" class="category" /><label for=" technology">Technology</label></div>
+            <div><input id="resources" type="radio" name="category" value="resources" class="category" /><label for="resources">Resources</label></div>
       </div>
+
+      <p>Enter your comment. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
+      <div>
+        <textarea name="content" rows=20 class="content"></textarea>
+      </div>
+
+      <p>Enter a few tags, separated by spaces, to help find this comment:</p>
+
+      <blockquote>
+        Examples:<br />
+        <ul>
+        <li>link children parenting</li>
+        <li>family travel</li>
+        <li>gratitude</li>
+        </ul>
+      </blockquote>
 
       <div class="tags">
         <label for="tags">Tags:</label>
         <input type="text" name="tags" class="tag">
       </div>
 
-      <div>
-        <textarea name="content" rows=20 class="content"></textarea>
-      </div>
-
-      <div>
-      <label for="comments">Allow Comments?</label>
-      <input type="checkbox" id="comments" name="comments" checked>
+      <p>Select your options, then click publish!</p>
+      <div class="options">
+          <div><input id="comments" type="checkbox" name="comments" class="option" checked><label for="comments">Allow Comments?</label></div>
       </div>
 
       <div class="buttons">
         <input id="date" type="text" name="current_date" value="" hidden>
-        <button type="submit">Publish</button>
+        <button type="submit">Publish!</button>
       </div>
     </form>
       <script type="text/javascript" src="{{ script }}"></script>
