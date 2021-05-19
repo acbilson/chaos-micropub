@@ -9,6 +9,7 @@ class Config:
 
     FLASK_SECRET_KEY = environ.get('FLASK_SECRET_KEY')
     SESSION_SECRET = environ.get('SESSION_SECRET')
+
     GITHUB_CLIENT_ID = environ.get('GITHUB_CLIENT_ID')
     GITHUB_CLIENT_SECRET = environ.get('GITHUB_CLIENT_SECRET')
     GOOGLE_CLIENT_ID = environ.get('GOOGLE_CLIENT_ID')

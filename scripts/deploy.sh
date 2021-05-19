@@ -11,8 +11,8 @@ uat)
     sudo podman run --rm -d \
       --expose ${UAT_EXPOSED_PORT} -p ${UAT_EXPOSED_PORT}:80 \
       -e "SITE=${UAT_SITE}" \
-      -e "CLIENT_ID=${UAT_CLIENT_ID}" \
-      -e "CLIENT_SECRET=${UAT_CLIENT_SECRET}" \
+      -e "GITHUB_CLIENT_ID=${UAT_GITHUB_CLIENT_ID}" \
+      -e "GITHUB_CLIENT_SECRET=${UAT_GITHUB_CLIENT_SECRET}" \
       -e "FLASK_SECRET_KEY=${FLASK_SECRET_KEY}" \
       -e "SESSION_SECRET=${SESSION_SECRET}" \
       -v ${PRD_CONTENT_PATH}/chaos-content:/mnt/chaos/content \

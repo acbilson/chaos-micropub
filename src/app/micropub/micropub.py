@@ -6,8 +6,8 @@ from flask import (
     redirect,
     Response,
 )
-from werkzeug.utils import secure_filename
 from flask_dance.contrib.github import github
+from flask_dance.contrib.google import google
 from flask import current_app as app
 from pathlib import Path
 import sys
@@ -26,7 +26,7 @@ def health():
 @micropub_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        if app.debug or not github.authorized:
+        if not app.debug and not authorized():
             return render_template(
                 "login.html",
                 style=url_for("static", filename="css/micropub.css"),
@@ -55,7 +55,7 @@ def login():
 @micropub_bp.route("/", methods=["GET", "POST"])
 def create():
     if request.method == "GET":
-        if not app.debug and not github.authorized:
+        if not app.debug and not authorized():
             return redirect(url_for("micropub_bp.login"))
         else:
             return render_template(
@@ -66,7 +66,7 @@ def create():
                 script=url_for("static", filename="js/micropub.js"),
             )
     elif request.method == "POST":
-        if not app.debug and not github.authorized:
+        if not app.debug and not authorized():
             return redirect(url_for("micropub_bp.login"))
         else:
             if "content" not in request.form:
@@ -138,3 +138,39 @@ def run_build_script(file_path):
 
 def parse_to_list(text):
     return '"' + '","'.join(text.split(" ")) + '"'
+
+
+def authorized():
+    if github.authorized:
+        user = get_user("github")
+        if user == "acbilson":
+            return True
+        else:
+            print(f"github user {user} is not authorized")
+            return False
+
+    elif google.authorized:
+        user = get_user("google")
+        if user in [
+            "Alexander Bilson",
+            "Amie Bilson",
+        ]:
+            return True
+        else:
+            print(f"google user {user} is not authorized")
+            return False
+
+    else:
+        print(f"no oauth providers have authenticated this login")
+        return False
+
+
+def get_user(provider):
+    if provider == "github":
+        resp = github.get("/user")
+        assert resp.ok
+        return resp.json()["login"]
+    elif provider == "google":
+        resp = google.get("/oauth2/v3/userinfo")
+        assert resp.ok, resp.text
+        return resp.json()["name"]

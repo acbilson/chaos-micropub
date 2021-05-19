@@ -7,8 +7,7 @@ case $ENVIRONMENT in
 
 uat)
   echo "stops container in uat..."
-  ssh -t ${UAT_HOST}
-    sudo podman stop micropub-uat
+  ssh -t ${UAT_HOST} sudo podman stop micropub-uat
 ;;
 
 prod)

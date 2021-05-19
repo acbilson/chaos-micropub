@@ -28,10 +28,13 @@ PRD_SITE=https://prod-env
 
 
 # OAuth authentication keys
-UAT_CLIENT_ID=myuatclientid
-UAT_CLIENT_SECRET=myuatclientsecret
-PRD_CLIENT_ID=myprodclientid
-PRD_CLIENT_SECRET=myprodclientsecret
+UAT_GITHUB_CLIENT_ID=myuatclientid
+UAT_GITHUB_CLIENT_SECRET=myuatclientsecret
+
+PRD_GITHUB_CLIENT_ID=myprodclientid
+UAT_GITHUB_CLIENT_SECRET=myprodclientsecret
+PRD_GOOGLE_CLIENT_ID=myprodclientid
+PRD_GOOGLE_CLIENT_SECRET=myprodclientsecret
 
 # paths
 CONTENT_PATH=/path/to/markdown/content
