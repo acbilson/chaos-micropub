@@ -6,7 +6,7 @@ ENV STATIC_PATH /app/app/static
 # install uwsgi dependencies
 RUN apk add python3-dev build-base linux-headers pcre-dev
 
-# install requirements
+# Installs python packages to the users local folder
 WORKDIR /app
 COPY ./src/requirements.txt /app/
 RUN pip install --user -r requirements.txt
@@ -34,8 +34,9 @@ COPY ./src /app/src
 
 FROM base as dev
 
-# makes comment directory
-RUN mkdir -p /mnt/chaos/content/comments
+# makes content directories
+RUN mkdir -p /mnt/chaos/content/logs; \
+    mkdir -p /mnt/chaos/content/notes
 
 # mount source code volume here
 WORKDIR /mnt/src

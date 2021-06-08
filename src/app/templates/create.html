@@ -11,36 +11,41 @@
 </head>
 
 <body>
-    <form action="{{ create_route }}" method="POST" class="entry-form">
 
-      <p>Select an overall category for this comment:</p>
-       <div class="categories">
-            <div><input id="personal" type="radio" name="category" value="personal" class="category" /><label for="personal">Personal</label></div>
-            <div><input id="spiritual" type="radio" name="category" value="spiritual" class="category" /><label for="spiritual">Spiritual</label></div>
-            <div><input id="business" type="radio" name="category" value="business" class="category" /><label for="business">Business</label></div>
-            <div><input id="technology" type="radio" name="category" value="technology" class="category" /><label for=" technology">Technology</label></div>
-            <div><input id="resources" type="radio" name="category" value="resources" class="category" /><label for="resources">Resources</label></div>
-      </div>
+    <div class="">
+    <p>Select a post type:</p>
+    <button id="post-type-log" type="submit">Log</button>
+    <button id="post-type-note" type="submit">Note</button>
+    </div>
 
-      <p>Enter your comment. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
+    <!-- The form for entering a new log -->
+    <form id="log-form" action="{{ create_route }}" method="POST" class="entry-form">
+
+      <p>Enter your log. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
       <div>
         <textarea name="content" rows=20 class="content"></textarea>
       </div>
 
-      <p>Enter a few tags, separated by spaces, to help find this comment:</p>
+      <div class="buttons">
+        <input id="log_date" type="text" name="current_date" value="" hidden>
+        <input id="type" type="text" name="post_type" value="log" hidden>
+        <button type="submit">Publish!</button>
+      </div>
+    </form>
 
-      <blockquote>
-        Examples:<br />
-        <ul>
-        <li>link children parenting</li>
-        <li>family travel</li>
-        <li>gratitude</li>
-        </ul>
-      </blockquote>
+    <!-- The form for entering a new note -->
+    <form id="note-form" style="display: none;" action="{{ create_route }}" method="POST" class="entry-form">
+
+      <p>Enter your note. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
+      <div>
+        <textarea name="content" rows=20 class="content"></textarea>
+      </div>
+
+      <p>Enter a title for your note:</p>
 
       <div class="tags">
-        <label for="tags">Tags:</label>
-        <input type="text" name="tags" class="tag">
+        <label for="title">Title:</label>
+        <input type="text" name="title" class="tag">
       </div>
 
       <p>Select your options, then click publish!</p>
@@ -49,10 +54,12 @@
       </div>
 
       <div class="buttons">
-        <input id="date" type="text" name="current_date" value="" hidden>
+        <input id="note_date" type="text" name="current_date" value="" hidden>
+        <input id="type" type="text" name="post_type" value="note" hidden>
         <button type="submit">Publish!</button>
       </div>
     </form>
+
       <script type="text/javascript" src="{{ script }}"></script>
   </body>
 </html>

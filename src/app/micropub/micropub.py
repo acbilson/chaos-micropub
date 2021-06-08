@@ -26,7 +26,7 @@ def health():
 @micropub_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        if not app.debug and not authorized():
+        if not app.debug and not authenticated():
             return render_template(
                 "login.html",
                 style=url_for("static", filename="css/micropub.css"),
@@ -55,7 +55,7 @@ def login():
 @micropub_bp.route("/", methods=["GET", "POST"])
 def create():
     if request.method == "GET":
-        if not app.debug and not authorized():
+        if not app.debug and not authenticated():
             return redirect(url_for("micropub_bp.login"))
         else:
             return render_template(
@@ -66,50 +66,94 @@ def create():
                 script=url_for("static", filename="js/micropub.js"),
             )
     elif request.method == "POST":
-        if not app.debug and not authorized():
+        if not app.debug and not authenticated():
             return redirect(url_for("micropub_bp.login"))
         else:
+            user = get_user()
+            if not authorized(user):
+                return f"{user} is not authorized to use this application."
+
+            if "post_type" not in request.form:
+                return "no post type was passed to this endpont. aborting."
             if "content" not in request.form:
                 return "no content was passed to this endpoint. aborting."
             if "current_date" not in request.form:
                 return "no date was passed to this endpoint. aborting."
 
             now = datetime.fromisoformat(request.form["current_date"])
-            filename = now.strftime("%Y%m%d-%H%M%S")
-            date = now.isoformat()
+            content = request.form["content"]
+            post_type = request.form["post_type"]
+            new_file_path = ""
 
-            category = "personal"
+            if post_type == "log":
+                new_file_path = create_log(now, user, content)
 
-            if "category" in request.form:
-                category = request.form["category"]
+            elif post_type == "note":
 
-            tags = ""
-            if "tags" in request.form:
-                tags = parse_to_list(request.form["tags"])
+                if "comments" not in request.form:
+                    return "no options were passed to this endpoint. aborting."
+                if "title" not in request.form:
+                    return "no title was passed to this endpoint. aborting."
 
-            comments = ""
-            if "comments" in request.form and request.form["comments"] == "on":
-                comments = "comments = true"
+                comments = "false"
+                if request.form["comments"] == "on":
+                    comments = "true"
 
-            new_file_path = Path(f"/mnt/chaos/content/comments/{filename}.md")
-            content = f"""+++
-categories = ["{category}"]
-date = "{date}"
-tags = [{tags}]
-{comments}
-+++
-{request.form['content']}
-      """
+                title = request.form["title"]
 
-            with open(new_file_path, "x") as f:
-                f.write(content)
+                new_file_path = create_note(now, user, content, comments, title)
+
+            else:
+                return f"post type {post_type} is not supported"
 
             run_build_script(new_file_path)
-
             return redirect(app.config["SITE"])
-
     else:
         return f"{request.method} is unsupported for this endpoint"
+
+
+def create_log(now, user, post_content):
+    filename = now.strftime("%Y%m%d-%H%M%S")
+    date = now.isoformat()
+
+    if user == "acbilson" or user == "Alexander Bilson":
+        user = "Alex Bilson"
+
+    new_file_path = Path(f"/mnt/chaos/content/logs/{filename}.md")
+    content = f"""+++
+author = "{user}"
+date = "{date}"
++++
+{post_content}
+    """
+
+    with open(new_file_path, "x") as f:
+        f.write(content)
+
+    return new_file_path
+
+
+def create_note(now, user, post_content, comments, title):
+    filename = title.lower().replace(' ', '-')
+    date = now.isoformat()
+
+    if user == "acbilson" or user == "Alexander Bilson":
+        user = "Alex Bilson"
+
+    new_file_path = Path(f"/mnt/chaos/content/notes/{filename}.md")
+    content = f"""+++
+author = "{user}"
+comments = {comments}
+date = "{date}"
+title = "{title}"
++++
+{request.form['content']}
+    """
+
+    with open(new_file_path, "x") as f:
+        f.write(content)
+
+    return new_file_path
 
 
 def run_build_script(file_path):
@@ -140,37 +184,32 @@ def parse_to_list(text):
     return '"' + '","'.join(text.split(" ")) + '"'
 
 
-def authorized():
-    if github.authorized:
-        user = get_user("github")
-        if user == "acbilson":
-            return True
-        else:
-            print(f"github user {user} is not authorized")
-            return False
-
-    elif google.authorized:
-        user = get_user("google")
-        if user in [
-            "Alexander Bilson",
-            "Amie Bilson",
-        ]:
-            return True
-        else:
-            print(f"google user {user} is not authorized")
-            return False
-
+def authenticated():
+    if github.authorized or google.authorized:
+        return True
     else:
-        print(f"no oauth providers have authenticated this login")
+        print("the user is not authenticated with any supported provider")
         return False
 
 
-def get_user(provider):
-    if provider == "github":
+def authorized(user):
+
+    if app.debug:
+        return True
+    elif github.authorized and user == "acbilson":
+        return True
+    elif google.authorized and user in ["Alexander Bilson", "Amie Bilson"]:
+        return True
+    else:
+        print(f"{user} is not authorized to use this app")
+
+
+def get_user():
+    if github.authorized:
         resp = github.get("/user")
         assert resp.ok
         return resp.json()["login"]
-    elif provider == "google":
+    elif google.authorized:
         resp = google.get("/oauth2/v3/userinfo")
         assert resp.ok, resp.text
         return resp.json()["name"]
