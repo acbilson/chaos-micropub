@@ -90,18 +90,20 @@ def create():
 
             elif post_type == "note":
 
-                if "comments" not in request.form:
-                    return "no options were passed to this endpoint. aborting."
                 if "title" not in request.form:
                     return "no title was passed to this endpoint. aborting."
+                if "tags" not in request.form:
+                    return "no tags were passed to this endpoint. aborting."
 
                 comments = "false"
-                if request.form["comments"] == "on":
+                if "comments" in request.form and request.form["comments"] == "on":
                     comments = "true"
 
                 title = request.form["title"]
 
-                new_file_path = create_note(now, user, content, comments, title)
+                tags = parse_to_list(request.form["tags"])
+
+                new_file_path = create_note(now, user, content, comments, title, tags)
 
             else:
                 return f"post type {post_type} is not supported"
@@ -133,7 +135,7 @@ date = "{date}"
     return new_file_path
 
 
-def create_note(now, user, post_content, comments, title):
+def create_note(now, user, post_content, comments, title, tags):
     filename = title.lower().replace(' ', '-')
     date = now.isoformat()
 
@@ -145,6 +147,7 @@ def create_note(now, user, post_content, comments, title):
 author = "{user}"
 comments = {comments}
 date = "{date}"
+tags = [{tags}]
 title = "{title}"
 +++
 {request.form['content']}
