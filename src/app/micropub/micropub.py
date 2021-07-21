@@ -147,6 +147,7 @@ def create_note(now, user, post_content, comments, title, tags):
 author = "{user}"
 comments = {comments}
 date = "{date}"
+epistemic = "seedling"
 tags = [{tags}]
 title = "{title}"
 +++
