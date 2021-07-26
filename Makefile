@@ -73,3 +73,6 @@ deploy: ## deploys the remote production Docker image
 .PHONY: stop
 stop: ## stops the remote prod service
 	. ./scripts/stop.sh prod
+
+.PHONY: redeploy
+redeploy: stop build-prod deploy ## stops, builds, and deploys a new production Docker image
