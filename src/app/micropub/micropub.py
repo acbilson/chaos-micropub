@@ -74,11 +74,11 @@ def create():
                 return f"{user} is not authorized to use this application."
 
             if "post_type" not in request.form:
-                return "no post type was passed to this endpont. aborting."
+                return "no post type was passed to this endpont. aborting.", 400
             if "content" not in request.form:
-                return "no content was passed to this endpoint. aborting."
+                return "no content was passed to this endpoint. aborting.", 400
             if "current_date" not in request.form:
-                return "no date was passed to this endpoint. aborting."
+                return "no date was passed to this endpoint. aborting.", 400
 
             now = datetime.fromisoformat(request.form["current_date"])
             content = request.form["content"]
@@ -91,9 +91,9 @@ def create():
             elif post_type == "note":
 
                 if "title" not in request.form:
-                    return "no title was passed to this endpoint. aborting."
+                    return "no title was passed to this endpoint. aborting.", 400
                 if "tags" not in request.form:
-                    return "no tags were passed to this endpoint. aborting."
+                    return "no tags were passed to this endpoint. aborting.", 400
 
                 comments = "false"
                 if "comments" in request.form and request.form["comments"] == "on":
@@ -106,7 +106,7 @@ def create():
                 new_file_path = create_note(now, user, content, comments, title, tags)
 
             else:
-                return f"post type {post_type} is not supported"
+                return f"post type {post_type} is not supported", 400
 
             run_build_script(new_file_path)
             return redirect(app.config["SITE"])

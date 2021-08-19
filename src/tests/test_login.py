@@ -3,7 +3,7 @@ import unittest
 from flask import Flask
 from app import create_app
 
-class MicropubTests(unittest.TestCase):
+class LoginTests(unittest.TestCase):
 
   def setUp(self):
     self.app = create_app().test_client()
