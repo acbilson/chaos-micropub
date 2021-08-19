@@ -26,7 +26,7 @@ docker run --rm \
   --name micropub-test \
   --entrypoint "python" \
   acbilson/micropub-dev:alpine-3.12 \
-  -m unittest tests/test_basic.py
+  -m unittest discover tests
 ;;
 
 *)

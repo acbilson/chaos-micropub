@@ -1,19 +1,17 @@
-import os
 import unittest
-
 from flask import Flask
 from app import create_app
 
 class BasicTests(unittest.TestCase):
 
-  def setUp(self):
-    self.app = create_app()
-
   def test_create_app(self):
-    self.assertEqual(type(self.app), Flask)
+    app = create_app()
+    self.assertEqual(type(app), Flask)
 
-  def test_example(self):
-    self.assertEqual(True, True)
+  def test_healthcheck(self):
+    app = create_app().test_client()
+    resp = app.get("/healthcheck")
+    self.assertEqual(resp.status, "200 OK")
 
 if __name__ == "__main__":
   unittest.main()
