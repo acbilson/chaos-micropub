@@ -26,9 +26,9 @@ build: clean ## builds a local development Docker image
 start: ## starts a local development Docker container
 	. ./scripts/start.sh
 
-.PHONY: unittest
-unittest: ## runs unit tests in a local development Docker container
-	. ./scripts/test.sh unit
+.PHONY: test
+test: ## runs unit tests in a local development Docker container
+	. ./scripts/start.sh test
 
 ##############
 # UAT Workflow
@@ -49,10 +49,6 @@ deploy-uat: ## deploys a remote UAT environment
 .PHONY: stop-uat
 stop-uat: ## stops a remote UAT environment
 	. ./scripts/stop.sh uat
-
-.PHONY: smoketest
-smoketest: ## runs smoke tests against the remote UAT environment
-	. ./scripts/test.sh smoke
 
 #####################
 # Deployment Workflow

@@ -1,6 +1,11 @@
 #!/bin/bash
 . .env
 
+ENVIRONMENT=$1
+
+case $ENVIRONMENT in
+
+dev)
 docker run --rm \
   --expose ${EXPOSED_PORT} -p ${EXPOSED_PORT}:80 \
   -e "SITE=${DEV_SITE}" \
@@ -12,3 +17,20 @@ docker run --rm \
   -v ${SOURCE_PATH}/src:/mnt/src \
   --name micropub \
   acbilson/micropub-dev:alpine-3.12
+;;
+
+test)
+# entrypoint args must come after image name (weird)
+docker run --rm \
+  -v ${SOURCE_PATH}/src:/mnt/src \
+  --name micropub-test \
+  --entrypoint "python" \
+  acbilson/micropub-dev:alpine-3.12 \
+  -m unittest tests/test_basic.py
+;;
+
+*)
+  echo "please provide one of the following as the first argument: dev, test."
+  exit 1
+
+esac
