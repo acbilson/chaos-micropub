@@ -170,6 +170,7 @@ def run_build_script(file_path):
             stderr=subprocess.STDOUT,
             universal_newlines=True,
         )
+        print(completed_proc.returncode)
         if completed_proc.returncode < 0:
             print(
                 "Child was terminated by signal",
