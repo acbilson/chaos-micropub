@@ -3,7 +3,7 @@ from unittest import mock
 from datetime import datetime
 from flask import Flask
 from app import create_app
-from app.micropub import micropub
+from app.micropub import views
 
 class CreateLogTests(unittest.TestCase):
 
@@ -22,7 +22,7 @@ class CreateLogTests(unittest.TestCase):
       self.assertEqual(resp.status, "400 BAD REQUEST")
 
   @mock.patch("app.open")
-  @mock.patch("app.micropub.micropub.run_build_script")
+  @mock.patch("app.micropub.views.run_build_script")
   def test_create_log_file_output(self, mock_open, mock_sp):
     # setup
     data = dict(post_type="log",content="a fake post here",current_date="2021-01-01T12:12:12")

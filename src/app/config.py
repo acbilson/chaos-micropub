@@ -1,6 +1,6 @@
 from os import environ
 
-class Config:
+class BaseConfig(object):
     """Set Flask configuration variables"""
     FLASK_HOST = "0.0.0.0"
     FLASK_PORT = 80
