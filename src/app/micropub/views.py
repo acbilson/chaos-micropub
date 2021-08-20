@@ -58,8 +58,6 @@ def create():
         else:
             return render_template(
                 "create.html",
-                style=url_for("static", filename="css/micropub.css"),
-                normalize_style=url_for("static", filename="css/normalize.css"),
                 create_route=url_for("micropub_bp.create"),
                 script=url_for("static", filename="js/micropub.js"),
             )

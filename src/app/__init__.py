@@ -2,6 +2,7 @@ from flask import Flask
 from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint
 from app.micropub import micropub_bp
+from app.assets import assets
 from app import config
 
 def create_app(config=config.BaseConfig):
@@ -11,6 +12,8 @@ def create_app(config=config.BaseConfig):
 
     # required to encrypt session
     app.secret_key = app.config["FLASK_SECRET_KEY"]
+
+    register_extensions(app)
 
     with app.app_context():
 
@@ -32,3 +35,8 @@ def create_app(config=config.BaseConfig):
         app.register_blueprint(micropub_bp)
 
         return app
+
+def register_extensions(app):
+    """Register extensions with the Flask application."""
+    assets.init_app(app)
+
