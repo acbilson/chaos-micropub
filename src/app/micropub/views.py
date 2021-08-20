@@ -14,9 +14,7 @@ import sys
 import subprocess
 from datetime import datetime
 
-# blueprint configuration
-micropub_bp = Blueprint("micropub_bp", __name__)
-
+from ..micropub import micropub_bp
 
 @micropub_bp.route("/healthcheck", methods=["GET"])
 def health():
