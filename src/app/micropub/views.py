@@ -28,8 +28,6 @@ def login():
         if not app.debug and not authenticated():
             return render_template(
                 "login.html",
-                style=url_for("static", filename="css/micropub.css"),
-                normalize_style=url_for("static", filename="css/normalize.css"),
                 login_route=url_for("micropub_bp.login"),
             )
         else:
@@ -46,9 +44,9 @@ def login():
             return redirect(url_for("google.login"))
 
         else:
-            return "the selected oauth login method is unsupported"
+            return "the selected oauth login method is unsupported", 501
     else:
-        return f"{request.method} is unsupported for this endpoint"
+        return f"{request.method} is unsupported for this endpoint", 501
 
 
 @micropub_bp.route("/", methods=["GET", "POST"])
@@ -68,10 +66,35 @@ def create():
         else:
             user = get_user()
             if not authorized(user):
-                return f"{user} is not authorized to use this application."
+                return f"{user} is not authorized to use this application.", 403
 
-            if "post_type" not in request.form:
-                return "no post type was passed to this endpont. aborting.", 400
+            if "post-type-log" in request.form:
+                return redirect(url_for("micropub_bp.create_log"))
+            elif "post-type-note" in request.form:
+                return redirect(url_for("micropub_bp.create_note"))
+            else:
+                return "no post type was passed to this endpoint. aborting.", 400
+
+
+@micropub_bp.route("/create/log", methods=["GET", "POST"])
+def create_log():
+    if request.method == "GET":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            return render_template(
+                "create_log.html",
+                create_route=url_for("micropub_bp.create_log"),
+                script=url_for("static", filename="js/micropub.js"),
+            )
+    elif request.method == "POST":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            user = get_user()
+            if not authorized(user):
+                return f"{user} is not authorized to use this application.", 403
+
             if "content" not in request.form:
                 return "no content was passed to this endpoint. aborting.", 400
             if "current_date" not in request.form:
@@ -79,36 +102,61 @@ def create():
 
             now = datetime.fromisoformat(request.form["current_date"])
             content = request.form["content"]
-            post_type = request.form["post_type"]
-            new_file_path = ""
-
-            if post_type == "log":
-                new_file_path = create_log(now, user, content)
-
-            elif post_type == "note":
-
-                if "title" not in request.form:
-                    return "no title was passed to this endpoint. aborting.", 400
-                if "tags" not in request.form:
-                    return "no tags were passed to this endpoint. aborting.", 400
-
-                comments = "false"
-                if "comments" in request.form and request.form["comments"] == "on":
-                    comments = "true"
-
-                title = request.form["title"]
-
-                tags = parse_to_list(request.form["tags"])
-
-                new_file_path = create_note(now, user, content, comments, title, tags)
-
-            else:
-                return f"post type {post_type} is not supported", 400
+            new_file_path = create_log(now, user, content)
 
             run_build_script(new_file_path)
             return redirect(app.config["SITE"])
     else:
-        return f"{request.method} is unsupported for this endpoint"
+        return f"{request.method} is unsupported for this endpoint", 501
+
+
+@micropub_bp.route("/create/note", methods=["GET", "POST"])
+def create_note():
+    if request.method == "GET":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            return render_template(
+                "create_note.html",
+                create_route=url_for("micropub_bp.create_note"),
+                script=url_for("static", filename="js/micropub.js"),
+            )
+    elif request.method == "POST":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            user = get_user()
+            if not authorized(user):
+                return f"{user} is not authorized to use this application.", 403
+
+            if "content" not in request.form:
+                return "no content was passed to this endpoint. aborting.", 400
+            if "current_date" not in request.form:
+                return "no date was passed to this endpoint. aborting.", 400
+
+            now = datetime.fromisoformat(request.form["current_date"])
+            content = request.form["content"]
+            new_file_path = ""
+
+            if "title" not in request.form:
+                return "no title was passed to this endpoint. aborting.", 400
+            if "tags" not in request.form:
+                return "no tags were passed to this endpoint. aborting.", 400
+
+            comments = "false"
+            if "comments" in request.form and request.form["comments"] == "on":
+                comments = "true"
+
+            title = request.form["title"]
+
+            tags = parse_to_list(request.form["tags"])
+
+            new_file_path = create_note(now, user, content, comments, title, tags)
+
+            run_build_script(new_file_path)
+            return redirect(app.config["SITE"])
+    else:
+        return f"{request.method} is unsupported for this endpoint", 501
 
 
 def create_log(now, user, post_content):

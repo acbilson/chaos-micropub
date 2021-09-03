@@ -1,68 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
-<div style="margin: 5%;">
-<p>Select a post type:</p>
-<button id="post-type-log" type="submit">Log</button>
-<button id="post-type-note" type="submit">Note</button>
-</div>
-
-<!-- The form for entering a new log -->
-<form id="log-form" action="{{ create_route }}" method="POST" class="entry-form">
-
-  <p>Enter your log. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
-  <div>
-    <textarea name="content" rows=20 class="content"></textarea>
-  </div>
-
-  <div class="buttons">
-    <input id="log_date" type="text" name="current_date" value="" hidden>
-    <input id="type" type="text" name="post_type" value="log" hidden>
-    <button type="submit">Publish!</button>
-  </div>
-</form>
-
-<!-- The form for entering a new note -->
-<form id="note-form" style="display: none;" action="{{ create_route }}" method="POST" class="entry-form">
-
-  <p>Enter your note. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
-  <div>
-    <textarea name="content" rows=20 class="content"></textarea>
-  </div>
-
-  <p>Enter a title for your note:</p>
-
-  <div class="tags">
-    <label for="title">Title:</label>
-    <input type="text" name="title" class="tag">
-  </div>
-
-  <p>Enter a few tags, separated by spaces, to help find this comment:</p>
-
-  <blockquote>
-    Examples:<br />
-    <ul>
-    <li>children parenting</li>
-    <li>software design</li>
-    <li>bible</li>
-    </ul>
-  </blockquote>
-
-  <div class="tags">
-    <label for="tags">Tags:</label>
-    <input type="text" name="tags" class="tag">
-  </div>
-
-  <p>Select your options, then click publish!</p>
-  <div class="options">
-      <div><input id="comments" type="checkbox" name="comments" class="option" checked><label for="comments">Allow Comments?</label></div>
-  </div>
-
-  <div class="buttons">
-    <input id="note_date" type="text" name="current_date" value="" hidden>
-    <input id="type" type="text" name="post_type" value="note" hidden>
-    <button type="submit">Publish!</button>
-  </div>
-</form>
+  <form
+    id="entry-form"
+    class="entry-form"
+    style="margin: 5%;"
+    method="POST"
+    action="{{ create_route }}"
+    >
+  <p>Select a post type:</p>
+  <button name="post-type-log" type="submit">Log</button>
+  <button name="post-type-note" type="submit">Note</button>
+  </form>
 
   <script type="text/javascript" src="{{ script }}"></script>
 {% endblock %}

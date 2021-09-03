@@ -7,14 +7,20 @@ from app.config import TestConfig
 from app.micropub import views
 
 
-class CreateLogTests(unittest.TestCase):
+class CreateNoteTests(unittest.TestCase):
     def setUp(self):
         self.app = create_app(TestConfig).test_client()
 
-    def test_create_log_missing_request_data(self):
+    def test_create_note_missing_request_data(self):
         bodies = [
             dict(),
             dict(content="a fake post here"),
+            dict(content="a fake post here", current_date="2021-01-01T12:12:12"),
+            dict(
+                content="a fake post here",
+                current_date="2021-01-01T12:12:12",
+                title="A Fake Title",
+            ),
         ]
 
         for body in bodies:
@@ -28,8 +34,10 @@ class CreateLogTests(unittest.TestCase):
         data = dict(
             content="a fake post here",
             current_date="2021-01-01T12:12:12",
+            title="A Fake Title",
+            tags="fake false",
         )
-        resp = self.app.post("/create/log", data=data)
+        resp = self.app.post("/create/note", data=data)
         self.assertEqual(resp.status, "302 FOUND")
         self.assertEqual(resp.location, TestConfig.SITE)
 
