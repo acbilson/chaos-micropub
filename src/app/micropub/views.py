@@ -16,6 +16,7 @@ from datetime import datetime
 
 from ..micropub import micropub_bp
 
+
 @micropub_bp.route("/healthcheck", methods=["GET"])
 def health():
     return Response(status=200)
@@ -132,7 +133,7 @@ date = "{date}"
 
 
 def create_note(now, user, post_content, comments, title, tags):
-    filename = title.lower().replace(' ', '-')
+    filename = title.lower().replace(" ", "-")
     date = now.isoformat()
 
     if user == "acbilson" or user == "Alexander Bilson":

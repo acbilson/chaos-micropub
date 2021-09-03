@@ -5,6 +5,7 @@ from app.micropub import micropub_bp
 from app.assets import assets
 from app import config
 
+
 def create_app(config=config.BaseConfig):
     """Initialize the core application"""
     app = Flask(__name__, instance_relative_config=False)
@@ -36,7 +37,7 @@ def create_app(config=config.BaseConfig):
 
         return app
 
+
 def register_extensions(app):
     """Register extensions with the Flask application."""
     assets.init_app(app)
-
