@@ -4,17 +4,14 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import Field
 from app.micropub.models import LogFile
+from helpers import mock_field
 
 
 class LogFileTests(unittest.TestCase):
     def setUp(self):
       self.form = create_autospec(FlaskForm)
-
-      self.form.content = create_autospec(Field)
-      self.form.content.data = "Test content"
-
-      self.form.current_date = create_autospec(Field)
-      self.form.current_date.data = "2021-09-23T18:53:39.240457"
+      self.form.content = mock_field(Field, "Test content")
+      self.form.current_date = mock_field(Field, "2021-09-23T18:53:39.240457")
 
     def test_model_composes_file(self):
         expected = """+++

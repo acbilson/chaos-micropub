@@ -4,29 +4,18 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import Field
 from app.micropub.models import NoteFile
+from helpers import mock_field
 
 
 class NoteFileTests(unittest.TestCase):
     def setUp(self):
       self.form = create_autospec(FlaskForm)
+      self.form.content = mock_field(Field, "Test content")
+      self.form.current_date = mock_field(Field, "2021-09-23T18:53:39.240457")
+      self.form.title = mock_field(Field, "Test Title")
+      self.form.tags = mock_field(Field, "fake tags")
+      self.form.comments = mock_field(Field, "on")
 
-      self.form.content = create_autospec(Field)
-      self.form.content.data = "Test content"
-
-      self.form.current_date = create_autospec(Field)
-      self.form.current_date.data = "2021-09-23T18:53:39.240457"
-
-      self.form.title = create_autospec(Field)
-      self.form.title.data = "Test Title"
-
-      self.form.title = create_autospec(Field)
-      self.form.title.data = "Test Title"
-
-      self.form.tags = create_autospec(Field)
-      self.form.tags.data = "fake tags"
-
-      self.form.comments = create_autospec(Field)
-      self.form.comments.data = "on"
 
     def test_model_composes_file(self):
         expected = """+++
