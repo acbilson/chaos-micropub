@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import create_autospec
+from pathlib import Path
 from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import Field
@@ -28,15 +29,16 @@ title = "Test Title"
 +++
 Test content"""
 
-        model = NoteFile("a/path/here", self.form, "acbilson")
+        model = NoteFile("/path/here", self.form, "acbilson")
         content = model.compose()
         self.assertEqual(content, expected)
 
 
-    def test_model_sets_filename(self):
-        expected = "test-title"
-        model = NoteFile("a/path/here", self.form, "acbilson")
-        self.assertEqual(model.filename, expected)
+    def test_model_builds_path(self):
+      expected = Path("/path/here/test-title.md")
+      model = NoteFile("/path/here", self.form, "acbilson")
+      self.assertEqual(model.path, expected)
+
 
 if __name__ == "__main__":
     unittest.main()

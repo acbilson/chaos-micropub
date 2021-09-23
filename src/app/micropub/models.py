@@ -1,22 +1,57 @@
+from pathlib import Path
 from os import path
 from datetime import datetime
+from flask_wtf import FlaskForm
 
+class MicropubFile:
 
-class LogFile():
+  def __init__(self, base_path: Path, form: FlaskForm, user: str):
+    self._base_path = base_path
+    self._form = form
+    self._user = user
 
-  def __init__(self, path, form, user):
-    self.path = path
-    self.body = form.content.data
-    self.timestamp = datetime.fromisoformat(form.current_date.data) if form.current_date.data else None
-    self.date = self.timestamp.isoformat()
-    self.filename = self.timestamp.strftime("%Y%m%d-%H%M%S")
-    self.user = "Alex Bilson" if (user == "acbilson" or user == "Alexander Bilson") else user
-    self.content = self.compose()
+  @property
+  def body(self):
+    return self._form.content.data
+
+  @property
+  def user(self):
+    return "Alex Bilson" if (self._user == "acbilson" or self._user == "Alexander Bilson") else self._user
+
+  @property
+  def date(self):
+    return self.timestamp.isoformat() if self.timestamp else None
+
+  @property
+  def timestamp(self):
+    d = self._form.current_date.data
+    return datetime.fromisoformat(d) if d else None
+
+  @property
+  def path(self):
+    return Path(path.join(self._base_path, f"{self.filename}.md"))
 
   def save(self):
-    save_path = path.join(self.path, f"{self.filename}.md")
-    with open(save_path, "x") as f:
-        f.write(self.content)
+    with open(self.path, "x") as f:
+        f.write(self.compose())
+    return self.path
+
+  @property
+  def filename(self):
+    raise "not implemented"
+
+  def compose(self):
+    raise "not implemented"
+
+
+class LogFile(MicropubFile):
+
+  def __init__(self, base_path: Path, form: FlaskForm, user: str):
+    super().__init__(base_path, form, user)
+
+  @property
+  def filename(self):
+    return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
   def compose(self):
     return f"""+++
@@ -26,25 +61,26 @@ date = "{self.date}"
 {self.body}"""
 
 
-class NoteFile():
+class NoteFile(MicropubFile):
 
-  def __init__(self, path, form, user):
-    self.path = path
-    self.body = form.content.data
-    self.timestamp = datetime.fromisoformat(form.current_date.data) if form.current_date.data else None
-    self.date = self.timestamp.isoformat()
-    self.user = "Alex Bilson" if (user == "acbilson" or user == "Alexander Bilson") else user
-    self.title = form.title.data
-    self.filename = self.title.lower().replace(" ", "-")
-    self.tags = '"' + '","'.join(form.tags.data.split(" ")) + '"'
-    self.comments = "true" if form.comments.data == "on" else "false"
-    self.content = self.compose()
+  def __init__(self, base_path: Path, form: FlaskForm, user: str):
+    super().__init__(base_path, form, user)
 
-  def save(self):
-    save_path = path.join(self.path, f"{self.filename}.md")
-    with open(save_path, "x") as f:
-        f.write(self.content)
-    return save_path
+  @property
+  def title(self):
+    return self._form.title.data
+
+  @property
+  def tags(self):
+    return '"' + '","'.join(self._form.tags.data.split(" ")) + '"'
+
+  @property
+  def comments(self):
+    return "true" if self._form.comments.data == "on" else "false"
+
+  @property
+  def filename(self):
+    return self.title.lower().replace(" ", "-")
 
   def compose(self):
     return f"""+++
