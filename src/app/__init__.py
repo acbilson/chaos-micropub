@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint
 from app.micropub import micropub_bp
@@ -35,9 +35,14 @@ def create_app(config=config.BaseConfig):
         app.register_blueprint(google_bp, url_prefix="/login")
         app.register_blueprint(micropub_bp)
 
+        @app.route("/healthcheck", methods=["GET"])
+        def health():
+            return Response(status=200)
+
         return app
 
 
 def register_extensions(app):
     """Register extensions with the Flask application."""
     assets.init_app(app)
+

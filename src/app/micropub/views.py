@@ -9,7 +9,6 @@ from flask import (
     render_template,
     url_for,
     redirect,
-    Response,
 )
 from flask_dance.contrib.github import github
 from flask_dance.contrib.google import google
@@ -22,12 +21,6 @@ from app.micropub.forms import (
   NoteForm,
 )
 from app.micropub.models import LogFile, NoteFile
-
-
-@micropub_bp.route("/healthcheck", methods=["GET"])
-def health():
-    return Response(status=200)
-
 
 @micropub_bp.route("/login", methods=["GET", "POST"])
 def login():
