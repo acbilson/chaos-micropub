@@ -99,7 +99,7 @@ def create_log():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            form = LogForm(request.form, csrf_enabled=False)
+            form = LogForm(request.form, meta={"csrf": False})
             if not form.validate():
                 return f"form could not be validated because {form.errors}. aborting.", 400
 
@@ -130,7 +130,7 @@ def create_note():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            form = NoteForm(request.form, csrf_enabled=False)
+            form = NoteForm(request.form, meta={"csrf": False})
             if not form.validate():
                 return f"form could not be validated because {form.errors}. aborting.", 400
 
