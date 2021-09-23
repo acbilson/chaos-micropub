@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import (
   StringField,
   PasswordField,
@@ -12,7 +12,7 @@ from wtforms.validators import (
 )
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     option = StringField("option", validators=[
         InputRequired(message="Must select a login option"),
         AnyOf(["github", "google"], message="This login option is not supported")
@@ -22,15 +22,15 @@ class LoginForm(Form):
         Form.__init__(self, *args, **kwargs)
 
 
-class LogForm(Form):
+class LogForm(FlaskForm):
     content = StringField("content", validators=[InputRequired(message="No content entered")])
     current_date = StringField("current_date", validators=[Length(min=1, max=25, message="No date entered")])
 
     def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)
+        FlaskForm.__init__(self, *args, **kwargs)
 
 
-class NoteForm(Form):
+class NoteForm(FlaskForm):
     content = StringField("content", validators=[InputRequired(message="No content entered")])
     current_date = StringField("current_date", validators=[Length(min=1, max=25, message="No date entered")])
     title = StringField("title", validators=[InputRequired(message="No title entered")])
@@ -38,5 +38,5 @@ class NoteForm(Form):
     comments = StringField("comments", validators=[InputRequired(message="Comment data missing")])
 
     def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)
+        FlaskForm.__init__(self, *args, **kwargs)
 
