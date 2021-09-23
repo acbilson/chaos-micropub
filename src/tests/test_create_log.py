@@ -30,7 +30,7 @@ class CreateLogTests(unittest.TestCase):
             current_date="2021-01-01T12:12:12",
         )
         resp = self.app.post("/create/log", data=data)
-        self.assertEqual(resp.status, "302 FOUND")
+        self.assertEqual(resp.status, "302 FOUND", resp.data)
         self.assertEqual(resp.location, TestConfig.SITE)
 
 

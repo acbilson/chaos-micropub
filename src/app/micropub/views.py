@@ -15,6 +15,7 @@ import subprocess
 from datetime import datetime
 
 from ..micropub import micropub_bp
+from app.micropub.forms import LogForm
 
 
 @micropub_bp.route("/healthcheck", methods=["GET"])
@@ -95,14 +96,10 @@ def create_log():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            if "content" not in request.form:
-                return "no content was passed to this endpoint. aborting.", 400
-            if "current_date" not in request.form:
-                return "no date was passed to this endpoint. aborting.", 400
-
-            now = datetime.fromisoformat(request.form["current_date"])
-            content = request.form["content"]
-            new_file_path = create_log(now, user, content)
+            form = LogForm(request.form, csrf_enabled=False)
+            if not form.validate():
+                return f"form could not be validated because {form.errors}. aborting.", 400
+            new_file_path = create_log(form.timestamp, user, form.content.data)
 
             run_build_script(new_file_path)
             return redirect(app.config["SITE"])
