@@ -10,8 +10,6 @@ from flask import (
     url_for,
     redirect,
 )
-from flask_dance.contrib.github import github
-from flask_dance.contrib.google import google
 from flask import current_app as app
 
 from ..micropub import micropub_bp
@@ -20,7 +18,15 @@ from app.micropub.forms import (
   LogForm,
   NoteForm,
 )
-from app.micropub.models import LogFile, NoteFile
+from app.micropub.models import (
+  LogFile,
+  NoteFile,
+)
+from app.micropub.authhelper import (
+  authenticated,
+  authorized,
+  get_user
+)
 
 @micropub_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -158,34 +164,3 @@ def run_build_script(file_path):
             print(completed_proc.stdout, file=sys.stderr)
     except OSError as e:
         print("Execution failed:", e, file=sys.stderr)
-
-
-def authenticated():
-    if github.authorized or google.authorized:
-        return True
-    else:
-        print("the user is not authenticated with any supported provider")
-        return False
-
-
-def authorized(user):
-
-    if app.debug:
-        return True
-    elif github.authorized and user == "acbilson":
-        return True
-    elif google.authorized and user in ["Alexander Bilson", "Amie Bilson"]:
-        return True
-    else:
-        print(f"{user} is not authorized to use this app")
-
-
-def get_user():
-    if github.authorized:
-        resp = github.get("/user")
-        assert resp.ok
-        return resp.json()["login"]
-    elif google.authorized:
-        resp = google.get("/oauth2/v3/userinfo")
-        assert resp.ok, resp.text
-        return resp.json()["name"]
