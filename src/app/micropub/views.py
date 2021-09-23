@@ -1,3 +1,8 @@
+from pathlib import Path
+import sys
+import subprocess
+from datetime import datetime
+
 from flask import (
     Blueprint,
     request,
@@ -9,13 +14,14 @@ from flask import (
 from flask_dance.contrib.github import github
 from flask_dance.contrib.google import google
 from flask import current_app as app
-from pathlib import Path
-import sys
-import subprocess
-from datetime import datetime
 
 from ..micropub import micropub_bp
-from app.micropub.forms import LogForm
+from app.micropub.forms import (
+  LoginForm,
+  LogForm,
+  NoteForm,
+)
+from app.micropub.models import LogFile, NoteFile
 
 
 @micropub_bp.route("/healthcheck", methods=["GET"])
@@ -38,14 +44,11 @@ def login():
         if app.debug:
             return redirect(url_for("micropub_bp.create"))
 
-        if "option" in request.form and request.form["option"] == "github":
-            return redirect(url_for("github.login"))
+        form = LoginForm(form)
+        if not form.validate():
+            return f"login failed: {form.errors}", 501
 
-        elif "option" in request.form and request.form["option"] == "google":
-            return redirect(url_for("google.login"))
-
-        else:
-            return "the selected oauth login method is unsupported", 501
+        return redirect(url_for(f"{form.option.data}.login"))
     else:
         return f"{request.method} is unsupported for this endpoint", 501
 
@@ -99,8 +102,9 @@ def create_log():
             form = LogForm(request.form, csrf_enabled=False)
             if not form.validate():
                 return f"form could not be validated because {form.errors}. aborting.", 400
-            new_file_path = create_log(form.timestamp, user, form.content.data)
 
+            log = LogFile("/mnt/chaos/content/logs", form, user)
+            new_file_path = log.save()
             run_build_script(new_file_path)
             return redirect(app.config["SITE"])
     else:
@@ -126,80 +130,16 @@ def create_note():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            if "content" not in request.form:
-                return "no content was passed to this endpoint. aborting.", 400
-            if "current_date" not in request.form:
-                return "no date was passed to this endpoint. aborting.", 400
+            form = NoteForm(request.form, csrf_enabled=False)
+            if not form.validate():
+                return f"form could not be validated because {form.errors}. aborting.", 400
 
-            now = datetime.fromisoformat(request.form["current_date"])
-            content = request.form["content"]
-            new_file_path = ""
-
-            if "title" not in request.form:
-                return "no title was passed to this endpoint. aborting.", 400
-            if "tags" not in request.form:
-                return "no tags were passed to this endpoint. aborting.", 400
-
-            comments = "false"
-            if "comments" in request.form and request.form["comments"] == "on":
-                comments = "true"
-
-            title = request.form["title"]
-
-            tags = parse_to_list(request.form["tags"])
-
-            new_file_path = create_note(now, user, content, comments, title, tags)
-
+            note = NoteFile("/mnt/chaos/content/notes", form, user)
+            new_file_path = note.save()
             run_build_script(new_file_path)
             return redirect(app.config["SITE"])
     else:
         return f"{request.method} is unsupported for this endpoint", 501
-
-
-def create_log(now, user, post_content):
-    filename = now.strftime("%Y%m%d-%H%M%S")
-    date = now.isoformat()
-
-    if user == "acbilson" or user == "Alexander Bilson":
-        user = "Alex Bilson"
-
-    new_file_path = Path(f"/mnt/chaos/content/logs/{filename}.md")
-    content = f"""+++
-author = "{user}"
-date = "{date}"
-+++
-{post_content}
-    """
-
-    with open(new_file_path, "x") as f:
-        f.write(content)
-
-    return new_file_path
-
-
-def create_note(now, user, post_content, comments, title, tags):
-    filename = title.lower().replace(" ", "-")
-    date = now.isoformat()
-
-    if user == "acbilson" or user == "Alexander Bilson":
-        user = "Alex Bilson"
-
-    new_file_path = Path(f"/mnt/chaos/content/notes/{filename}.md")
-    content = f"""+++
-author = "{user}"
-comments = {comments}
-date = "{date}"
-epistemic = "seedling"
-tags = [{tags}]
-title = "{title}"
-+++
-{request.form['content']}
-    """
-
-    with open(new_file_path, "x") as f:
-        f.write(content)
-
-    return new_file_path
 
 
 def run_build_script(file_path):
@@ -225,10 +165,6 @@ def run_build_script(file_path):
             print(completed_proc.stdout, file=sys.stderr)
     except OSError as e:
         print("Execution failed:", e, file=sys.stderr)
-
-
-def parse_to_list(text):
-    return '"' + '","'.join(text.split(" ")) + '"'
 
 
 def authenticated():

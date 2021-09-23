@@ -21,6 +21,12 @@ class CreateNoteTests(unittest.TestCase):
                 current_date="2021-01-01T12:12:12",
                 title="A Fake Title",
             ),
+            dict(
+                content="a fake post here",
+                current_date="2021-01-01T12:12:12",
+                title="A Fake Title",
+                tags="fake false",
+            ),
         ]
 
         for body in bodies:
@@ -29,16 +35,17 @@ class CreateNoteTests(unittest.TestCase):
 
     @mock.patch("app.open")
     @mock.patch("app.micropub.views.run_build_script")
-    def test_create_log_file_output(self, mock_open, mock_sp):
+    def test_create_note_file_output(self, mock_open, mock_sp):
         # setup
         data = dict(
             content="a fake post here",
             current_date="2021-01-01T12:12:12",
             title="A Fake Title",
             tags="fake false",
+            comments="on",
         )
         resp = self.app.post("/create/note", data=data)
-        self.assertEqual(resp.status, "302 FOUND")
+        self.assertEqual(resp.status, "302 FOUND", resp.data)
         self.assertEqual(resp.location, TestConfig.SITE)
 
 
