@@ -24,7 +24,7 @@ class LoginForm(Form):
 
 class LogForm(Form):
     content = StringField("content", validators=[InputRequired(message="No content entered")])
-    current_date = StringField("current_date", validators=[Length(min=1, max=25)])
+    current_date = StringField("current_date", validators=[Length(min=1, max=25, message="No date entered")])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -32,7 +32,7 @@ class LogForm(Form):
 
 class NoteForm(Form):
     content = StringField("content", validators=[InputRequired(message="No content entered")])
-    current_date = StringField("current_date", validators=[Length(min=1, max=25)])
+    current_date = StringField("current_date", validators=[Length(min=1, max=25, message="No date entered")])
     title = StringField("title", validators=[InputRequired(message="No title entered")])
     tags = StringField("tags", validators=[InputRequired(message="No tags entered")])
     comments = StringField("comments", validators=[InputRequired(message="Comment data missing")])
