@@ -1,3 +1,6 @@
+import sys
+import subprocess
+
 def run_build_script(file_path):
     try:
         cmd = ["/usr/local/bin/build-site.sh", f"{file_path}"]
