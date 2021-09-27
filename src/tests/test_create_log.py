@@ -22,7 +22,7 @@ class CreateLogTests(unittest.TestCase):
             self.assertEqual(resp.status, "400 BAD REQUEST")
 
     @mock.patch("app.open")
-    @mock.patch("app.micropub.views.run_build_script")
+    @mock.patch("app.micropub.scripthelper.run_build_script")
     def test_create_log_file_output(self, mock_open, mock_sp):
         # setup
         data = dict(

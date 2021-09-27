@@ -1,6 +1,4 @@
 from pathlib import Path
-import sys
-import subprocess
 from datetime import datetime
 
 from flask import (
@@ -17,6 +15,7 @@ from app.micropub.forms import (
   LoginForm,
   LogForm,
   NoteForm,
+  CreateForm,
 )
 from app.micropub.models import (
   LogFile,
@@ -27,6 +26,7 @@ from app.micropub.authhelper import (
   authorized,
   get_user
 )
+from app.micropub import scripthelper
 
 @micropub_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -58,11 +58,11 @@ def create():
         if not app.debug and not authenticated():
             return redirect(url_for("micropub_bp.login"))
         else:
+            form = CreateForm(meta={"csrf": False})
             return render_template(
                 "create.html",
                 create_route=url_for("micropub_bp.create"),
-                script=url_for("static", filename="js/micropub.js"),
-            )
+                form=form)
     elif request.method == "POST":
         if not app.debug and not authenticated():
             return redirect(url_for("micropub_bp.login"))
@@ -71,12 +71,11 @@ def create():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            if "post-type-log" in request.form:
-                return redirect(url_for("micropub_bp.create_log"))
-            elif "post-type-note" in request.form:
-                return redirect(url_for("micropub_bp.create_note"))
-            else:
-                return "no post type was passed to this endpoint. aborting.", 400
+            form = CreateForm(request.form, meta={"csrf": False})
+            if not form.validate():
+                return f"No post type was passed to this endpoint {form.errors}, {form.post_type.data}. aborting.", 400
+
+            return redirect(url_for(f"micropub_bp.create_{form.post_type.data}"))
 
 
 @micropub_bp.route("/create/log", methods=["GET", "POST"])
@@ -104,7 +103,9 @@ def create_log():
 
             log = LogFile("/mnt/chaos/content/logs", form, user)
             new_file_path = log.save()
-            run_build_script(new_file_path)
+
+            scripthelper.run_build_script(new_file_path)
+
             return redirect(app.config["SITE"])
     else:
         return f"{request.method} is unsupported for this endpoint", 501
@@ -135,32 +136,9 @@ def create_note():
 
             note = NoteFile("/mnt/chaos/content/notes", form, user)
             new_file_path = note.save()
-            run_build_script(new_file_path)
+
+            scripthelper.run_build_script(new_file_path)
+
             return redirect(app.config["SITE"])
     else:
         return f"{request.method} is unsupported for this endpoint", 501
-
-
-def run_build_script(file_path):
-    try:
-        cmd = ["/usr/local/bin/build-site.sh", f"{file_path}"]
-        completed_proc = subprocess.run(
-            cmd,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            universal_newlines=True,
-        )
-        print(completed_proc.returncode)
-        if completed_proc.returncode < 0:
-            print(
-                "Child was terminated by signal",
-                -completed_proc.returncode,
-                file=sys.stderr,
-            )
-        else:
-            print("Child returned: ", completed_proc.returncode, file=sys.stderr)
-            print("Script returned: ")
-            print(completed_proc.stdout, file=sys.stderr)
-    except OSError as e:
-        print("Execution failed:", e, file=sys.stderr)

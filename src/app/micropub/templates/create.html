@@ -8,9 +8,7 @@
     action="{{ create_route }}"
     >
   <p>Select a post type:</p>
-  <button name="post-type-log" type="submit">Log</button>
-  <button name="post-type-note" type="submit">Note</button>
+  {{ form.post_type }}
+  <button name="submit" type="submit">Select</button>
   </form>
-
-  <script type="text/javascript" src="{{ script }}"></script>
 {% endblock %}

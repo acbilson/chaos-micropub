@@ -4,6 +4,7 @@ from wtforms import (
   StringField,
   PasswordField,
   BooleanField,
+  RadioField,
 )
 from wtforms.validators import (
   InputRequired,
@@ -19,7 +20,14 @@ class LoginForm(FlaskForm):
       ])
 
     def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)
+        FlaskForm.__init__(self, *args, **kwargs)
+
+
+class CreateForm(FlaskForm):
+    post_type = RadioField("post-type", choices=[("log", "Log"), ("note", "Note")])
+
+    def __init__(self, *args, **kwargs):
+        FlaskForm.__init__(self, *args, **kwargs)
 
 
 class LogForm(FlaskForm):
