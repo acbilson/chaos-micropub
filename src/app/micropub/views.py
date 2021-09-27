@@ -43,7 +43,7 @@ def login():
         if app.debug:
             return redirect(url_for("micropub_bp.create"))
 
-        form = LoginForm(form)
+        form = LoginForm(request.form)
         if not form.validate():
             return f"login failed: {form.errors}", 501
 
