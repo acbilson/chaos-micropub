@@ -1,6 +1,9 @@
+Flask-Assets
+Flask-Login
+Flask-WTF
 Flask
-uwsgi
 flask-dance
+uwsgi
 beautifulsoup4
 mf2py
 python-dotenv

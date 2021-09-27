@@ -3,17 +3,13 @@ from app import create_app
 
 app = create_app()
 
-env = app.config['FLASK_ENV']
-site = app.config['SITE']
-host = app.config['FLASK_HOST']
-port = app.config['FLASK_PORT']
+env = app.config["FLASK_ENV"]
+site = app.config["SITE"]
+host = app.config["FLASK_HOST"]
+port = app.config["FLASK_PORT"]
 
 print(f"Flask app running in {env} mode at {host}:{port}")
 print(f"View the site at {site}")
 
 if __name__ == "__main__":
-    app.run(
-        host=host,
-        port=port,
-        debug=(env == 'development')
-        )
+    app.run(host=host, port=port, debug=(env == "development"))
