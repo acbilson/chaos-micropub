@@ -5,6 +5,7 @@ from wtforms import (
   PasswordField,
   BooleanField,
   RadioField,
+  SelectField,
 )
 from wtforms.validators import (
   InputRequired,
@@ -48,3 +49,9 @@ class NoteForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
 
+class NoteEditForm(FlaskForm):
+    selected_note = SelectField("note_select", coerce=str, validators=[InputRequired(message="no note selected")])
+    content = StringField("content")
+
+    def __init__(self, *args, **kwargs):
+        FlaskForm.__init__(self, *args, **kwargs)

@@ -16,6 +16,7 @@ from app.micropub.forms import (
   LogForm,
   NoteForm,
   CreateForm,
+  NoteEditForm,
 )
 from app.micropub.models import (
   LogFile,
@@ -25,6 +26,9 @@ from app.micropub.authhelper import (
   authenticated,
   authorized,
   get_user
+)
+from app.micropub.filehelper import (
+    read_notes
 )
 from app.micropub import scripthelper
 
@@ -140,5 +144,50 @@ def create_note():
             scripthelper.run_build_script(new_file_path)
 
             return redirect(app.config["SITE"])
+    else:
+        return f"{request.method} is unsupported for this endpoint", 501
+
+@micropub_bp.route("/edit/note", methods=["GET", "POST"])
+def edit_note():
+    if request.method == "GET":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            notes = read_notes("/mnt/chaos/content/notes")
+            form = NoteEditForm(request.form, meta={"csrf": False})
+            form.selected_note.choices = [(note, note) for note in notes]
+            return render_template(
+                "edit_notes.html",
+                form=form,
+                load_route=url_for("micropub_bp.edit_note"),
+                script=url_for("static", filename="js/micropub.js"),
+            )
+    elif request.method == "POST":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            user = get_user()
+            if not authorized(user):
+                return f"{user} is not authorized to use this application.", 403
+
+            notes = read_notes("/mnt/chaos/content/notes")
+            form = NoteEditForm(request.form, meta={"csrf": False})
+
+            with open(form.selected_note.data, 'r') as f:
+                form.content.data = f.readlines()
+
+            form.selected_note.choices = [(note, note) for note in notes]
+            if not form.validate():
+                return f"form could not be validated because {form.errors}. aborting.", 400
+
+            return render_template(
+                "edit_note.html",
+                form=form,
+                load_route=url_for("micropub_bp.edit_note"),
+                script=url_for("static", filename="js/micropub.js"),
+            )
+
+
+        return "";
     else:
         return f"{request.method} is unsupported for this endpoint", 501

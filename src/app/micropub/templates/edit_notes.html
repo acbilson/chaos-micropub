@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- The form for selecting a note to edit -->
+<form id="note-form-select" action="{{ load_route }}" method="POST" class="entry-form">
+  <p>Select a note to edit:</p>
+  <div>
+  {{ form.selected_note.label }}: {{ form.selected_note() }}
+  </div>
+  <div class="buttons">
+    <button type="submit">Load File</button>
+  </div>
+</form>
+
+  <script type="text/javascript" src="{{ script }}"></script>
+{% endblock %}
