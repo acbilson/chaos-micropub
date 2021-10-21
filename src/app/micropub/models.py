@@ -36,15 +36,14 @@ class MicropubFile:
         return Path(path.join(self._base_path, f"{self.filename}.md"))
 
     def save(self):
-        with open(self.path, "x") as f:
+        with open(self.path, "x", newline="\n") as f:
             f.write(self.compose())
         return self.path
 
     def update(self):
-        with open(self.path, "w") as f:
+        with open(self.path, "w", newline="\n") as f:
             f.write(self.compose())
         return self.path
-
 
     @property
     def filename(self):
@@ -62,12 +61,12 @@ class LogFile(MicropubFile):
     def filename(self):
         return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
-    def compose(self):
+    def compose(self) -> str:
         return f"""+++
 author = "{self.user}"
 date = "{self.date}"
 +++
-{self.body}"""
+{self.body}""".encode("utf-8").decode("utf-8")
 
 
 class NoteFile(MicropubFile):
@@ -90,7 +89,7 @@ class NoteFile(MicropubFile):
     def filename(self):
         return self.title.lower().replace(" ", "-")
 
-    def compose(self):
+    def compose(self) -> str:
         return f"""+++
 author = "{self.user}"
 comments = {self.comments}
@@ -99,4 +98,4 @@ epistemic = "seedling"
 tags = [{self.tags}]
 title = "{self.title}"
 +++
-{self.body}"""
+{self.body}""".encode("utf-8").decode("utf-8")
