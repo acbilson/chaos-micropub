@@ -48,6 +48,7 @@ def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
     form.title.data = top['title']
     form.tags.data = top['tags']
     form.current_date.data = top['date']
+    form.comments.data = "true" if "comments" in top else "false"
     form.content.data = "".join(content)
 
     return form

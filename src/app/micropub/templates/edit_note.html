@@ -15,6 +15,10 @@
     {{ form.current_date.label }}
     {{ form.current_date(readonly=True, class="tag") }}
   </div>
+  <div>
+    {{ form.comments.label }}
+    {{ form.comments(readonly=True, class="tag") }}
+  </div>
   <div>{{ form.content(rows=20, class="content") }}</div>
 
   <div class="buttons">

@@ -40,6 +40,12 @@ class MicropubFile:
             f.write(self.compose())
         return self.path
 
+    def update(self):
+        with open(self.path, "w") as f:
+            f.write(self.compose())
+        return self.path
+
+
     @property
     def filename(self):
         raise "not implemented"

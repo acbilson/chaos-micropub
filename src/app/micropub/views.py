@@ -176,12 +176,8 @@ def select_note():
                 return f"{user} is not authorized to use this application.", 403
 
             selectionForm = NoteSelectionForm(request.form, meta={"csrf": False})
-
-            url = url_for("micropub_bp.edit_note", path=selectionForm.selected_note.data)
-            redir = redirect(url, code=303)
-            app.logger.info(url)
-            app.logger.info(redir)
-            return redir
+            # code=303 redirects as GET
+            return redirect(url_for("micropub_bp.edit_note", path=selectionForm.selected_note.data), code=303)
     else:
         return f"{request.method} is unsupported for this endpoint", 501
 
@@ -214,7 +210,17 @@ def edit_note():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            app.logger.info("Saving updates to file...")
+            form = NoteForm(request.form, meta={"csrf": False})
+            if not form.validate():
+                return (
+                    f"form could not be validated because {form.errors}. aborting.",
+                    400,
+                )
+
+            note = NoteFile("/mnt/chaos/content/notes", form, user)
+            new_file_path = note.update()
+
+            scripthelper.run_build_script(new_file_path)
 
             return redirect(app.config["SITE"])
     else:
