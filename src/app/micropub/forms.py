@@ -2,8 +2,6 @@ from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField,
-    PasswordField,
-    BooleanField,
     RadioField,
     SelectField,
 )
@@ -66,22 +64,12 @@ class NoteForm(FlaskForm):
         FlaskForm.__init__(self, *args, **kwargs)
 
 
-class NoteEditForm(FlaskForm):
+class NoteSelectionForm(FlaskForm):
     selected_note = SelectField(
         "Select Note",
         coerce=str,
         validators=[InputRequired(message="no note selected")],
     )
-    header = StringField(u"Header", widget=TextArea())
-
-    @property
-    def content(self):
-        return self.note.content
-
-    @property
-    def title(self):
-        return self.note.title
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
-        self.note = NoteForm(*args, **kwargs)

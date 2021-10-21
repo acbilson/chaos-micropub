@@ -15,6 +15,7 @@ docker run --rm \
   -e "SESSION_SECRET=${SESSION_SECRET}" \
   -v ${SITE_PATH}/site:/var/www/site \
   -v ${SOURCE_PATH}/src:/mnt/src \
+  -v ${SOURCE_PATH}/content:/mnt/chaos/content \
   --name micropub \
   acbilson/micropub-dev:alpine-3.12
 ;;
@@ -23,6 +24,7 @@ test)
 # entrypoint args must come after image name (weird)
 docker run --rm \
   -v ${SOURCE_PATH}/src:/mnt/src \
+  -v ${SOURCE_PATH}/content:/mnt/chaos/content \
   --name micropub-test \
   --entrypoint "python" \
   acbilson/micropub-dev:alpine-3.12 \

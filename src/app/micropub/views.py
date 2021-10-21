@@ -16,7 +16,7 @@ from app.micropub.forms import (
     LogForm,
     NoteForm,
     CreateForm,
-    NoteEditForm,
+    NoteSelectionForm,
 )
 from app.micropub.models import (
     LogFile,
@@ -160,7 +160,7 @@ def edit_note():
             return redirect(url_for("micropub_bp.login"))
         else:
             notes = read_notes("/mnt/chaos/content/notes")
-            form = NoteEditForm(request.form, meta={"csrf": False})
+            form = NoteSelectionForm(request.form, meta={"csrf": False})
             form.selected_note.choices = [(note, note) for note in notes]
             return render_template(
                 "edit_notes.html",
@@ -176,21 +176,16 @@ def edit_note():
             if not authorized(user):
                 return f"{user} is not authorized to use this application.", 403
 
-            notes = read_notes("/mnt/chaos/content/notes")
-            form = NoteEditForm(request.form, meta={"csrf": False})
+            selectionForm = NoteSelectionForm(request.form, meta={"csrf": False})
 
-            with open(form.selected_note.data, "r") as f:
-                note = NoteFactory.fromBody(
+            with open(selectionForm.selected_note.data, "r") as f:
+                form = NoteFactory.fromBody(
                     "/mnt/chaos/content/notes", user, f.readlines()
                 )
-                form.note.title.data = note.title
-                form.note.content.data = note.body
-
-            form.selected_note.choices = [(note, note) for note in notes]
 
             if not form.validate():
                 return (
-                    f"form could not be validated because {form.errors}. aborting.",
+                    f"file content could not be validated because {form.errors}. aborting.",
                     400,
                 )
 
@@ -200,7 +195,5 @@ def edit_note():
                 load_route=url_for("micropub_bp.edit_note"),
                 script=url_for("static", filename="js/micropub.js"),
             )
-
-        return ""
     else:
         return f"{request.method} is unsupported for this endpoint", 501
