@@ -2,7 +2,6 @@ from pathlib import Path
 from datetime import datetime
 
 from flask import (
-    Blueprint,
     request,
     render_template,
     url_for,
@@ -25,7 +24,6 @@ from app.micropub.models import (
 from app.micropub.authhelper import authenticated, authorized, get_user
 from app.micropub.filehelper import read_notes
 from app.micropub import scripthelper
-from app.micropub.note_factory import Note
 from app.micropub import note_factory as NoteFactory
 
 
@@ -74,14 +72,14 @@ def create():
             form = CreateForm(request.form, meta={"csrf": False})
             if not form.validate():
                 return (
-                    f"No post type was passed to this endpoint {form.errors}, {form.post_type.data}. aborting.",
+                    f"No action was passed to this endpoint {form.errors}, {form.action.data}. aborting.",
                     400,
                 )
 
-            return redirect(url_for(f"micropub_bp.create_{form.post_type.data}"))
+            return redirect(url_for(f"micropub_bp.{form.action.data}"))
 
 
-@micropub_bp.route("/create/log", methods=["GET", "POST"])
+@micropub_bp.route("/log", methods=["GET", "POST"])
 def create_log():
     if request.method == "GET":
         if not app.debug and not authenticated():
@@ -117,7 +115,7 @@ def create_log():
         return f"{request.method} is unsupported for this endpoint", 501
 
 
-@micropub_bp.route("/create/note", methods=["GET", "POST"])
+@micropub_bp.route("/note", methods=["GET", "POST"])
 def create_note():
     if request.method == "GET":
         if not app.debug and not authenticated():
@@ -152,7 +150,7 @@ def create_note():
     else:
         return f"{request.method} is unsupported for this endpoint", 501
 
-@micropub_bp.route("/select/note", methods=["GET", "POST"])
+@micropub_bp.route("/note/select", methods=["GET", "POST"])
 def select_note():
     if request.method == "GET":
         if not app.debug and not authenticated():
@@ -182,7 +180,7 @@ def select_note():
         return f"{request.method} is unsupported for this endpoint", 501
 
 
-@micropub_bp.route("/edit/note", methods=["GET", "POST"])
+@micropub_bp.route("/note/edit", methods=["GET", "POST"])
 def edit_note():
     if request.method == "GET":
         if not app.debug and not authenticated():
