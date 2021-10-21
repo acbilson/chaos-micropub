@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="611px" preserveAspectRatio="none" style="width:1177px;height:611px;" version="1.1" viewBox="0 0 1177 611" width="1177px" zoomAndPan="magnify"><defs><filter height="300%" id="fhucx7ajg55zz" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="267" x="448.5" y="16.708">Podman Deployment Diagram</text><!--MD5=[ceb7723fb1f11f0c3ab3de4ce8df727e]
+cluster podman_services--><polygon fill="#FFFFFF" filter="url(#fhucx7ajg55zz)" points="16,243.6324,26,233.6324,1160,233.6324,1160,344.6324,1150,354.6324,16,354.6324,16,243.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1150" x2="1160" y1="243.6324" y2="233.6324"/><line style="stroke:#000000;stroke-width:1.5;" x1="16" x2="1150" y1="243.6324" y2="243.6324"/><line style="stroke:#000000;stroke-width:1.5;" x1="1150" x2="1150" y1="243.6324" y2="354.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="137" x="515.5" y="259.6276">podman_services</text><!--MD5=[f762e9f0e99acb339daf8ccc73829846]
+cluster feedreader--><rect fill="#ADD8E6" filter="url(#fhucx7ajg55zz)" height="81" style="stroke:#000000;stroke-width:1.5;" width="376" x="24" y="265.6324"/><rect fill="#ADD8E6" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="380" y="270.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="378" y="272.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="378" y="276.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="89" x="167.5" y="291.6276">feedreader</text><!--MD5=[169e03381c266d75b02301431b08a58e]
+entity webhook_server--><rect fill="#ADD8E6" filter="url(#fhucx7ajg55zz)" height="46.2969" style="stroke:#A80036;stroke-width:1.5;" width="154" x="427" y="292.6324"/><rect fill="#ADD8E6" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="561" y="297.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="559" y="299.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="559" y="303.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="442" y="325.6276">webhook_server</text><!--MD5=[9b3cc507723315d59c498ee350120eff]
+entity publishing_server--><rect fill="#ADD8E6" filter="url(#fhucx7ajg55zz)" height="46.2969" style="stroke:#A80036;stroke-width:1.5;" width="161" x="616.5" y="292.6324"/><rect fill="#ADD8E6" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="757.5" y="297.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="755.5" y="299.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="755.5" y="303.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="631.5" y="325.6276">publishing_server</text><!--MD5=[ceabb0d366f56739fd9800683f3780cd]
+entity budget_server--><rect fill="#ADD8E6" filter="url(#fhucx7ajg55zz)" height="46.2969" style="stroke:#A80036;stroke-width:1.5;" width="140" x="813" y="292.6324"/><rect fill="#ADD8E6" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="933" y="297.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="931" y="299.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="931" y="303.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100" x="828" y="325.6276">budget_server</text><!--MD5=[be09c7b45d9d48fee0c9ae0bb670dcd1]
+entity comments_server--><rect fill="#ADD8E6" filter="url(#fhucx7ajg55zz)" height="46.2969" style="stroke:#A80036;stroke-width:1.5;" width="164" x="988" y="292.6324"/><rect fill="#ADD8E6" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="1132" y="297.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="1130" y="299.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="1130" y="303.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="124" x="1003" y="325.6276">comments_server</text><!--MD5=[2b6cbefc7f2dfbf1818a4ac30e14b6b9]
+entity feedreader_service--><rect fill="#ADD8E6" filter="url(#fhucx7ajg55zz)" height="46.2969" style="stroke:#A80036;stroke-width:1.5;" width="172" x="32" y="292.6324"/><rect fill="#ADD8E6" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="184" y="297.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="182" y="299.6324"/><rect fill="#ADD8E6" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="182" y="303.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="132" x="47" y="325.6276">feedreader_service</text><!--MD5=[8b1862a764400a0d86d8a2da850f5817]
+entity feedreader_db--><path d="M270.5,303.1324 C270.5,293.1324 331,293.1324 331,293.1324 C331,293.1324 391.5,293.1324 391.5,303.1324 L391.5,328.4293 C391.5,338.4293 331,338.4293 331,338.4293 C331,338.4293 270.5,338.4293 270.5,328.4293 L270.5,303.1324 " fill="#FEFECE" filter="url(#fhucx7ajg55zz)" style="stroke:#000000;stroke-width:1.5;"/><path d="M270.5,303.1324 C270.5,313.1324 331,313.1324 331,313.1324 C331,313.1324 391.5,313.1324 391.5,303.1324 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101" x="280.5" y="330.1276">feedreader_db</text><!--MD5=[41227805b6469b59939696479dbd4ab3]
+entity nginx_proxy--><polygon fill="#FFFFFF" filter="url(#fhucx7ajg55zz)" points="636.5,158.6324,646.5,148.6324,757.5,148.6324,757.5,184.9293,747.5,194.9293,636.5,194.9293,636.5,158.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="747.5" x2="757.5" y1="158.6324" y2="148.6324"/><line style="stroke:#000000;stroke-width:1.5;" x1="636.5" x2="747.5" y1="158.6324" y2="158.6324"/><line style="stroke:#000000;stroke-width:1.5;" x1="747.5" x2="747.5" y1="158.6324" y2="194.9293"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="651.5" y="181.6276">nginx_proxy</text><!--MD5=[9eb86c2b3d925a16ba1bdada40016c70]
+entity Internet--><path d="M664.3988,35.4584 C666.9638,29.4217 670.934,28.8411 675.7765,32.8889 C679.2724,28.0846 684.434,26.9531 687.4051,33.4299 C689.2201,28.0647 693.7807,27.8394 697.2423,31.6681 C700.801,27.6403 706.5415,27.3105 708.4392,33.4901 C711.8776,28.7169 716.2059,27.5683 719.7597,33.3664 C724.2738,27.8931 727.7886,28.4335 731.0842,34.5563 C740.1733,37.1842 743.5441,41.5158 738.4225,50.631 C744.1203,57.5708 739.8494,64.8442 731.9515,66.0947 C729.8116,71.5346 725.8219,73.0533 721.1207,69.0246 C717.9415,74.6332 713.5858,75.3664 709.0572,70.5923 C707.5309,76.716 703.476,79.4169 697.7206,75.2524 C692.5438,79.2909 688.8058,77.0597 687.6306,71.1811 C682.2901,75.6126 677.7708,75.2292 674.9358,68.3651 C670.8968,71.9472 666.7822,70.6617 665.1123,65.6553 C656.5685,62.0284 655.8125,55.2038 661.9753,48.8343 C655.7885,43.0599 656.2846,38.6417 664.3988,35.4584 " fill="#FFFFFF" filter="url(#fhucx7ajg55zz)" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="670" y="53.6276">Internet</text><!--MD5=[ae826d22571cd783223c569f5da65001]
+entity chaos_source--><polygon fill="#D2B48C" filter="url(#fhucx7ajg55zz)" points="409.5,532.6324,455.5,532.6324,462.5,553.6324,596.5,553.6324,596.5,604.5231,409.5,604.5231,409.5,532.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="409.5" x2="462.5" y1="553.6324" y2="553.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108" x="419.5" y="573.6276">chaos_content/</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="157" x="419.5" y="589.9244">themes/chaos_theme/</text><!--MD5=[6efb4afd612182dcdbaf5716d5c1cddd]
+entity chaos_site--><polygon fill="#D2B48C" filter="url(#fhucx7ajg55zz)" points="632,540.6324,678,540.6324,685,561.6324,764,561.6324,764,596.2262,632,596.2262,632,540.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="632" x2="685" y1="561.6324" y2="561.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="642" y="581.6276">alexbilson.dev/</text><!--MD5=[6df171afc9acc3e1932afe9c29843974]
+entity budget_source--><polygon fill="#D2B48C" filter="url(#fhucx7ajg55zz)" points="805.5,407.6324,851.5,407.6324,858.5,428.6324,952.5,428.6324,952.5,463.2262,805.5,463.2262,805.5,407.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="805.5" x2="858.5" y1="428.6324" y2="428.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="815.5" y="448.6276">journals/</text><!--MD5=[36099e3977d016c999e1a1ed1cdb2dff]
+entity feedreader_source--><polygon fill="#D2B48C" filter="url(#fhucx7ajg55zz)" points="244.5,407.6324,290.5,407.6324,297.5,428.6324,417.5,428.6324,417.5,463.2262,244.5,463.2262,244.5,407.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="244.5" x2="297.5" y1="428.6324" y2="428.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104" x="254.5" y="448.6276">db/feedreader/</text><!--MD5=[ed3a41ed90da0e8e914a32ea6539f59a]
+entity comments_source--><polygon fill="#D2B48C" filter="url(#fhucx7ajg55zz)" points="987.5,399.6324,1033.5,399.6324,1040.5,420.6324,1158.5,420.6324,1158.5,471.5231,987.5,471.5231,987.5,399.6324" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="987.5" x2="1040.5" y1="420.6324" y2="420.6324"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102" x="997.5" y="440.6276">db/comments/</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="54" x="997.5" y="456.9244">avatars/</text><!--MD5=[ee82db322e0630049bff818f56bfd9d8]
+entity uses--><ellipse cx="504" cy="435.6324" fill="#FEFECE" filter="url(#fhucx7ajg55zz)" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="34" x="487" y="465.6276">uses</text><!--MD5=[1fa33c98f97147626bf4bd527070f633]
+entity compiles--><ellipse cx="697" cy="435.6324" fill="#FEFECE" filter="url(#fhucx7ajg55zz)" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62" x="666" y="465.6276">compiles</text><!--MD5=[450b89c98818eaf2d27e2f521457724b]
+link feedreader_service to feedreader_db--><path d="M204.0213,315.6324 C224.39,315.6324 245.7973,315.6324 265.1092,315.6324 " fill="none" id="feedreader_service-to-feedreader_db" style="stroke:#A80036;stroke-width:1.0;"/><rect fill="#FFFFFF" height="10" style="stroke:#A80036;stroke-width:1.5;" width="10" x="265.498" y="310.6324"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="30" x="222.25" y="308.6993">uses</text><!--MD5=[af3fada51ba15734d6d304714bf35fe9]
+link webhook_server to uses--><path d="M504,338.7696 C504,365.4674 504,408.0634 504,426.5637 " fill="none" id="webhook_server-uses" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[a1bc08f49fa194e1422b50595d9d1c20]
+link publishing_server to uses--><path d="M659.7877,338.7696 C614.0007,367.2382 539.1398,413.7838 513.1951,429.9152 " fill="none" id="publishing_server-uses" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[baa612f2b8c57556ef36e0e495aff74f]
+link uses to chaos_source--><path d="M503.9313,444.774 C503.8054,461.5147 503.5307,498.0459 503.3121,527.1201 " fill="none" id="uses-to-chaos_source" style="stroke:#A80036;stroke-width:1.0;"/><rect fill="#FFFFFF" height="10" style="stroke:#A80036;stroke-width:1.5;" width="10" x="498.272" y="527.4556"/><!--MD5=[b35e7e6f2d813945689c4361e5c8a4d7]
+link webhook_server to compiles--><path d="M541.2123,338.7696 C586.9993,367.2382 661.8602,413.7838 687.8049,429.9152 " fill="none" id="webhook_server-compiles" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[44ef44fc15b779fb2dc551afe660d549]
+link publishing_server to compiles--><path d="M697,338.7696 C697,365.4674 697,408.0634 697,426.5637 " fill="none" id="publishing_server-compiles" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[ad8eb93de2bb17a3229be890880baf49]
+link compiles to chaos_site--><path d="M697.0687,444.774 C697.2068,463.1375 697.5239,505.3147 697.7497,535.3406 " fill="none" id="compiles-to-chaos_site" style="stroke:#A80036;stroke-width:1.0;"/><rect fill="#FFFFFF" height="10" style="stroke:#A80036;stroke-width:1.5;" width="10" x="692.7879" y="535.4227"/><!--MD5=[eb36f14209926d6d1165b892be39b3a6]
+link budget_server to budget_source--><path d="M882.2288,338.7696 C881.626,356.8519 880.7802,382.2272 880.1054,402.4695 " fill="none" id="budget_server-to-budget_source" style="stroke:#A80036;stroke-width:1.0;"/><rect fill="#FFFFFF" height="10" style="stroke:#A80036;stroke-width:1.5;" width="10" x="874.9378" y="402.4977"/><!--MD5=[27ed49bf8c66fb47bdfb8b8c01cb9f57]
+link comments_server to comments_source--><path d="M1070.5784,338.7696 C1070.9706,354.4575 1071.5001,375.6349 1071.9639,394.1872 " fill="none" id="comments_server-to-comments_source" style="stroke:#A80036;stroke-width:1.0;"/><rect fill="#FFFFFF" height="10" style="stroke:#A80036;stroke-width:1.5;" width="10" x="1067.0928" y="394.3435"/><!--MD5=[c8e716cb36050493862e73db10643d95]
+link feedreader_db to feedreader_source--><path d="M331,338.2035 C331,356.229 331,381.7586 331,402.1627 " fill="none" id="feedreader_db-to-feedreader_source" style="stroke:#A80036;stroke-width:1.0;"/><rect fill="#FFFFFF" height="10" style="stroke:#A80036;stroke-width:1.5;" width="10" x="326" y="402.2321"/><!--MD5=[517958aaa329132ed559f1807a294e0a]
+link nginx_proxy to webhook_server--><path d="M657.4858,194.7878 C639.2622,205.9291 617.5973,219.8412 599,233.6324 C578.2264,249.0374 556.2923,267.7866 538.7403,283.4665 " fill="none" id="nginx_proxy-to-webhook_server" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="528.9542,292.2954,536.0886,291.2462,537.864,284.2571,530.7297,285.3063,528.9542,292.2954" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[bc3fbba5de6bda900e610b1640820f53]
+link nginx_proxy to publishing_server--><path d="M697,194.7685 C697,217.5467 697,252.679 697,279.2064 " fill="none" id="nginx_proxy-to-publishing_server" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="697,292.5537,701,286.5537,697,280.5537,693,286.5537,697,292.5537" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[93dc34ca77c39f8f65636e11f19a0311]
+link nginx_proxy to budget_server--><path d="M737.2334,194.7577 C755.4065,205.7849 776.8278,219.6131 795,233.6324 C814.5799,248.7377 834.8758,267.4148 851.0354,283.1269 " fill="none" id="nginx_proxy-to-budget_server" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="860.5191,292.4683,859.0515,285.4082,851.97,284.0474,853.4376,291.1076,860.5191,292.4683" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[4c3a9c6cdc80dcad17549a953bf3b5c3]
+link nginx_proxy to comments_server--><path d="M757.6856,177.1478 C815.0808,184.2229 902.3998,199.8885 971,233.6324 C996.1765,246.0165 1020.5008,266.013 1038.7382,283.1585 " fill="none" id="nginx_proxy-to-comments_server" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="1048.2107,292.3241,1046.6803,285.2773,1039.5869,283.9797,1041.1173,291.0265,1048.2107,292.3241" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[e99fe9f7caf50cd0fcbb21f29fb35ee0]
+link nginx_proxy to feedreader_service--><path d="M636.3333,177.0379 C531.8251,186.8582 322.3753,208.9125 253,233.6324 C219.0226,245.7393 184.321,267.0529 158.6094,284.916 " fill="none" id="nginx_proxy-to-feedreader_service" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="147.817,292.5786,155.025,292.3666,157.6016,285.6316,150.3936,285.8436,147.817,292.5786" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[045b5809f2ebefd30d6cf9554598e674]
+reverse link Internet to nginx_proxy--><path d="M697,76.8352 C697,98.5796 697,128.2742 697,148.6008 " fill="none" id="Internet-backto-nginx_proxy" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="697,71.7678,693,80.7678,697,76.7678,701,80.7678,697,71.7678" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="146" x="698" y="114.6993">https://*.alexbilson.dev</text><!--MD5=[ccf21f19a0092db0ee43113f45c6cdcd]
+@startuml
+'
+title Podman Deployment Diagram
+
+skinparam nodeBackgroundColor #white
+skinparam componentBackgroundColor #lightBlue
+skinparam folderBackgroundColor #tan
+skinparam cloudBackgroundColor #white
+
+node nginx_proxy
+
+node podman_services {
+  component webhook_server
+  component publishing_server
+  component budget_server
+  component comments_server
+  component feedreader {
+    component feedreader_service
+    database feedreader_db
+    feedreader_service -# feedreader_db : uses
+  }
+}
+
+cloud Internet
+
+folder chaos_source [
+  chaos_content/
+  themes/chaos_theme/
+]
+
+folder chaos_site [
+  alexbilson.dev/
+]
+
+folder budget_source [
+  journals/
+]
+
+folder feedreader_source [
+  db/feedreader/
+]
+
+folder comments_source [
+  db/comments/
+  avatars/
+]
+
+' Relationships
+
+webhook_server - - uses
+publishing_server - - uses
+uses - -# chaos_source
+
+webhook_server - - compiles
+publishing_server - - compiles
+compiles - -# chaos_site
+
+budget_server - -# budget_source
+
+comments_server - -# comments_source
+
+feedreader_db - -# feedreader_source
+
+nginx_proxy - -* webhook_server
+nginx_proxy - -* publishing_server
+nginx_proxy - -* budget_server
+nginx_proxy - -* comments_server
+nginx_proxy - -* feedreader_service
+
+' Network
+
+Internet <.. nginx_proxy : https://*.alexbilson.dev
+@enduml
+
+@startuml
+title Podman Deployment Diagram
+
+skinparam nodeBackgroundColor #white
+skinparam componentBackgroundColor #lightBlue
+skinparam folderBackgroundColor #tan
+skinparam cloudBackgroundColor #white
+
+node nginx_proxy
+
+node podman_services {
+  component webhook_server
+  component publishing_server
+  component budget_server
+  component comments_server
+  component feedreader {
+    component feedreader_service
+    database feedreader_db
+    feedreader_service -# feedreader_db : uses
+  }
+}
+
+cloud Internet
+
+folder chaos_source [
+  chaos_content/
+  themes/chaos_theme/
+]
+
+folder chaos_site [
+  alexbilson.dev/
+]
+
+folder budget_source [
+  journals/
+]
+
+folder feedreader_source [
+  db/feedreader/
+]
+
+folder comments_source [
+  db/comments/
+  avatars/
+]
+
+
+webhook_server - - uses
+publishing_server - - uses
+uses - -# chaos_source
+
+webhook_server - - compiles
+publishing_server - - compiles
+compiles - -# chaos_site
+
+budget_server - -# budget_source
+
+comments_server - -# comments_source
+
+feedreader_db - -# feedreader_source
+
+nginx_proxy - -* webhook_server
+nginx_proxy - -* publishing_server
+nginx_proxy - -* budget_server
+nginx_proxy - -* comments_server
+nginx_proxy - -* feedreader_service
+
+
+Internet <.. nginx_proxy : https://*.alexbilson.dev
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 10:25:05 UTC 2021)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
