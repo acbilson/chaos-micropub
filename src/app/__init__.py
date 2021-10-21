@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, Response
 from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint

@@ -4,6 +4,7 @@ Converts data into objects of Note* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
+from flask import current_app as app
 from app.micropub.forms import NoteForm
 from pathlib import Path
 import toml

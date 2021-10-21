@@ -152,9 +152,8 @@ def create_note():
     else:
         return f"{request.method} is unsupported for this endpoint", 501
 
-
-@micropub_bp.route("/edit/note", methods=["GET", "POST"])
-def edit_note():
+@micropub_bp.route("/select/note", methods=["GET", "POST"])
+def select_note():
     if request.method == "GET":
         if not app.debug and not authenticated():
             return redirect(url_for("micropub_bp.login"))
@@ -165,7 +164,7 @@ def edit_note():
             return render_template(
                 "edit_notes.html",
                 form=form,
-                load_route=url_for("micropub_bp.edit_note"),
+                load_route=url_for("micropub_bp.select_note"),
                 script=url_for("static", filename="js/micropub.js"),
             )
     elif request.method == "POST":
@@ -178,22 +177,45 @@ def edit_note():
 
             selectionForm = NoteSelectionForm(request.form, meta={"csrf": False})
 
-            with open(selectionForm.selected_note.data, "r") as f:
-                form = NoteFactory.fromBody(
-                    "/mnt/chaos/content/notes", user, f.readlines()
-                )
+            url = url_for("micropub_bp.edit_note", path=selectionForm.selected_note.data)
+            redir = redirect(url, code=303)
+            app.logger.info(url)
+            app.logger.info(redir)
+            return redir
+    else:
+        return f"{request.method} is unsupported for this endpoint", 501
 
-            if not form.validate():
-                return (
-                    f"file content could not be validated because {form.errors}. aborting.",
-                    400,
+
+@micropub_bp.route("/edit/note", methods=["GET", "POST"])
+def edit_note():
+    if request.method == "GET":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            if "path" not in request.args:
+                return f"path not present in query string {request.args}", 400
+
+            with open(request.args["path"], "r") as f:
+                form = NoteFactory.fromBody(
+                    "/mnt/chaos/content/notes", "Alex Bilson", f.readlines()
                 )
 
             return render_template(
                 "edit_note.html",
                 form=form,
-                load_route=url_for("micropub_bp.edit_note"),
+                save_route=url_for("micropub_bp.edit_note"),
                 script=url_for("static", filename="js/micropub.js"),
             )
+    elif request.method == "POST":
+        if not app.debug and not authenticated():
+            return redirect(url_for("micropub_bp.login"))
+        else:
+            user = get_user()
+            if not authorized(user):
+                return f"{user} is not authorized to use this application.", 403
+
+            app.logger.info("Saving updates to file...")
+
+            return redirect(app.config["SITE"])
     else:
         return f"{request.method} is unsupported for this endpoint", 501

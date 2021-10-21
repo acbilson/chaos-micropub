@@ -1,15 +1,24 @@
 {% extends "layout.html" %}
 {% block content %}
 <!-- The form for selecting a note to edit -->
-<form id="note-form-update" action="{{ load_route }}" method="POST" class="entry-form">
+<form id="note-form-update" action="{{ save_route }}" method="POST" class="entry-form">
   <p>Edit this note</p>
-  <div>{{ form.title }}</div>
-  <div>{{ form.tags }}</div>
-  <div>{{ form.date }}</div>
-  <div>{{ form.content }}</div>
+  <div>
+    {{ form.title.label }}
+    {{ form.title(readonly=True, class="tag") }}
+  </div>
+  <div>
+    {{ form.tags.label }}
+    {{ form.tags(readonly=True, class="tag") }}
+  </div>
+  <div>
+    {{ form.current_date.label }}
+    {{ form.current_date(readonly=True, class="tag") }}
+  </div>
+  <div>{{ form.content(rows=20, class="content") }}</div>
 
   <div class="buttons">
-    <button type="submit">Save!</button>
+    <button type="submit">Update!</button>
   </div>
 </form>
 
