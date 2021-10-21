@@ -8,3 +8,4 @@ beautifulsoup4
 mf2py
 python-dotenv
 requests
+pyyaml

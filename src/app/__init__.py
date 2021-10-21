@@ -45,4 +45,3 @@ def create_app(config=config.BaseConfig):
 def register_extensions(app):
     """Register extensions with the Flask application."""
     assets.init_app(app)
-

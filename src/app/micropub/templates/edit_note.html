@@ -3,10 +3,9 @@
 <!-- The form for selecting a note to edit -->
 <form id="note-form-update" action="{{ load_route }}" method="POST" class="entry-form">
   <p>Edit this note</p>
-  <div>
-  {{ form.selected_note.data }}
-  {{ form.content }}
-  </div>
+  <div>{{ form.selected_note.data }}</div>
+  <div>{{ form.title }}</div>
+  <div>{{ form.content }}</div>
 
   <div class="buttons">
     <button type="submit">Save!</button>

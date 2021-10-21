@@ -12,25 +12,22 @@ from flask import current_app as app
 
 from ..micropub import micropub_bp
 from app.micropub.forms import (
-  LoginForm,
-  LogForm,
-  NoteForm,
-  CreateForm,
-  NoteEditForm,
+    LoginForm,
+    LogForm,
+    NoteForm,
+    CreateForm,
+    NoteEditForm,
 )
 from app.micropub.models import (
-  LogFile,
-  NoteFile,
+    LogFile,
+    NoteFile,
 )
-from app.micropub.authhelper import (
-  authenticated,
-  authorized,
-  get_user
-)
-from app.micropub.filehelper import (
-    read_notes
-)
+from app.micropub.authhelper import authenticated, authorized, get_user
+from app.micropub.filehelper import read_notes
 from app.micropub import scripthelper
+from app.micropub.note_factory import Note
+from app.micropub import note_factory as NoteFactory
+
 
 @micropub_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -64,9 +61,8 @@ def create():
         else:
             form = CreateForm(meta={"csrf": False})
             return render_template(
-                "create.html",
-                create_route=url_for("micropub_bp.create"),
-                form=form)
+                "create.html", create_route=url_for("micropub_bp.create"), form=form
+            )
     elif request.method == "POST":
         if not app.debug and not authenticated():
             return redirect(url_for("micropub_bp.login"))
@@ -77,7 +73,10 @@ def create():
 
             form = CreateForm(request.form, meta={"csrf": False})
             if not form.validate():
-                return f"No post type was passed to this endpoint {form.errors}, {form.post_type.data}. aborting.", 400
+                return (
+                    f"No post type was passed to this endpoint {form.errors}, {form.post_type.data}. aborting.",
+                    400,
+                )
 
             return redirect(url_for(f"micropub_bp.create_{form.post_type.data}"))
 
@@ -103,7 +102,10 @@ def create_log():
 
             form = LogForm(request.form, meta={"csrf": False})
             if not form.validate():
-                return f"form could not be validated because {form.errors}. aborting.", 400
+                return (
+                    f"form could not be validated because {form.errors}. aborting.",
+                    400,
+                )
 
             log = LogFile("/mnt/chaos/content/logs", form, user)
             new_file_path = log.save()
@@ -136,7 +138,10 @@ def create_note():
 
             form = NoteForm(request.form, meta={"csrf": False})
             if not form.validate():
-                return f"form could not be validated because {form.errors}. aborting.", 400
+                return (
+                    f"form could not be validated because {form.errors}. aborting.",
+                    400,
+                )
 
             note = NoteFile("/mnt/chaos/content/notes", form, user)
             new_file_path = note.save()
@@ -146,6 +151,7 @@ def create_note():
             return redirect(app.config["SITE"])
     else:
         return f"{request.method} is unsupported for this endpoint", 501
+
 
 @micropub_bp.route("/edit/note", methods=["GET", "POST"])
 def edit_note():
@@ -173,12 +179,20 @@ def edit_note():
             notes = read_notes("/mnt/chaos/content/notes")
             form = NoteEditForm(request.form, meta={"csrf": False})
 
-            with open(form.selected_note.data, 'r') as f:
-                form.content.data = f.readlines()
+            with open(form.selected_note.data, "r") as f:
+                note = NoteFactory.fromBody(
+                    "/mnt/chaos/content/notes", user, f.readlines()
+                )
+                form.note.title.data = note.title
+                form.note.content.data = note.body
 
             form.selected_note.choices = [(note, note) for note in notes]
+
             if not form.validate():
-                return f"form could not be validated because {form.errors}. aborting.", 400
+                return (
+                    f"form could not be validated because {form.errors}. aborting.",
+                    400,
+                )
 
             return render_template(
                 "edit_note.html",
@@ -187,7 +201,6 @@ def edit_note():
                 script=url_for("static", filename="js/micropub.js"),
             )
 
-
-        return "";
+        return ""
     else:
         return f"{request.method} is unsupported for this endpoint", 501

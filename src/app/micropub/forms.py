@@ -1,24 +1,28 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import (
-  StringField,
-  PasswordField,
-  BooleanField,
-  RadioField,
-  SelectField,
+    StringField,
+    PasswordField,
+    BooleanField,
+    RadioField,
+    SelectField,
 )
+from wtforms.widgets import TextArea
 from wtforms.validators import (
-  InputRequired,
-  Length,
-  AnyOf,
+    InputRequired,
+    Length,
+    AnyOf,
 )
 
 
 class LoginForm(FlaskForm):
-    option = StringField("option", validators=[
-        InputRequired(message="Must select a login option"),
-        AnyOf(["github", "google"], message="This login option is not supported")
-      ])
+    option = StringField(
+        "option",
+        validators=[
+            InputRequired(message="Must select a login option"),
+            AnyOf(["github", "google"], message="This login option is not supported"),
+        ],
+    )
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
@@ -32,26 +36,52 @@ class CreateForm(FlaskForm):
 
 
 class LogForm(FlaskForm):
-    content = StringField("content", validators=[InputRequired(message="No content entered")])
-    current_date = StringField("current_date", validators=[Length(min=1, max=25, message="No date entered")])
+    content = StringField(
+        "content", validators=[InputRequired(message="No content entered")]
+    )
+    current_date = StringField(
+        "current_date", validators=[Length(min=1, max=25, message="No date entered")]
+    )
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
 
 
 class NoteForm(FlaskForm):
-    content = StringField("content", validators=[InputRequired(message="No content entered")])
-    current_date = StringField("current_date", validators=[Length(min=1, max=25, message="No date entered")])
+    content = StringField(
+        "content",
+        widget=TextArea(),
+        validators=[InputRequired(message="No content entered")],
+    )
+    current_date = StringField(
+        "current_date", validators=[Length(min=1, max=25, message="No date entered")]
+    )
     title = StringField("title", validators=[InputRequired(message="No title entered")])
     tags = StringField("tags", validators=[InputRequired(message="No tags entered")])
-    comments = StringField("comments", validators=[InputRequired(message="Comment data missing")])
+    comments = StringField(
+        "comments", validators=[InputRequired(message="Comment data missing")]
+    )
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
+
 
 class NoteEditForm(FlaskForm):
-    selected_note = SelectField("note_select", coerce=str, validators=[InputRequired(message="no note selected")])
-    content = StringField("content")
+    selected_note = SelectField(
+        "Select Note",
+        coerce=str,
+        validators=[InputRequired(message="no note selected")],
+    )
+    header = StringField(u"Header", widget=TextArea())
+
+    @property
+    def content(self):
+        return self.note.content
+
+    @property
+    def title(self):
+        return self.note.title
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
+        self.note = NoteForm(*args, **kwargs)
