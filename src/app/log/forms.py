@@ -20,9 +20,8 @@ class LogForm(FlaskForm):
         validators=[InputRequired(message="No content entered")],
     )
     logname = StringField("Log Name")
-    current_date = HiddenField(
-        "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
-    )
+
+    current_date = HiddenField("Current Date")
     aliases = HiddenField("Aliases")
     submit = SubmitField("Publish!")
 

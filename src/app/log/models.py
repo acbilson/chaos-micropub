@@ -44,7 +44,10 @@ class Log:
 
     @property
     def timestamp(self):
-        return datetime.fromisoformat(self._date)
+        if self._date is not None:
+            return datetime.fromisoformat(self._date)
+        else:
+            return datetime.now()
 
     @property
     def author(self):
