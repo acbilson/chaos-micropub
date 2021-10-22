@@ -40,7 +40,7 @@ def _authorized() -> Text:
 def login():
     if request.method == "GET":
         if not app.debug and not authenticated():
-            form = LoginForm(request.form, meta={"csrf": False})
+            form = LoginForm(request.form)
             return render_template(
                 "login.html",
                 login_route=url_for("micropub_bp.login"),
@@ -52,7 +52,7 @@ def login():
         if app.debug:
             return redirect(url_for("micropub_bp.select"))
 
-        form = LoginForm(request.form, meta={"csrf": False})
+        form = LoginForm(request.form)
         if not form.validate():
             return f"login failed: {form.errors}", 501
 
@@ -67,12 +67,12 @@ def select():
         return exits
 
     if request.method == "GET":
-        form = SelectForm(meta={"csrf": False})
+        form = SelectForm()
         return render_template(
             "select.html", create_route=url_for("micropub_bp.select"), form=form
         )
     elif request.method == "POST":
-        form = SelectForm(request.form, meta={"csrf": False})
+        form = SelectForm(request.form)
         if not form.validate():
             return (
                 f"No action was passed to this endpoint {form.errors}, {form.action.data}. aborting.",
@@ -86,7 +86,7 @@ def select():
 def create_log():
     if exits := _authorized() != None:
         return exits
-    form = LogForm(request.form, meta={"csrf": False})
+    form = LogForm(request.form)
 
     if request.method == "GET":
         return render_template(
@@ -115,7 +115,7 @@ def create_log():
 def create_note():
     if exits := _authorized() != None:
         return exits
-    form = NoteForm(request.form, meta={"csrf": False})
+    form = NoteForm(request.form)
 
     if request.method == "GET":
         return render_template(
@@ -147,7 +147,7 @@ def select_note():
 
     if request.method == "GET":
         notes = read_notes("/mnt/chaos/content/notes")
-        form = NoteSelectionForm(request.form, meta={"csrf": False})
+        form = NoteSelectionForm(request.form)
         form.selected_note.choices = [(note, note) for note in notes]
         return render_template(
             "edit_notes.html",
@@ -156,7 +156,7 @@ def select_note():
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
-        selectionForm = NoteSelectionForm(request.form, meta={"csrf": False})
+        selectionForm = NoteSelectionForm(request.form)
         # code=303 redirects as GET
         return redirect(
             url_for("micropub_bp.edit_note", path=selectionForm.selected_note.data),
@@ -185,7 +185,7 @@ def edit_note():
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
-        form = NoteForm(request.form, meta={"csrf": False})
+        form = NoteForm(request.form)
         if not form.validate():
             return (
                 f"form could not be validated because {form.errors}. aborting.",

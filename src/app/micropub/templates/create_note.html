@@ -2,6 +2,7 @@
 {% block content %}
 <div class="create">
   <form id="create-form" action="{{ create_route }}" method="POST">
+    {{ form.csrf_token }}
 
     <p>Enter your note. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
     {{ form.content(rows=20, class="content") }}

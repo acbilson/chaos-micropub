@@ -42,7 +42,7 @@ def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
     """
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
-    form = NoteForm(meta={"csrf": False})
+    form = NoteForm()
 
     form.title.data = top["title"]
     form.tags.data = top["tags"]

@@ -2,6 +2,8 @@
 {% block content %}
 <div class="edit">
   <form id="edit-form" action="{{ save_route }}" method="POST">
+    {{ form.csrf_token }}
+
     <div class="view-set">
       {{ form.title.label }}
       {{ form.title(readonly=True, class="title") }}

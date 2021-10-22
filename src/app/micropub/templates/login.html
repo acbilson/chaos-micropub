@@ -13,6 +13,8 @@
 <body>
   <div class="login">
     <form id="entry-form" action="{{ login_route }}" method="POST">
+    {{ form.csrf_token }}
+
       <p>Select your login:</p>
       {{ form.action }}
       {{ form.submit }}
