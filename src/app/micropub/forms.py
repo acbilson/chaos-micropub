@@ -17,13 +17,14 @@ from wtforms.validators import (
 
 
 class LoginForm(FlaskForm):
-    option = StringField(
-        "option",
-        validators=[
-            InputRequired(message="Must select a login option"),
-            AnyOf(["github", "google"], message="This login option is not supported"),
-        ],
+    option = RadioField(
+        "Action",
+        choices=[
+            ("github", "Github"),
+            ("google", "Google"),
+        ]
     )
+    submit = SubmitField("Login")
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
@@ -68,8 +69,8 @@ class NoteForm(FlaskForm):
     current_date = HiddenField(
         "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
     )
-    title = StringField("Title", validators=[InputRequired(message="No title entered")])
-    tags = StringField("Tags", validators=[InputRequired(message="No tags entered")])
+    title = StringField("Title:", validators=[InputRequired(message="No title entered")])
+    tags = StringField("Tags:", validators=[InputRequired(message="No tags entered")])
     comments = BooleanField("Allow Comments?")
     submit = SubmitField("Publish!")
 
@@ -83,6 +84,7 @@ class NoteSelectionForm(FlaskForm):
         coerce=str,
         validators=[InputRequired(message="no note selected")],
     )
+    submit = SubmitField("Load Note")
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

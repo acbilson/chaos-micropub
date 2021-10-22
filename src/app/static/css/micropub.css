@@ -1,6 +1,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 12pt;
+    line-height: 18px;
 }
 
 p {
@@ -19,6 +20,18 @@ li {
 input[type="submit"] {
     width: 100px;
     margin-top: 9px;
+}
+
+/* login.html */
+
+.login {
+    max-width: 30%;
+    margin: auto;
+}
+
+.login-action {
+    color: black;
+    padding-left: 0;
 }
 
 /* select.html */
@@ -76,6 +89,38 @@ textarea.content {
     #create-form {
         align-items: flex-start;
     }
+}
+
+/* edit_notes */
+
+.edit {
+    margin: 5%;
+}
+
+#edit-form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.view-set {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    margin-bottom: 9px;
+}
+
+.view-set > input[type="text"] {
+    border: none
+}
+
+.view-set > * {
+    line-height: 18px;
+    padding: 0;
+}
+
+.view-set > *:first-child {
+    padding-right: 9px;
 }
 
 /* */

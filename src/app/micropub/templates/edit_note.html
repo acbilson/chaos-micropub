@@ -1,30 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
-<!-- The form for selecting a note to edit -->
-<form id="note-form-update" action="{{ save_route }}" method="POST" class="entry-form">
-  <p>Edit this note</p>
-  <div>
-    {{ form.title.label }}
-    {{ form.title(readonly=True, class="tag") }}
-  </div>
-  <div>
-    {{ form.tags.label }}
-    {{ form.tags(readonly=True, class="tag") }}
-  </div>
-  <div>
-    {{ form.current_date.label }}
-    {{ form.current_date(readonly=True, class="tag") }}
-  </div>
-  <div>
-    {{ form.comments.label }}
-    {{ form.comments(readonly=True, class="tag") }}
-  </div>
-  <div>{{ form.content(rows=20, class="content") }}</div>
-
-  <div class="buttons">
-    <button type="submit">Update!</button>
-  </div>
-</form>
-
+<div class="edit">
+  <form id="edit-form" action="{{ save_route }}" method="POST">
+    <div class="view-set">
+      {{ form.title.label }}
+      {{ form.title(readonly=True, class="title") }}
+    </div>
+    <div class="view-set">
+      {{ form.tags.label }}
+      {{ form.tags(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.comments.label }}
+      {{ form.comments(readonly=True) }}
+    </div>
+    {{ form.content(rows=20, class="content") }}
+    {{ form.submit }}
+  </form>
+</div>
   <script type="text/javascript" src="{{ script }}"></script>
 {% endblock %}

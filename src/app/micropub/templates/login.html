@@ -11,13 +11,12 @@
 </head>
 
 <body>
-    <form action="{{ login_route }}" method="POST" class="entry-form">
+  <div class="login">
+    <form id="entry-form" action="{{ login_route }}" method="POST">
       <p>Select your login:</p>
-       <div class="options">
-          <div><input type="radio" name="option" value="google" class="category" /><label for="google">Google</label></div>
-          <div><input type="radio" name="option" value="github" class="category" /><label for="github">Github</label></div>
-        </div>
-      <button type="submit">Submit</button>
+      {{ form.action }}
+      {{ form.submit }}
     </form>
-  </body>
+  </div>
+</body>
 </html>

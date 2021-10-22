@@ -40,6 +40,7 @@ def _authorized() -> Text:
 def login():
     if request.method == "GET":
         if not app.debug and not authenticated():
+            form = LoginForm(request.form, meta={"csrf": False})
             return render_template(
                 "login.html",
                 login_route=url_for("micropub_bp.login"),
