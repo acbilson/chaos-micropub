@@ -1,12 +1,12 @@
 from pathlib import Path
 from datetime import datetime
-from typing import Text
 
 from flask import (
     request,
     render_template,
     url_for,
     redirect,
+    Response,
 )
 from flask import current_app as app
 
@@ -27,7 +27,8 @@ from app.micropub.filehelper import read_notes
 from app.micropub import scripthelper
 from app.micropub import note_factory as NoteFactory
 
-def _authorized() -> Text:
+
+def _authorized() -> Response:
     if not app.debug and not authenticated():
         return redirect(url_for("micropub_bp.login"))
     user = get_user()
@@ -48,7 +49,7 @@ def login():
         else:
             return redirect(url_for("micropub_bp.select"))
 
-    elif request.method == "POST":
+    else:
         if app.debug:
             return redirect(url_for("micropub_bp.select"))
 
@@ -57,8 +58,6 @@ def login():
             return f"login failed: {form.errors}", 501
 
         return redirect(url_for(f"{form.option.data}.login"))
-    else:
-        return f"{request.method} is unsupported for this endpoint", 501
 
 
 @micropub_bp.route("/", methods=["GET", "POST"])
@@ -71,7 +70,7 @@ def select():
         return render_template(
             "select.html", create_route=url_for("micropub_bp.select"), form=form
         )
-    elif request.method == "POST":
+    else:
         form = SelectForm(request.form)
         if not form.validate():
             return (

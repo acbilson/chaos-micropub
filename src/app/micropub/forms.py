@@ -22,7 +22,7 @@ class LoginForm(FlaskForm):
         choices=[
             ("github", "Github"),
             ("google", "Google"),
-        ]
+        ],
     )
     submit = SubmitField("Login")
 
@@ -49,7 +49,7 @@ class LogForm(FlaskForm):
     content = StringField(
         "Content",
         widget=TextArea(),
-        validators=[InputRequired(message="No content entered")]
+        validators=[InputRequired(message="No content entered")],
     )
     current_date = HiddenField(
         "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
@@ -68,7 +68,9 @@ class NoteForm(FlaskForm):
     )
     current_date = HiddenField("Current Date")
     modified_date = StringField("Modified Date")
-    title = StringField("Title:", validators=[InputRequired(message="No title entered")])
+    title = StringField(
+        "Title:", validators=[InputRequired(message="No title entered")]
+    )
     tags = StringField("Tags:", validators=[InputRequired(message="No tags entered")])
     comments = BooleanField("Allow Comments?")
     submit = SubmitField("Publish!")

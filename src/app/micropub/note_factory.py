@@ -7,6 +7,7 @@ Currently supports TOML-style content, with YAML as a possible future implementa
 from flask import current_app as app
 from app.micropub.forms import NoteForm
 from pathlib import Path
+from datetime import datetime
 import toml
 
 
@@ -47,6 +48,7 @@ def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
     form.title.data = top["title"]
     form.tags.data = top["tags"]
     form.current_date.data = top["date"]
+    form.modified_date.data = top["lastmod"] if "lastmod" in top else datetime.now()
     form.comments.data = "true" if "comments" in top else "false"
     form.content.data = "".join(content)
 

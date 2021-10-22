@@ -1,17 +1,10 @@
 import unittest
 from datetime import datetime
-from flask_wtf import Form
-from flask import Flask
-from app import create_app
 from app.micropub.forms import LogForm
+from base_test import BaseTest
 
 
-class LogFormTests(unittest.TestCase):
-    def setUp(self):
-        app = create_app()
-        app.config["WTF_CSRF_ENABLED"] = False
-        self.app = app
-
+class LogFormTests(BaseTest):
     def test_form_missing_content(self):
         with self.app.app_context():
             form = LogForm()

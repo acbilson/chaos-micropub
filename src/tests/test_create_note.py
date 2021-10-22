@@ -1,16 +1,10 @@
 import unittest
 from unittest import mock
-from datetime import datetime
-from flask import Flask
-from app import create_app
 from app.config import TestConfig
-from app.micropub import views
+from base_test import BaseTest
 
 
-class CreateNoteTests(unittest.TestCase):
-    def setUp(self):
-        self.app = create_app(TestConfig).test_client()
-
+class CreateNoteTests(BaseTest):
     def test_create_note_missing_request_data(self):
         bodies = [
             dict(),
@@ -30,7 +24,7 @@ class CreateNoteTests(unittest.TestCase):
         ]
 
         for body in bodies:
-            resp = self.app.post("/", data=body)
+            resp = self.client.post("/", data=body)
             self.assertEqual(resp.status, "400 BAD REQUEST")
 
     @mock.patch("app.micropub.models.NoteFile.save")
@@ -44,7 +38,7 @@ class CreateNoteTests(unittest.TestCase):
             tags="fake false",
             comments="on",
         )
-        resp = self.app.post("/note", data=data)
+        resp = self.client.post("/note", data=data)
         self.assertEqual(resp.status, "302 FOUND", resp.data)
         self.assertEqual(resp.location, TestConfig.SITE)
 

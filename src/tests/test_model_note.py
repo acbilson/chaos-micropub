@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import create_autospec
 from pathlib import Path
-from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import Field
 from app.micropub.models import NoteFile

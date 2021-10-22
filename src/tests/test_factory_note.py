@@ -1,19 +1,15 @@
 import unittest
-from app import create_app
-from app.micropub.forms import NoteForm
 from app.micropub import note_factory as NoteFactory
+from base_test import BaseTest
 
 
-class NoteFactoryTests(unittest.TestCase):
+class NoteFactoryTests(BaseTest):
     def setUp(self):
+        super().setUp()
         with open(
             "/mnt/chaos/content/notes/add-snippets-to-your-text-input.md", "r"
         ) as f:
             self.content = f.readlines()
-
-        app = create_app()
-        app.config["WTF_CSRF_ENABLED"] = False
-        self.app = app
 
     def test_factory_creates_note_form_from_content(self):
         with self.app.app_context():

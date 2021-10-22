@@ -1,12 +1,9 @@
 +++
-backlinks = [
-  "/notes/biblical-business-insights",
-  "/notes/church-for-a-new-generation"
-]
-author = "Alex Bilson"
-date = "2018-06-01"
-epistemic = "sprout"
-tags = ["bible","business","character"]
+author = "None"
+comments = false
+date = "None"
+epistemic = "seedling"
+tags = ["['bible',","'business',","'character']"]
 title = "A Stunted View of God Limits Imitation"
 +++
 **A stunted view of God's character limits our imitation of him.**
@@ -26,3 +23,5 @@ As children of our heavenly Father, we are small versions of him.  While we conf
 Songs abound which express the love and mercy of God, but few display his power, his sovereignty, or his uprightness.  One that's stood out to me is a rendition of God's speech to Job.  Entitled, ["Where Were You?"](https://www.youtube.com/watch?v=DLf_Nlukra0) it crescendos over wave after wave of God's awesome might, his manifold wisdom, and his effortless control.  Beyond many a love song, these words cause me to tremble with reverent pleasure at the respect-worthy King of Heaven and Earth.
 
 Theologians often split God's attributes into those which we may share and those which are God's alone.  Wisdom, power, riches and sovereignty are all placed in the former category.  With this, and Paul's admonition to be 'imitators of God,' a practical step to integrate one's business and identity as God's child is to doggedly pursue the very characteristics which make God himself a wise and beneficient owner of all.
+
+Stuff, n' stuff
