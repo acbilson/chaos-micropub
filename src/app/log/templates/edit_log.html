@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="edit">
+  <form id="edit-form" action="{{ save_route }}" method="POST">
+    {{ form.csrf_token }}
+
+    <div class="view-set">
+      {{ form.author.label }}
+      {{ form.author(readonly=True) }}
+    </div>
+
+    {{ form.current_date(readonly=True) }}
+    {{ form.content(rows=20, class="content") }}
+    {{ form.submit }}
+  </form>
+</div>
+  <script type="text/javascript" src="{{ script }}"></script>
+{% endblock %}

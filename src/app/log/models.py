@@ -21,7 +21,7 @@ class Log:
 
     @property
     def path(self):
-        return Path(path.join(self._base_path, "notes", f"{self.filename}.md"))
+        return Path(path.join(self._base_path, "logs", f"{self.filename}.md"))
 
     @property
     def filename(self):

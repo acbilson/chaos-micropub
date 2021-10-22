@@ -24,6 +24,7 @@ class SelectForm(FlaskForm):
         "Action",
         choices=[
             ("log_bp.create_log", "Create Log"),
+            ("log_bp.select_log", "Edit Log"),
             ("note_bp.create_note", "Create Note"),
             ("note_bp.select_note", "Edit Note"),
         ],

@@ -1,3 +1,4 @@
+from os import path
 from flask import (
     request,
     render_template,
@@ -53,11 +54,12 @@ def select_note():
         return exits
 
     if request.method == "GET":
-        notes = filehelper.read_notes("/mnt/chaos/content/notes")
+        note_path = path.join(app.config.get("CONTENT_PATH"), "notes")
+        notes = filehelper.read_files(note_path)
         form = NoteSelectionForm(request.form)
         form.selected_note.choices = [(note, note) for note in notes]
         return render_template(
-            "edit_notes.html",
+            "select_note.html",
             form=form,
             load_route=url_for("note_bp.select_note"),
             script=url_for("static", filename="js/micropub.js"),

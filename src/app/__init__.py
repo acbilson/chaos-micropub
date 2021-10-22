@@ -15,6 +15,8 @@ def create_app(config=config.BaseConfig):
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(config)
 
+    app.logger.info(app.config.get("CONTENT_PATH"))
+
     # required to encrypt session
     app.secret_key = app.config["FLASK_SECRET_KEY"]
 

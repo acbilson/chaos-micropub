@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     SubmitField,
+    SelectField,
     StringField,
     HiddenField,
 )
@@ -12,6 +13,7 @@ from wtforms.validators import (
 
 
 class LogForm(FlaskForm):
+    author = StringField("Author:")
     content = StringField(
         "Content",
         widget=TextArea(),
@@ -21,6 +23,18 @@ class LogForm(FlaskForm):
         "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
     )
     submit = SubmitField("Publish!")
+
+    def __init__(self, *args, **kwargs):
+        FlaskForm.__init__(self, *args, **kwargs)
+
+
+class LogSelectionForm(FlaskForm):
+    selected_log = SelectField(
+        "Select Log",
+        coerce=str,
+        validators=[InputRequired(message="no log selected")],
+    )
+    submit = SubmitField("Load Log")
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

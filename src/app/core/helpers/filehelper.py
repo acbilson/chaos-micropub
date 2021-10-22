@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 
-def read_notes(dir):
+def read_files(dir):
     return [os.path.join(dir, name) for name in os.listdir(dir)]
 
 

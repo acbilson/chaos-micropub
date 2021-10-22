@@ -6,7 +6,7 @@ from flask_dance.contrib.google import google
 
 def authorized() -> Response:
     if not app.debug and not _authenticated():
-        return redirect(url_for("micropub_bp.login"))
+        return redirect(url_for("core_bp.login"))
     user = get_user()
     if not _authorized(user):
         return f"{user} is not authorized to use this application.", 403
