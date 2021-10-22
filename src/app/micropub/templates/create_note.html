@@ -1,47 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
-<!-- The form for entering a new note -->
-<form id="note-form" action="{{ create_route }}" method="POST" class="entry-form">
+<div class="create">
+  <form id="create-form" action="{{ create_route }}" method="POST">
 
-  <p>Enter your note. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
-  <div>
-    <textarea name="content" rows=20 class="content"></textarea>
-  </div>
+    <p>Enter your note. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
+    {{ form.content(rows=20, class="content") }}
 
-  <p>Enter a title for your note:</p>
+    <p>Enter a title for your note:</p>
+    {{ form.title(class="title") }}
 
-  <div class="tags">
-    <label for="title">Title:</label>
-    <input type="text" name="title" class="tag">
-  </div>
+    <p>Enter a few tags, separated by spaces, to help find this comment:</p>
 
-  <p>Enter a few tags, separated by spaces, to help find this comment:</p>
+    <blockquote>
+      <label>Examples:</label>
+      <ul>
+        <li>children parenting</li>
+        <li>software design</li>
+        <li>bible</li>
+      </ul>
+    </blockquote>
 
-  <blockquote>
-    Examples:<br />
-    <ul>
-    <li>children parenting</li>
-    <li>software design</li>
-    <li>bible</li>
-    </ul>
-  </blockquote>
+    {{ form.tags(class="tags") }}
 
-  <div class="tags">
-    <label for="tags">Tags:</label>
-    <input type="text" name="tags" class="tag">
-  </div>
+    <p>Select your options, then click publish!</p>
+    <div class="input-set">
+      {{ form.comments.label }}
+      {{ form.comments(checked=True) }}
+    </div>
 
-  <p>Select your options, then click publish!</p>
-  <div class="options">
-      <div><input id="comments" type="checkbox" name="comments" class="option" checked><label for="comments">Allow Comments?</label></div>
-  </div>
-
-  <div class="buttons">
-    <input id="current_date" type="text" name="current_date" value="" hidden>
-    <input id="type" type="text" name="post_type" value="note" hidden>
-    <button type="submit">Publish!</button>
-  </div>
-</form>
+    {{ form.current_date }}
+    {{ form.submit }}
+  </form>
+</div>
 
   <script type="text/javascript" src="{{ script }}"></script>
 {% endblock %}

@@ -114,15 +114,16 @@ def create_log():
 def create_note():
     if exits := _authorized() != None:
         return exits
+    form = NoteForm(request.form, meta={"csrf": False})
 
     if request.method == "GET":
         return render_template(
             "create_note.html",
+            form=form,
             create_route=url_for("micropub_bp.create_note"),
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
-        form = NoteForm(request.form, meta={"csrf": False})
         if not form.validate():
             return (
                 f"form could not be validated because {form.errors}. aborting.",

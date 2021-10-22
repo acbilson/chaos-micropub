@@ -6,6 +6,7 @@ from wtforms import (
     RadioField,
     SelectField,
     HiddenField,
+    BooleanField,
 )
 from wtforms.widgets import TextArea
 from wtforms.validators import (
@@ -60,18 +61,17 @@ class LogForm(FlaskForm):
 
 class NoteForm(FlaskForm):
     content = StringField(
-        "content",
+        "Content",
         widget=TextArea(),
         validators=[InputRequired(message="No content entered")],
     )
-    current_date = StringField(
-        "current_date", validators=[Length(min=1, max=25, message="No date entered")]
+    current_date = HiddenField(
+        "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
     )
-    title = StringField("title", validators=[InputRequired(message="No title entered")])
-    tags = StringField("tags", validators=[InputRequired(message="No tags entered")])
-    comments = StringField(
-        "comments", validators=[InputRequired(message="Comment data missing")]
-    )
+    title = StringField("Title", validators=[InputRequired(message="No title entered")])
+    tags = StringField("Tags", validators=[InputRequired(message="No tags entered")])
+    comments = BooleanField("Allow Comments?")
+    submit = SubmitField("Publish!")
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

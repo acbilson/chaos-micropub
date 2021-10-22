@@ -55,11 +55,27 @@ textarea.content {
     width: 100%;
 }
 
+.title {
+    width: 80%;
+}
+
+.tags {
+    width: 70%;
+}
+
+.input-set {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.input-set > *:first-child {
+    padding-right: 9px;
+}
+
 @media screen and (min-width: 80em) {
     #create-form {
         align-items: flex-start;
     }
-
 }
 
 /* */
@@ -73,12 +89,14 @@ textarea.content {
     margin: 10px;
 }
 
+/*
 .tags {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     margin-top: 1%;
 }
+*/
 
 .tag {
     width: 80%;
