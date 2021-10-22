@@ -27,7 +27,14 @@ class LoginForm(FlaskForm):
 
 
 class CreateForm(FlaskForm):
-    action = RadioField("Action", choices=[("create_log", "Create Log"), ("create_note", "Create Note"), ("select_note", "Edit Note")])
+    action = RadioField(
+        "Action",
+        choices=[
+            ("create_log", "Create Log"),
+            ("create_note", "Create Note"),
+            ("select_note", "Edit Note"),
+        ],
+    )
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

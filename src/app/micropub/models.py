@@ -66,7 +66,11 @@ class LogFile(MicropubFile):
 author = "{self.user}"
 date = "{self.date}"
 +++
-{self.body}""".encode("utf-8").decode("utf-8")
+{self.body}""".encode(
+            "utf-8"
+        ).decode(
+            "utf-8"
+        )
 
 
 class NoteFile(MicropubFile):
@@ -98,4 +102,8 @@ epistemic = "seedling"
 tags = [{self.tags}]
 title = "{self.title}"
 +++
-{self.body}""".encode("utf-8").decode("utf-8")
+{self.body}""".encode(
+            "utf-8"
+        ).decode(
+            "utf-8"
+        )

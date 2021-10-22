@@ -6,7 +6,9 @@ from app.micropub import note_factory as NoteFactory
 
 class NoteFactoryTests(unittest.TestCase):
     def setUp(self):
-        with open("/mnt/chaos/content/notes/add-snippets-to-your-text-input.md", "r") as f:
+        with open(
+            "/mnt/chaos/content/notes/add-snippets-to-your-text-input.md", "r"
+        ) as f:
             self.content = f.readlines()
 
         app = create_app()
@@ -22,6 +24,7 @@ class NoteFactoryTests(unittest.TestCase):
             self.assertEqual(note.tags.data, ["snippet", "javascript", "software"])
             self.assertEqual(note.current_date.data, "2021-06-11T20:05:50")
             self.assertGreater(len(note.content.data), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

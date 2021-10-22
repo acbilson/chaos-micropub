@@ -35,7 +35,6 @@ def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
             setattr(form, key, top[key])
 
 
-
 def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
     """returns a NoteForm obj
 
@@ -45,9 +44,9 @@ def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
     top = toml.loads("".join(top_matter))
     form = NoteForm(meta={"csrf": False})
 
-    form.title.data = top['title']
-    form.tags.data = top['tags']
-    form.current_date.data = top['date']
+    form.title.data = top["title"]
+    form.tags.data = top["tags"]
+    form.current_date.data = top["date"]
     form.comments.data = "true" if "comments" in top else "false"
     form.content.data = "".join(content)
 
