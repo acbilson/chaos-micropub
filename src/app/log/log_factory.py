@@ -6,6 +6,7 @@ Currently supports TOML-style content, with YAML as a possible future implementa
 """
 from app.log.forms import LogForm
 from app.log.models import Log
+from os import path
 from pathlib import Path
 import toml
 
@@ -18,23 +19,27 @@ def fromForm(base_path: Path, user: str, form: LogForm) -> Log:
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
     return Log(
         base_path=base_path,
+        logname=form.logname.data,
         date=form.current_date.data,
         content=form.content.data,
         author=user,
     )
 
 
-def fromBody(base_path: Path, body: list) -> LogForm:
+def fromBody(log_path: Path, body: list) -> LogForm:
     """returns a LogForm obj
 
     converts a list of content into a LogForm
     """
+    logname = path.basename(log_path)
+
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
     return LogForm(
         author=top["author"] if "author" in top else "Alex Bilson",
         current_date=top["date"],
         content="".join(content),
+        logname=logname,
     )
 
 

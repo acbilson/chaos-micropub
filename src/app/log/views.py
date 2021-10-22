@@ -37,7 +37,7 @@ def create_log():
             )
 
         user = get_user()
-        log = LogFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
+        log = LogFactory.fromForm(user, form)
 
         filehelper.save(log.path, log.content)
         scripthelper.run_build_script(log.path)
@@ -78,8 +78,9 @@ def edit_log():
         if "path" not in request.args:
             return f"path not present in query string {request.args}", 400
 
-        with open(request.args.get("path"), "r") as f:
-            form = LogFactory.fromBody(app.config.get("CONTENT_PATH"), f.readlines())
+        log_path = request.args.get("path")
+        with open(log_path, "r") as f:
+            form = LogFactory.fromBody(log_path, f.readlines())
 
         return render_template(
             "edit_log.html",

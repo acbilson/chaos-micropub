@@ -22,6 +22,7 @@ class LogForm(FlaskForm):
     current_date = HiddenField(
         "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
     )
+    logname = StringField("Log Name")
     submit = SubmitField("Publish!")
 
     def __init__(self, *args, **kwargs):
