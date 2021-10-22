@@ -6,11 +6,11 @@ from wtforms import (
 
 
 class LoginForm(FlaskForm):
-    option = RadioField(
+    action = RadioField(
         "Action",
         choices=[
-            ("github", "Github"),
-            ("google", "Google"),
+            ("github.login", "Github"),
+            ("google.login", "Google"),
         ],
     )
     submit = SubmitField("Login")

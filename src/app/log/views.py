@@ -18,7 +18,7 @@ from app.log import log_factory as LogFactory
 
 @log_bp.route("/log", methods=["GET", "POST"])
 def create_log():
-    if exits := authorized() != None:
+    if (exits := authorized()) != None:
         return exits
     form = LogForm(request.form)
 
@@ -47,7 +47,7 @@ def create_log():
 
 @log_bp.route("/log/select", methods=["GET", "POST"])
 def select_log():
-    if exits := authorized() != None:
+    if (exits := authorized()) != None:
         return exits
 
     if request.method == "GET":
@@ -72,7 +72,7 @@ def select_log():
 
 @log_bp.route("/log/edit", methods=["GET", "POST"])
 def edit_log():
-    if exits := authorized() != None:
+    if (exits := authorized()) != None:
         return exits
 
     if request.method == "GET":

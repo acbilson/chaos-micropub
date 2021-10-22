@@ -22,6 +22,7 @@ def login():
             form = LoginForm(request.form)
             return render_template(
                 "login.html",
+                form=form,
                 login_route=url_for("core_bp.login"),
             )
         else:
@@ -35,12 +36,12 @@ def login():
         if not form.validate():
             return f"login failed: {form.errors}", 501
 
-        return redirect(url_for(f"{form.option.data}.login"))
+        return redirect(url_for(form.action.data))
 
 
 @core_bp.route("/", methods=["GET", "POST"])
 def select():
-    if exits := authhelper.authorized() != None:
+    if (exits := authhelper.authorized()) != None:
         return exits
 
     if request.method == "GET":

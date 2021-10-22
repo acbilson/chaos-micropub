@@ -21,7 +21,7 @@ from app.note.forms import (
 
 @note_bp.route("/note", methods=["GET", "POST"])
 def create_note():
-    if exits := authorized() != None:
+    if (exits := authorized()) != None:
         return exits
     form = NoteForm(request.form)
 
@@ -50,7 +50,7 @@ def create_note():
 
 @note_bp.route("/note/select", methods=["GET", "POST"])
 def select_note():
-    if exits := authorized() != None:
+    if (exits := authorized()) != None:
         return exits
 
     if request.method == "GET":
@@ -75,7 +75,7 @@ def select_note():
 
 @note_bp.route("/note/edit", methods=["GET", "POST"])
 def edit_note():
-    if exits := authorized() != None:
+    if (exits := authorized()) != None:
         return exits
 
     if request.method == "GET":
