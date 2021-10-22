@@ -5,16 +5,24 @@
     {{ form.csrf_token }}
 
     <div class="view-set">
-      {{ form.author.label }}
-      {{ form.author(readonly=True) }}
-    </div>
-    <div class="view-set">
       {{ form.title.label }}
       {{ form.title(readonly=True, class="title") }}
     </div>
     <div class="view-set">
+      {{ form.author.label }}
+      {{ form.author(readonly=True) }}
+    </div>
+    <div class="view-set">
+      {{ form.epistemic.label }}
+      {{ form.epistemic(readonly=True) }}
+    </div>
+    <div class="view-set">
       {{ form.tags.label }}
       {{ form.tags(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.backlinks.label }}
+      {{ form.backlinks(readonly=True, class="tags") }}
     </div>
     <div class="view-set">
       {{ form.comments.label }}

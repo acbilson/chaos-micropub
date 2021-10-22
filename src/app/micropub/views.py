@@ -10,6 +10,8 @@ from flask import (
 )
 from flask import current_app as app
 
+from app.micropub import filehelper
+
 from ..micropub import micropub_bp
 from app.micropub.forms import (
     LoginForm,
@@ -18,14 +20,12 @@ from app.micropub.forms import (
     SelectForm,
     NoteSelectionForm,
 )
-from app.micropub.models import (
-    LogFile,
-    NoteFile,
-)
+from app.micropub.models import Log, Note
 from app.micropub.authhelper import authenticated, authorized, get_user
 from app.micropub.filehelper import read_notes
 from app.micropub import scripthelper
 from app.micropub import note_factory as NoteFactory
+from app.micropub import log_factory as LogFactory
 
 
 def _authorized() -> Response:
@@ -102,10 +102,10 @@ def create_log():
             )
 
         user = get_user()
-        log = LogFile("/mnt/chaos/content/logs", form, user)
-        new_file_path = log.save()
+        log = LogFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
-        scripthelper.run_build_script(new_file_path)
+        filehelper.save(log.path, log.content)
+        scripthelper.run_build_script(log.path)
 
         return redirect(app.config["SITE"])
 
@@ -131,10 +131,10 @@ def create_note():
             )
 
         user = get_user()
-        note = NoteFile("/mnt/chaos/content/notes", form, user)
-        new_file_path = note.save()
+        note = NoteFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
-        scripthelper.run_build_script(new_file_path)
+        filehelper.save(note.path, note.compose())
+        scripthelper.run_build_script(note.path)
 
         return redirect(app.config["SITE"])
 
@@ -173,7 +173,7 @@ def edit_note():
             return f"path not present in query string {request.args}", 400
 
         with open(request.args.get("path"), "r") as f:
-            form = NoteFactory.fromBody("/mnt/chaos/content/notes", f.readlines())
+            form = NoteFactory.fromBody(app.config.get("CONTENT_PATH"), f.readlines())
 
         return render_template(
             "edit_note.html",
@@ -188,11 +188,10 @@ def edit_note():
                 f"form could not be validated because {form.errors}. aborting.",
                 400,
             )
-
         user = get_user()
-        note = NoteFile("/mnt/chaos/content/notes", form, user)
-        new_file_path = note.update()
+        note = NoteFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
-        scripthelper.run_build_script(new_file_path)
+        filehelper.update(note.path, note.compose())
+        scripthelper.run_build_script(note.path)
 
         return redirect(app.config["SITE"])

@@ -27,7 +27,7 @@ class CreateNoteTests(BaseTest):
             resp = self.client.post("/", data=body)
             self.assertEqual(resp.status, "400 BAD REQUEST")
 
-    @mock.patch("app.micropub.models.NoteFile.save")
+    @mock.patch("app.micropub.filehelper.save")
     @mock.patch("app.micropub.scripthelper.run_build_script")
     def test_create_note_file_output(self, mock_open, mock_sp):
         # setup

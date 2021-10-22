@@ -1,52 +1,39 @@
-"""Note Factory
+"""Log Factory
 
-Converts data into objects of Note* type
+Converts data into objects of Log* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
-from app.micropub.forms import NoteForm
-from app.micropub.models import Note
+from app.micropub.forms import LogForm
+from app.micropub.models import Log
 from pathlib import Path
-from datetime import datetime
 import toml
 
 
-def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
-    """returns a Note obj
+def fromForm(base_path: Path, user: str, form: LogForm) -> Log:
+    """returns a Log obj
 
-    converts a NoteForm obj into a Note
+    converts a LogForm obj into a Log
     """
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
-    return Note(
+    return Log(
         base_path=base_path,
-        backlinks=form.backlinks.data,
-        tags=form.tags.data,
-        title=form.title.data,
         date=form.current_date.data,
-        lastmod=form.modified_date.data,
-        epistemic=form.epistemic.data,
         content=form.content.data,
-        comments=form.comments.data,
         author=user,
     )
 
 
-def fromBody(base_path: Path, body: list) -> NoteForm:
-    """returns a NoteForm obj
+def fromBody(base_path: Path, body: list) -> LogForm:
+    """returns a LogForm obj
 
-    converts a list of content into a NoteForm
+    converts a list of content into a LogForm
     """
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
-    return NoteForm(
-        title=top["title"],
+    return LogForm(
         author=top["author"],
-        tags=top["tags"],
-        backlinks=top["backlinks"] if "backlinks" in top else None,
-        epistemic=top["epistemic"],
         current_date=top["date"],
-        modified_date=top["lastmod"] if "lastmod" in top else datetime.now(),
-        comments="true" if "comments" in top else "false",
         content="".join(content),
     )
 

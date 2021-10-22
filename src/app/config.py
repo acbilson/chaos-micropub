@@ -8,6 +8,7 @@ class BaseConfig(object):
     FLASK_PORT = 80
     FLASK_ENV = environ.get("FLASK_ENV")
     SITE = environ.get("SITE")
+    CONTENT_PATH = environ.get("CONTENT_PATH")
 
     FLASK_SECRET_KEY = environ.get("FLASK_SECRET_KEY")
     SESSION_SECRET = environ.get("SESSION_SECRET")
@@ -25,6 +26,7 @@ class TestConfig(object):
     FLASK_PORT = 80
     FLASK_ENV = "development"
     SITE = "http://localhost/"
+    CONTENT_PATH = "/mnt/chaos/content"
 
     FLASK_SECRET_KEY = "my secret test key"
     SESSION_SECRET = "my secret test session"

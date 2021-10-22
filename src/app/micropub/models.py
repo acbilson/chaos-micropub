@@ -1,116 +1,63 @@
+import toml
 from pathlib import Path
 from os import path
 from datetime import datetime
 from flask_wtf import FlaskForm
-from app.micropub.forms import NoteForm
 
 
-class MicropubFile:
-    def __init__(self, base_path: Path, form: FlaskForm, user: str):
+class Log:
+    """read-only log representation"""
+
+    def __init__(
+        self,
+        base_path: Path,
+        date: datetime,
+        author: str,
+        content: str,
+    ):
         self._base_path = base_path
-        self._form = form
-        self._user = user
-
-    @property
-    def body(self):
-        return self._form.content.data
-
-    @property
-    def user(self):
-        return (
-            "Alex Bilson"
-            if (self._user == "acbilson" or self._user == "Alexander Bilson")
-            else self._user
-        )
-
-    @property
-    def date(self):
-        return self.timestamp.isoformat() if self.timestamp else None
-
-    @property
-    def timestamp(self):
-        d = self._form.current_date.data
-        return datetime.fromisoformat(d) if d else None
+        self._date = date
+        self._author = author
+        self._content = content
 
     @property
     def path(self):
-        return Path(path.join(self._base_path, f"{self.filename}.md"))
-
-    def save(self):
-        with open(self.path, "x", newline="\n") as f:
-            f.write(self.compose())
-        return self.path
-
-    def update(self):
-        with open(self.path, "w", newline="\n") as f:
-            f.write(self.compose())
-        return self.path
-
-    @property
-    def filename(self):
-        raise "not implemented"
-
-    def compose(self):
-        raise "not implemented"
-
-
-class LogFile(MicropubFile):
-    def __init__(self, base_path: Path, form: FlaskForm, user: str):
-        super().__init__(base_path, form, user)
+        return Path(path.join(self._base_path, "notes", f"{self.filename}.md"))
 
     @property
     def filename(self):
         return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
-    def compose(self) -> str:
-        return f"""+++
-author = "{self.user}"
-date = "{self.date}"
-+++
-{self.body}""".encode(
-            "utf-8"
-        ).decode(
-            "utf-8"
+    @property
+    def date(self):
+        return self.timestamp.isoformat()
+
+    @property
+    def timestamp(self):
+        return datetime.fromisoformat(self._date)
+
+    @property
+    def author(self):
+        return self._author
+
+    @property
+    def content(self):
+        return self._content
+
+    def compose(self):
+        separator = "+++\n"
+        top_matter = toml.dumps(
+            {
+                "author": self.author,
+                "date": self.date,
+            }
         )
-
-
-class NoteFile(MicropubFile):
-    def __init__(self, base_path: Path, form: FlaskForm, user: str):
-        super().__init__(base_path, form, user)
-
-    @property
-    def title(self):
-        return self._form.title.data
-
-    @property
-    def tags(self):
-        return '"' + '","'.join(self._form.tags.data.split(" ")) + '"'
-
-    @property
-    def comments(self):
-        return "true" if self._form.comments.data == "on" else "false"
-
-    @property
-    def filename(self):
-        return self.title.lower().replace(" ", "-")
-
-    def compose(self) -> str:
-        return f"""+++
-author = "{self.user}"
-comments = {self.comments}
-date = "{self.date}"
-epistemic = "seedling"
-tags = [{self.tags}]
-title = "{self.title}"
-+++
-{self.body}""".encode(
-            "utf-8"
-        ).decode(
-            "utf-8"
-        )
+        return separator + top_matter + separator + self.content
 
 
 class Note:
+    """read-only note representation"""
+
     def __init__(
         self,
         base_path: Path,
@@ -122,13 +69,79 @@ class Note:
         epistemic: str,
         author: str,
         content: str,
+        comments: str,
     ):
-        self.base_path = base_path
-        self.backlinks = backlinks
-        self.tags = tags
-        self.title = title
-        self.date = date
-        self.lastmod = lastmod
-        self.epistemic = epistemic
-        self.author = author
-        self.content = content
+        self._base_path = base_path
+        self._backlinks = backlinks
+        self._tags = tags
+        self._title = title
+        self._date = date
+        self._lastmod = lastmod
+        self._epistemic = epistemic
+        self._author = author
+        self._content = content
+        self._comments = comments
+
+    @property
+    def path(self):
+        return Path(path.join(self._base_path, "notes", f"{self.filename}.md"))
+
+    @property
+    def filename(self):
+        return self.title.lower().replace(" ", "-")
+
+    @property
+    def backlinks(self):
+        return self._backlinks
+
+    @property
+    def tags(self):
+        return self._tags
+
+    @property
+    def title(self):
+        return self._title
+
+    @property
+    def date(self):
+        return self.timestamp.isoformat()
+
+    @property
+    def timestamp(self):
+        return datetime.fromisoformat(self._date)
+
+    @property
+    def lastmod(self):
+        return self._lastmod
+
+    @property
+    def epistemic(self):
+        return self._epistemic
+
+    @property
+    def author(self):
+        return self._author
+
+    @property
+    def comments(self):
+        return self._comments
+
+    @property
+    def content(self):
+        return self._content
+
+    def compose(self):
+        separator = "+++\n"
+        top_matter = toml.dumps(
+            {
+                "author": self.author,
+                "backlinks": self.backlinks,
+                "comments": self.comments,
+                "date": self.date,
+                "epistemic": self.epistemic,
+                "lastmod": self.lastmod,
+                "tags": self.tags,
+                "title": self.title,
+            }
+        )
+        return separator + top_matter + separator + self.content

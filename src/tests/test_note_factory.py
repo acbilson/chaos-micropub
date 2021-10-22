@@ -15,7 +15,7 @@ class NoteFactoryTests(BaseTest):
 
     def test_factory_creates_form_from_body(self):
         with self.app.app_context():
-            note = NoteFactory.fromBody("/mnt/chaos/content/notes", self.content)
+            note = NoteFactory.fromBody("/mnt/chaos/content", self.content)
             self.assertEqual(note.title.data, "Add Snippets to Your Text Input")
             self.assertEqual(note.author.data, "Alex Bilson")
             self.assertEqual(note.tags.data, ["snippet", "javascript", "software"])
@@ -29,16 +29,17 @@ class NoteFactoryTests(BaseTest):
             form.author.data = "Alex Bilson"
             form.title.data = "Test Title"
             form.content.data = "Test Content"
-            form.current_date.data = datetime.now()
-            form.modified_date.data = datetime.now()
+            form.current_date.data = datetime.now().isoformat()
+            form.modified_date.data = datetime.now().isoformat()
             form.comments.data = True
             form.tags.data = ["fake", "tag"]
 
-            note = NoteFactory.fromForm("/mnt/chaos/content/notes", "Alex Bilson", form)
+            note = NoteFactory.fromForm("/mnt/chaos/content", "Alex Bilson", form)
 
             self.assertEqual(note.title, "Test Title")
             self.assertEqual(note.author, "Alex Bilson")
             self.assertEqual(note.tags, ["fake", "tag"])
+            self.assertEqual(str(note.path), "/mnt/chaos/content/notes/test-title.md")
             self.assertGreater(len(str(note.date)), 0)
             self.assertGreater(len(str(note.lastmod)), 0)
             self.assertGreater(len(note.content), 0)
