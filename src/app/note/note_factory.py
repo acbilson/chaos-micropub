@@ -4,8 +4,8 @@ Converts data into objects of Note* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
-from app.micropub.forms import NoteForm
-from app.micropub.models import Note
+from app.note.forms import NoteForm
+from app.note.models import Note
 from pathlib import Path
 from datetime import datetime
 import toml

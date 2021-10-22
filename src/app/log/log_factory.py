@@ -4,8 +4,8 @@ Converts data into objects of Log* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
-from app.micropub.forms import LogForm
-from app.micropub.models import Log
+from app.log.forms import LogForm
+from app.log.models import Log
 from pathlib import Path
 import toml
 

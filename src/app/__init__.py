@@ -2,7 +2,10 @@ import logging
 from flask import Flask, Response
 from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint
-from app.micropub import micropub_bp
+
+from app.core import core_bp
+from app.log import log_bp
+from app.note import note_bp
 from app.assets import assets
 from app import config
 
@@ -34,7 +37,10 @@ def create_app(config=config.BaseConfig):
         # register blueprints
         app.register_blueprint(github_bp, url_prefix="/login")
         app.register_blueprint(google_bp, url_prefix="/login")
-        app.register_blueprint(micropub_bp)
+
+        app.register_blueprint(core_bp)
+        app.register_blueprint(log_bp)
+        app.register_blueprint(note_bp)
 
         @app.route("/healthcheck", methods=["GET"])
         def health():
