@@ -15,7 +15,7 @@ from app.micropub.forms import (
     LoginForm,
     LogForm,
     NoteForm,
-    CreateForm,
+    SelectForm,
     NoteSelectionForm,
 )
 from app.micropub.models import (
@@ -66,12 +66,12 @@ def select():
         return exits
 
     if request.method == "GET":
-        form = CreateForm(meta={"csrf": False})
+        form = SelectForm(meta={"csrf": False})
         return render_template(
             "select.html", create_route=url_for("micropub_bp.select"), form=form
         )
     elif request.method == "POST":
-        form = CreateForm(request.form, meta={"csrf": False})
+        form = SelectForm(request.form, meta={"csrf": False})
         if not form.validate():
             return (
                 f"No action was passed to this endpoint {form.errors}, {form.action.data}. aborting.",

@@ -1,16 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="entry">
   <form
     id="entry-form"
-    class="entry-form"
-    style="margin: 5%;"
     method="POST"
     action="{{ create_route }}"
     >
-  <div>
-    {{ form.action.label }}
-    {{ form.action }}
-  </div>
-  <button name="submit" type="submit">Select</button>
+    <p>What would you like to do?</p>
+    {{ form.action(class="entry-action") }}
+    {{ form.submit }}
   </form>
+</div>
 {% endblock %}

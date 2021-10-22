@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import (
+    SubmitField,
     StringField,
     RadioField,
     SelectField,
@@ -26,7 +27,7 @@ class LoginForm(FlaskForm):
         FlaskForm.__init__(self, *args, **kwargs)
 
 
-class CreateForm(FlaskForm):
+class SelectForm(FlaskForm):
     action = RadioField(
         "Action",
         choices=[
@@ -35,6 +36,7 @@ class CreateForm(FlaskForm):
             ("select_note", "Edit Note"),
         ],
     )
+    submit = SubmitField("Select")
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)

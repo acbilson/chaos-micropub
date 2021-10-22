@@ -16,12 +16,30 @@ li {
     margin: 5px;
 }
 
-.entry-form {
+input[type="submit"] {
+    width: 100px;
+}
+
+
+/* select.html */
+
+.entry {
+    max-width: 30%;
+    margin: auto;
+}
+
+#entry-form {
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
-    margin: 5%;
+    align-items: center;
 }
+
+.entry-action {
+    color: black;
+    padding-left: 0;
+}
+
+/*  */
 
 .categories {
     display: flex;
