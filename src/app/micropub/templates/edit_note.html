@@ -5,6 +5,10 @@
     {{ form.csrf_token }}
 
     <div class="view-set">
+      {{ form.author.label }}
+      {{ form.author(readonly=True) }}
+    </div>
+    <div class="view-set">
       {{ form.title.label }}
       {{ form.title(readonly=True, class="title") }}
     </div>

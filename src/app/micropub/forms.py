@@ -68,10 +68,13 @@ class NoteForm(FlaskForm):
     )
     current_date = HiddenField("Current Date")
     modified_date = StringField("Modified Date")
+    author = StringField("Author:")
     title = StringField(
         "Title:", validators=[InputRequired(message="No title entered")]
     )
     tags = StringField("Tags:", validators=[InputRequired(message="No tags entered")])
+    epistemic = StringField("Epistemic:")
+    backlinks = StringField("Backlinks:")
     comments = BooleanField("Allow Comments?")
     submit = SubmitField("Publish!")
 

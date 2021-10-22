@@ -2,6 +2,7 @@ from pathlib import Path
 from os import path
 from datetime import datetime
 from flask_wtf import FlaskForm
+from app.micropub.forms import NoteForm
 
 
 class MicropubFile:
@@ -107,3 +108,27 @@ title = "{self.title}"
         ).decode(
             "utf-8"
         )
+
+
+class Note:
+    def __init__(
+        self,
+        base_path: Path,
+        backlinks: list,
+        tags: list,
+        title: str,
+        date: datetime,
+        lastmod: datetime,
+        epistemic: str,
+        author: str,
+        content: str,
+    ):
+        self.base_path = base_path
+        self.backlinks = backlinks
+        self.tags = tags
+        self.title = title
+        self.date = date
+        self.lastmod = lastmod
+        self.epistemic = epistemic
+        self.author = author
+        self.content = content

@@ -173,9 +173,7 @@ def edit_note():
             return f"path not present in query string {request.args}", 400
 
         with open(request.args.get("path"), "r") as f:
-            form = NoteFactory.fromBody(
-                "/mnt/chaos/content/notes", "Alex Bilson", f.readlines()
-            )
+            form = NoteFactory.fromBody("/mnt/chaos/content/notes", f.readlines())
 
         return render_template(
             "edit_note.html",

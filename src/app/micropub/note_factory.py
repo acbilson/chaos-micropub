@@ -4,23 +4,11 @@ Converts data into objects of Note* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
-from flask import current_app as app
 from app.micropub.forms import NoteForm
+from app.micropub.models import Note
 from pathlib import Path
 from datetime import datetime
 import toml
-
-
-class Note:
-    def __init__(self, base_path: Path, user: str):
-        self.base_path = base_path
-        self.user = user
-        self.backlinks = []
-        self.tags = []
-        self.title = None
-        self.date = None
-        self.epistemic = None
-        self.author = None
 
 
 def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
@@ -28,15 +16,20 @@ def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
 
     converts a NoteForm obj into a Note
     """
-    pass
+    return Note(
+        base_path=base_path,
+        backlinks=form.backlinks.data,
+        tags=form.tags.data,
+        title=form.title.data,
+        date=form.current_date.data,
+        lastmod=form.modified_date.data,
+        epistemic=form.epistemic.data,
+        content=form.content.data,
+        author=user,
+    )
 
-    top = dict()
-    for key in top.keys():
-        if hasattr(form, key):
-            setattr(form, key, top[key])
 
-
-def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
+def fromBody(base_path: Path, body: list) -> NoteForm:
     """returns a NoteForm obj
 
     converts a list of content into a NoteForm
@@ -46,6 +39,7 @@ def fromBody(base_path: Path, user: str, body: list) -> NoteForm:
     form = NoteForm()
 
     form.title.data = top["title"]
+    form.author.data = top["author"]
     form.tags.data = top["tags"]
     form.current_date.data = top["date"]
     form.modified_date.data = top["lastmod"] if "lastmod" in top else datetime.now()
