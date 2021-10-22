@@ -4,6 +4,7 @@ Converts data into objects of Log* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
+from flask import current_app as app
 from app.log.forms import LogForm
 from app.log.models import Log
 from os import path
@@ -23,6 +24,7 @@ def fromForm(base_path: Path, user: str, form: LogForm) -> Log:
         date=form.current_date.data,
         content=form.content.data,
         author=user,
+        aliases=form.aliases.data,
     )
 
 
@@ -35,11 +37,13 @@ def fromBody(log_path: Path, body: list) -> LogForm:
 
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
+    app.logger.info(top)
     return LogForm(
-        author=top["author"] if "author" in top else "Alex Bilson",
-        current_date=top["date"],
+        author=top.get("author") if "author" in top else "Alex Bilson",
+        current_date=top.get("date"),
         content="".join(content),
         logname=logname,
+        aliases=top.get("aliases") if "aliases" in top else None,
     )
 
 

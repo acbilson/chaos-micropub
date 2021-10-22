@@ -14,12 +14,14 @@ class Log:
         date: datetime,
         author: str,
         content: str,
+        aliases: list,
     ):
         self._base_path = base_path
         self._logname = logname
         self._date = date
         self._author = author
         self._content = content
+        self._aliases = aliases
         self._folder = "logs"
 
     @property
@@ -49,15 +51,21 @@ class Log:
         return self._author
 
     @property
+    def aliases(self):
+        return self._aliases
+
+    @property
     def content(self):
         return self._content
 
     def compose(self):
         separator = "+++\n"
-        top_matter = toml.dumps(
-            {
-                "author": self.author,
-                "date": self.date,
-            }
-        )
+        top = {
+            "author": self.author,
+            "date": self.date,
+        }
+        if self.aliases is not None:
+            top["aliases"] = self.aliases
+
+        top_matter = toml.dumps(top)
         return separator + top_matter + separator + self.content

@@ -44,6 +44,7 @@ def create_log():
 
         return redirect(app.config["SITE"])
 
+
 @log_bp.route("/log/select", methods=["GET", "POST"])
 def select_log():
     if exits := authorized() != None:

@@ -19,10 +19,11 @@ class LogForm(FlaskForm):
         widget=TextArea(),
         validators=[InputRequired(message="No content entered")],
     )
+    logname = StringField("Log Name")
     current_date = HiddenField(
         "Current Date", validators=[Length(min=1, max=25, message="No date entered")]
     )
-    logname = StringField("Log Name")
+    aliases = HiddenField("Aliases")
     submit = SubmitField("Publish!")
 
     def __init__(self, *args, **kwargs):
