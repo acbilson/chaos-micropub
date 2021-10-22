@@ -82,8 +82,9 @@ def edit_note():
         if "path" not in request.args:
             return f"path not present in query string {request.args}", 400
 
-        with open(request.args.get("path"), "r") as f:
-            form = NoteFactory.fromBody(app.config.get("CONTENT_PATH"), f.readlines())
+        note_path = request.args.get("path")
+        with open(note_path, "r") as f:
+            form = NoteFactory.fromBody(note_path, f.readlines())
 
         return render_template(
             "edit_note.html",

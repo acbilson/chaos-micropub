@@ -6,6 +6,7 @@ Currently supports TOML-style content, with YAML as a possible future implementa
 """
 from app.note.forms import NoteForm
 from app.note.models import Note
+from os import path
 from pathlib import Path
 from datetime import datetime
 import toml
@@ -19,6 +20,7 @@ def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
     return Note(
         base_path=base_path,
+        notename=form.notename.data,
         backlinks=form.backlinks.data,
         tags=form.tags.data,
         title=form.title.data,
@@ -28,26 +30,31 @@ def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
         content=form.content.data,
         comments=form.comments.data,
         author=user,
+        aliases=form.aliases.data,
     )
 
 
-def fromBody(base_path: Path, body: list) -> NoteForm:
+def fromBody(note_path: Path, body: list) -> NoteForm:
     """returns a NoteForm obj
 
     converts a list of content into a NoteForm
     """
+    notename = path.basename(note_path)
+
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
     return NoteForm(
-        title=top["title"],
-        author=top["author"],
-        tags=top["tags"],
-        backlinks=top["backlinks"] if "backlinks" in top else None,
-        epistemic=top["epistemic"],
-        current_date=top["date"],
-        modified_date=top["lastmod"] if "lastmod" in top else datetime.now(),
-        comments="true" if "comments" in top else "false",
+        title=top.get("title"),
+        notename=notename,
+        author=top.get("author"),
+        tags=top.get("tags"),
+        backlinks=top.get("backlinks") if "backlinks" in top else None,
+        epistemic=top.get("epistemic"),
+        current_date=top.get("date"),
+        modified_date=top.get("lastmod") if "lastmod" in top else None,
+        comments=top.get("comments"),
         content="".join(content),
+        aliases=top.get("aliases")
     )
 
 

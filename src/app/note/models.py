@@ -10,6 +10,7 @@ class Note:
     def __init__(
         self,
         base_path: Path,
+        notename: str,
         backlinks: list,
         tags: list,
         title: str,
@@ -19,8 +20,10 @@ class Note:
         author: str,
         content: str,
         comments: str,
+        aliases: list,
     ):
         self._base_path = base_path
+        self._notename = notename
         self._backlinks = backlinks
         self._tags = tags
         self._title = title
@@ -30,14 +33,23 @@ class Note:
         self._author = author
         self._content = content
         self._comments = comments
+        self._aliases = aliases
+        self._folder = "notes"
 
     @property
     def path(self):
-        return Path(path.join(self._base_path, "notes", f"{self.filename}.md"))
+        if self._notename is not None:
+            return path.join(self._base_path, self._folder, self._notename)
+        else:
+            return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
+            
 
     @property
     def filename(self):
-        return self.title.lower().replace(" ", "-")
+        if self._notename is not None:
+            return self._notename
+        else:
+            return self.title.lower().replace(" ", "-")
 
     @property
     def backlinks(self):
@@ -57,11 +69,17 @@ class Note:
 
     @property
     def timestamp(self):
-        return datetime.fromisoformat(self._date)
+        if self._date is not None:
+            return datetime.fromisoformat(self._date)
+        else:
+            return datetime.now()
 
     @property
     def lastmod(self):
-        return self._lastmod
+        if self._lastmod is not None and self._lastmod != "":
+            return datetime.fromisoformat(self._lastmod)
+        else:
+            return datetime.now()
 
     @property
     def epistemic(self):
@@ -79,18 +97,26 @@ class Note:
     def content(self):
         return self._content
 
+    @property
+    def aliases(self):
+        return self._aliases
+
     def compose(self):
         separator = "+++\n"
-        top_matter = toml.dumps(
-            {
-                "author": self.author,
-                "backlinks": self.backlinks,
-                "comments": self.comments,
-                "date": self.date,
-                "epistemic": self.epistemic,
-                "lastmod": self.lastmod,
-                "tags": self.tags,
-                "title": self.title,
-            }
-        )
+        top = {
+            "author": self.author,
+            "backlinks": self.backlinks,
+            "comments": self.comments,
+            "date": self.date,
+            "epistemic": self.epistemic,
+            "lastmod": self.lastmod,
+            "tags": self.tags,
+            "title": self.title,
+        }
+
+        # adds optional tags 
+        if self.aliases is not None:
+            top["aliases"] = self.aliases
+
+        top_matter = toml.dumps(top)
         return separator + top_matter + separator + self.content

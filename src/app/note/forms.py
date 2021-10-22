@@ -18,8 +18,6 @@ class NoteForm(FlaskForm):
         widget=TextArea(),
         validators=[InputRequired(message="No content entered")],
     )
-    current_date = HiddenField("Current Date")
-    modified_date = StringField("Modified Date")
     author = StringField("Author:")
     title = StringField(
         "Title:", validators=[InputRequired(message="No title entered")]
@@ -28,6 +26,10 @@ class NoteForm(FlaskForm):
     epistemic = StringField("Epistemic:")
     backlinks = StringField("Backlinks:")
     comments = BooleanField("Allow Comments?")
+    notename = StringField("Note Name:")
+    current_date = StringField("Published:")
+    modified_date = StringField("Last Edited:")
+    aliases = HiddenField("Aliases")
     submit = SubmitField("Publish!")
 
     def __init__(self, *args, **kwargs):

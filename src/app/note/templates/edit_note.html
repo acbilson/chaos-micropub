@@ -9,8 +9,20 @@
       {{ form.title(readonly=True, class="title") }}
     </div>
     <div class="view-set">
+      {{ form.notename.label }}
+      {{ form.notename(readonly=True, class="title") }}
+    </div>
+    <div class="view-set">
       {{ form.author.label }}
       {{ form.author(readonly=True) }}
+    </div>
+    <div class="view-set">
+      {{ form.current_date.label }}
+      {{ form.current_date(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.modified_date.label }}
+      {{ form.modified_date(readonly=True, class="tags") }}
     </div>
     <div class="view-set">
       {{ form.epistemic.label }}
@@ -29,6 +41,7 @@
       {{ form.comments() }}
     </div>
     {{ form.content(rows=20, class="content") }}
+    {{ form.aliases }}
     {{ form.submit }}
   </form>
 </div>

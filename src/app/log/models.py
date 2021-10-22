@@ -67,6 +67,8 @@ class Log:
             "author": self.author,
             "date": self.date,
         }
+
+        # adds optional tags
         if self.aliases is not None:
             top["aliases"] = self.aliases
 
