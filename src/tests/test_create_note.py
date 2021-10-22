@@ -44,7 +44,7 @@ class CreateNoteTests(unittest.TestCase):
             tags="fake false",
             comments="on",
         )
-        resp = self.app.post("/create/note", data=data)
+        resp = self.app.post("/note", data=data)
         self.assertEqual(resp.status, "302 FOUND", resp.data)
         self.assertEqual(resp.location, TestConfig.SITE)
 

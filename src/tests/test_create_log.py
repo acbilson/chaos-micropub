@@ -29,7 +29,7 @@ class CreateLogTests(unittest.TestCase):
             content="a fake post here",
             current_date="2021-01-01T12:12:12",
         )
-        resp = self.app.post("/create/log", data=data)
+        resp = self.app.post("/log", data=data)
         self.assertEqual(resp.status, "302 FOUND", resp.data)
         self.assertEqual(resp.location, TestConfig.SITE)
 
