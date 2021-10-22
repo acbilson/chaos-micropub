@@ -36,17 +36,15 @@ def fromBody(base_path: Path, body: list) -> NoteForm:
     """
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
-    form = NoteForm()
-
-    form.title.data = top["title"]
-    form.author.data = top["author"]
-    form.tags.data = top["tags"]
-    form.current_date.data = top["date"]
-    form.modified_date.data = top["lastmod"] if "lastmod" in top else datetime.now()
-    form.comments.data = "true" if "comments" in top else "false"
-    form.content.data = "".join(content)
-
-    return form
+    return NoteForm(
+        title=top["title"],
+        author=top["author"],
+        tags=top["tags"],
+        current_date=top["date"],
+        modified_date=top["lastmod"] if "lastmod" in top else datetime.now(),
+        comments="true" if "comments" in top else "false",
+        content="".join(content),
+    )
 
 
 def _parseBody(body: list) -> tuple:
