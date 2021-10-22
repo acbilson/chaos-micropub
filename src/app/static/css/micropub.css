@@ -18,8 +18,8 @@ li {
 
 input[type="submit"] {
     width: 100px;
+    margin-top: 9px;
 }
-
 
 /* select.html */
 
@@ -39,7 +39,30 @@ input[type="submit"] {
     padding-left: 0;
 }
 
-/*  */
+/* create_*.html  */
+
+#create-form {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.create {
+    margin: 5%;
+}
+
+textarea.content {
+    width: 100%;
+}
+
+@media screen and (min-width: 80em) {
+    #create-form {
+        align-items: flex-start;
+    }
+
+}
+
+/* */
 
 .categories {
     display: flex;
@@ -69,11 +92,6 @@ input[type="submit"] {
 
 .option {
     margin: 10px;
-}
-
-.content {
-    width: 100%;
-    margin-top: 1%;
 }
 
 .buttons {

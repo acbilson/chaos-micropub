@@ -1,18 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
-<!-- The form for entering a new log -->
-<form id="log-form" action="{{ create_route }}" method="POST" class="entry-form">
+<div class="create">
+  <form id="create-form" action="{{ create_route }}" method="POST">
 
-  <p>Enter your log. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
-  <div>
-    <textarea name="content" rows=20 class="content"></textarea>
-  </div>
-
-  <div class="buttons">
-    <input id="current_date" type="text" name="current_date" value="" hidden>
-    <input id="type" type="text" name="post_type" value="log" hidden>
-    <button type="submit">Publish!</button>
-  </div>
-</form>
+    <p>Enter your log. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
+    {{ form.content(rows=20, class="content") }}
+    {{ form.current_date }}
+    {{ form.submit }}
+  </form>
+</div>
   <script type="text/javascript" src="{{ script }}"></script>
 {% endblock %}

@@ -85,15 +85,16 @@ def select():
 def create_log():
     if exits := _authorized() != None:
         return exits
+    form = LogForm(request.form, meta={"csrf": False})
 
     if request.method == "GET":
         return render_template(
             "create_log.html",
+            form=form,
             create_route=url_for("micropub_bp.create_log"),
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
-        form = LogForm(request.form, meta={"csrf": False})
         if not form.validate():
             return (
                 f"form could not be validated because {form.errors}. aborting.",
