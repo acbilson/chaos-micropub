@@ -10,26 +10,26 @@
     <p>Enter a title for your note:</p>
     {{ form.title(class="title") }}
 
-    <p>Enter a few tags, separated by spaces, to help find this comment:</p>
+    <p>Enter a few tags in TOML format to help find this comment:</p>
 
     <blockquote>
       <label>Examples:</label>
       <ul>
-        <li>children parenting</li>
-        <li>software design</li>
-        <li>bible</li>
+        <li>['children', 'parenting',]</li>
+        <li>['software', 'design',]</li>
+        <li>['bible']</li>
       </ul>
     </blockquote>
 
     {{ form.tags(class="tags") }}
 
-    <p>If there is another file which should link to this note, enter it here</p>
+    <p>If there is another file which should link to this note, enter it here in TOML format</p>
 
     <blockquote>
       <label>Examples:</label>
       <ul>
-        <li>/notes/craft-your-own-site</li>
-        <li>/posts/insights/time-budget</li>
+        <li>['/notes/craft-your-own-site',]</li>
+        <li>['/notes/craft-your-own-site','/posts/insights/time-budget',]</li>
       </ul>
     </blockquote>
 

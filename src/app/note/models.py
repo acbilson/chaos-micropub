@@ -71,7 +71,7 @@ class Note:
 
     @property
     def epistemic(self):
-        return self._epistemic
+        return self._epistemic if self._epistemic else "seedling"
 
     @property
     def author(self):
