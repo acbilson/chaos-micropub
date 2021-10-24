@@ -18,7 +18,7 @@ Test Content"""
 
         note = Note(
             base_path="/path/here",
-            notename="test-title.md",
+            filename="test-title.md",
             aliases=None,
             backlinks="[]",
             tags="['fake', 'tag']",

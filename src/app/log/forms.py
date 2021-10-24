@@ -20,9 +20,10 @@ class LogForm(FlaskForm):
         widget=TextArea(),
         validators=[InputRequired(message="No content entered")],
     )
-    logname = StringField("Log Name")
+    filename = StringField("File Name:")
+    current_date = StringField("Published:")
+    modified_date = StringField("Last Edited:")
 
-    current_date = HiddenField("Current Date")
     aliases = HiddenField("Aliases")
     submit = SubmitField("Publish!")
 

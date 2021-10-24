@@ -6,7 +6,7 @@
 
     <p>Enter your log. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
     {{ form.content(rows=20, class="content") }}
-    {{ form.current_date }}
+    {{ form.current_date(hidden=True) }}
     {{ form.submit }}
   </form>
 </div>

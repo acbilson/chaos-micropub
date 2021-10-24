@@ -39,6 +39,9 @@ def create_log():
         user = get_user()
         log = LogFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
+        app.logger.info(f"creating log: {log.path}")
+        app.logger.debug(log.compose())
+
         filehelper.save(log.path, log.content)
         scripthelper.run_build_script(log.path)
 
@@ -97,7 +100,14 @@ def edit_log():
                 400,
             )
         user = get_user()
+
+        # nullifies lastmod so it refreshes to now
+        form.modified_date.data = None
+
         log = LogFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
+
+        app.logger.info(f"editing log: {log.path}")
+        app.logger.debug(log.compose())
 
         filehelper.update(log.path, log.compose())
         scripthelper.run_build_script(log.path)

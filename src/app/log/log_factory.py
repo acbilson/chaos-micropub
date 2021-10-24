@@ -20,8 +20,9 @@ def fromForm(base_path: Path, user: str, form: LogForm) -> Log:
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
     return Log(
         base_path=base_path,
-        logname=form.logname.data,
+        filename=form.filename.data,
         date=form.current_date.data,
+        lastmod=form.modified_date.data,
         content=form.content.data,
         author=user,
         aliases=form.aliases.data,
@@ -41,6 +42,7 @@ def fromBody(log_path: Path, body: list) -> LogForm:
     return LogForm(
         author=top.get("author") if "author" in top else "Alex Bilson",
         current_date=top.get("date"),
+        modified_date=top.get("lastmod") if "lastmod" in top else None,
         content="".join(content),
         logname=logname,
         aliases=top.get("aliases") if "aliases" in top else None,

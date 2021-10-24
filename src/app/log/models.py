@@ -10,15 +10,17 @@ class Log:
     def __init__(
         self,
         base_path: str,
-        logname: str,
-        date: datetime,
+        filename: str,
+        date: str,
+        lastmod: str,
         author: str,
         content: str,
-        aliases: list,
+        aliases: str,
     ):
         self._base_path = base_path
-        self._logname = logname
+        self._filename = filename
         self._date = date
+        self._lastmod = lastmod
         self._author = author
         self._content = content
         self._aliases = aliases
@@ -26,17 +28,11 @@ class Log:
 
     @property
     def path(self):
-        if self._logname is not None:
-            return path.join(self._base_path, self._folder, self._logname)
-        else:
-            return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
+        return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
 
     @property
     def filename(self):
-        if self._logname is not None:
-            return self._logname
-        else:
-            return self.timestamp.strftime("%Y%m%d-%H%M%S")
+        return self._filename if self._filename else self.timestamp.strftime("%Y%m%d-%H%M%S")
 
     @property
     def date(self):
@@ -44,10 +40,11 @@ class Log:
 
     @property
     def timestamp(self):
-        if self._date is not None:
-            return datetime.fromisoformat(self._date)
-        else:
-            return datetime.now()
+        return datetime.fromisoformat(self._date) if self._date else datetime.now()
+
+    @property
+    def lastmod(self):
+        return datetime.fromisoformat(self._lastmod).isoformat() if self._lastmod else datetime.now().isoformat()
 
     @property
     def author(self):
@@ -55,10 +52,7 @@ class Log:
 
     @property
     def aliases(self):
-        if self._aliases:
-            return toml.loads(f"aliases = {self._aliases}").get("aliases")
-        else:
-            return None
+        return toml.loads(f"aliases = {self._aliases}").get("aliases") if self._aliases else None
 
     @property
     def content(self):
@@ -69,6 +63,7 @@ class Log:
         top = {
             "author": self.author,
             "date": self.date,
+            "lastmod": self.lastmod,
         }
 
         # adds optional tags

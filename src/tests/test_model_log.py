@@ -13,7 +13,7 @@ Test Content"""
 
         log = Log(
             base_path="/path/here",
-            logname="20210923.md",
+            filename="20210923.md",
             aliases=["/note/example/alias"],
             date="2021-09-23T18:53:39.240457",
             author="Alex Bilson",

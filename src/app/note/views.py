@@ -42,6 +42,9 @@ def create_note():
         user = get_user()
         note = NoteFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
+        app.logger.info(f"creating note: {note.path}")
+        app.logger.debug(note.compose())
+
         filehelper.save(note.path, note.compose())
         scripthelper.run_build_script(note.path)
 
@@ -100,7 +103,14 @@ def edit_note():
                 400,
             )
         user = get_user()
+
+        # nullifies lastmod so it refreshes to now
+        form.modified_date.data = None
+
         note = NoteFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
+
+        app.logger.info(f"editing note: {note.path}")
+        app.logger.debug(note.compose())
 
         filehelper.update(note.path, note.compose())
         scripthelper.run_build_script(note.path)

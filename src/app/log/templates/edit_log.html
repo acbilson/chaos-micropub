@@ -5,16 +5,23 @@
     {{ form.csrf_token }}
 
     <div class="view-set">
-      {{ form.logname.label }}
-      {{ form.logname(readonly=True) }}
+      {{ form.filename.label }}
+      {{ form.filename(readonly=True) }}
     </div>
     <div class="view-set">
       {{ form.author.label }}
       {{ form.author(readonly=True) }}
     </div>
+    <div class="view-set">
+      {{ form.current_date.label }}
+      {{ form.current_date(readonly=True) }}
+    </div>
+    <div class="view-set">
+      {{ form.modified_date.label }}
+      {{ form.modified_date(readonly=True) }}
+    </div>
 
     {{ form.aliases }}
-    {{ form.current_date }}
     {{ form.content(rows=20, class="content") }}
     {{ form.submit }}
   </form>

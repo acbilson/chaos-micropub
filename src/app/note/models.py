@@ -10,20 +10,20 @@ class Note:
     def __init__(
         self,
         base_path: Path,
-        notename: str,
-        backlinks: list,
-        tags: list,
+        filename: str,
+        backlinks: str,
+        tags: str,
         title: str,
-        date: datetime,
-        lastmod: datetime,
+        date: str,
+        lastmod: str,
         epistemic: str,
         author: str,
         content: str,
         comments: str,
-        aliases: list,
+        aliases: str,
     ):
         self._base_path = base_path
-        self._notename = notename
+        self._filename = filename
         self._backlinks = backlinks
         self._tags = tags
         self._title = title
@@ -38,33 +38,20 @@ class Note:
 
     @property
     def path(self):
-        if self._notename is not None:
-            return path.join(self._base_path, self._folder, self._notename)
-        else:
-            return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
-            
+        return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
 
     @property
     def filename(self):
-        if self._notename is not None:
-            return self._notename
-        else:
-            return self.title.lower().replace(" ", "-")
+        return self._filename if self._filename else self.title.lower().replace(" ", "-")
 
     @property
     def backlinks(self):
-        if self._backlinks:
-            return toml.loads(f"backlinks = {self._backlinks}").get("backlinks")
-        else:
-            return None
+        return toml.loads(f"backlinks = {self._backlinks}").get("backlinks") if self._backlinks else None
 
 
     @property
     def tags(self):
-        if self._tags:
-            return toml.loads(f"tags = {self._tags}").get("tags")
-        else:
-            return None
+        return toml.loads(f"tags = {self._tags}").get("tags") if self._tags else None
 
     @property
     def title(self):
@@ -76,17 +63,11 @@ class Note:
 
     @property
     def timestamp(self):
-        if self._date is not None:
-            return datetime.fromisoformat(self._date)
-        else:
-            return datetime.now()
+        return datetime.fromisoformat(self._date) if self._date else datetime.now()
 
     @property
     def lastmod(self):
-        if self._lastmod is not None and self._lastmod != "":
-            return datetime.fromisoformat(self._lastmod)
-        else:
-            return datetime.now()
+        return datetime.fromisoformat(self._lastmod).isoformat() if self._lastmod else datetime.now().isoformat()
 
     @property
     def epistemic(self):
@@ -106,10 +87,7 @@ class Note:
 
     @property
     def aliases(self):
-        if self._aliases:
-            return toml.loads(f"aliases = {self._aliases}").get("aliases")
-        else:
-            return None
+        return toml.loads(f"aliases = {self._aliases}").get("aliases") if self._aliases else None
 
     def compose(self):
         separator = "+++\n"

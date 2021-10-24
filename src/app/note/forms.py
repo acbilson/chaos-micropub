@@ -26,7 +26,7 @@ class NoteForm(FlaskForm):
     epistemic = StringField("Epistemic:")
     backlinks = StringField("Backlinks:")
     comments = BooleanField("Allow Comments?")
-    notename = StringField("Note Name:")
+    filename = StringField("File Name:")
     current_date = StringField("Published:")
     modified_date = StringField("Last Edited:")
     aliases = HiddenField("Aliases")

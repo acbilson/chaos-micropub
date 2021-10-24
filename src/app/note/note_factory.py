@@ -20,7 +20,7 @@ def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
     return Note(
         base_path=base_path,
-        notename=form.notename.data,
+        filename=form.filename.data,
         backlinks=form.backlinks.data,
         tags=form.tags.data,
         title=form.title.data,
@@ -45,7 +45,7 @@ def fromBody(note_path: Path, body: list) -> NoteForm:
     top = toml.loads("".join(top_matter))
     return NoteForm(
         title=top.get("title"),
-        notename=notename,
+        filename=filename,
         author=top.get("author"),
         tags=top.get("tags"),
         backlinks=top.get("backlinks") if "backlinks" in top else None,
