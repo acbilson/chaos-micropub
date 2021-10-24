@@ -10,7 +10,7 @@ backlinks = []
 comments = true
 date = "2021-09-23T18:53:39.240457"
 epistemic = "seedling"
-lastmod = 2021-09-23T18:53:39.240457
+lastmod = "2021-09-23T18:53:39.240457"
 tags = [ "fake", "tag",]
 title = "Test Title"
 +++

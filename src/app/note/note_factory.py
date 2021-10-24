@@ -39,7 +39,7 @@ def fromBody(note_path: Path, body: list) -> NoteForm:
 
     converts a list of content into a NoteForm
     """
-    notename = path.basename(note_path)
+    filename = path.basename(note_path)
 
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))

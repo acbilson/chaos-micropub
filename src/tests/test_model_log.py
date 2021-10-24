@@ -7,6 +7,7 @@ class LogTests(unittest.TestCase):
         expected = """+++
 author = "Alex Bilson"
 date = "2021-09-23T18:53:39.240457"
+lastmod = "2021-09-23T18:53:39.240457"
 aliases = [ "/note/example/alias",]
 +++
 Test Content"""
@@ -16,6 +17,7 @@ Test Content"""
             filename="20210923.md",
             aliases=["/note/example/alias"],
             date="2021-09-23T18:53:39.240457",
+            lastmod="2021-09-23T18:53:39.240457",
             author="Alex Bilson",
             content="Test Content",
         )
