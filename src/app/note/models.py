@@ -53,11 +53,18 @@ class Note:
 
     @property
     def backlinks(self):
-        return self._backlinks
+        if self._backlinks:
+            return toml.loads(f"backlinks = {self._backlinks}").get("backlinks")
+        else:
+            return None
+
 
     @property
     def tags(self):
-        return self._tags
+        if self._tags:
+            return toml.loads(f"tags = {self._tags}").get("tags")
+        else:
+            return None
 
     @property
     def title(self):
@@ -99,7 +106,10 @@ class Note:
 
     @property
     def aliases(self):
-        return self._aliases
+        if self._aliases:
+            return toml.loads(f"aliases = {self._aliases}").get("aliases")
+        else:
+            return None
 
     def compose(self):
         separator = "+++\n"
@@ -115,7 +125,7 @@ class Note:
         }
 
         # adds optional tags 
-        if self.aliases is not None and self.aliases != "":
+        if self.aliases:
             top["aliases"] = self.aliases
 
         top_matter = toml.dumps(top)

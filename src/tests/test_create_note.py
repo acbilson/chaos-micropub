@@ -19,7 +19,7 @@ class CreateNoteTests(BaseTest):
                 content="a fake post here",
                 current_date="2021-01-01T12:12:12",
                 title="A Fake Title",
-                tags="fake false",
+                tags="['fake', 'false',]",
             ),
         ]
 
@@ -35,7 +35,7 @@ class CreateNoteTests(BaseTest):
             content="a fake post here",
             current_date="2021-01-01T12:12:12",
             title="A Fake Title",
-            tags="fake false",
+            tags="['fake', 'false',]",
             comments="on",
         )
         resp = self.client.post("/note", data=data)

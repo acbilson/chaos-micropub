@@ -55,7 +55,10 @@ class Log:
 
     @property
     def aliases(self):
-        return self._aliases
+        if self._aliases:
+            return toml.loads(f"aliases = {self._aliases}").get("aliases")
+        else:
+            return None
 
     @property
     def content(self):
@@ -69,7 +72,7 @@ class Log:
         }
 
         # adds optional tags
-        if self.aliases is not None and self.aliases != "":
+        if self.aliases:
             top["aliases"] = self.aliases
 
         top_matter = toml.dumps(top)

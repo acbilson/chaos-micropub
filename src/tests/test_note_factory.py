@@ -32,7 +32,7 @@ class NoteFactoryTests(BaseTest):
             form.current_date.data = datetime.now().isoformat()
             form.modified_date.data = datetime.now().isoformat()
             form.comments.data = True
-            form.tags.data = ["fake", "tag"]
+            form.tags.data = "['fake','tag']"
 
             note = NoteFactory.fromForm("/mnt/chaos/content", "Alex Bilson", form)
 
