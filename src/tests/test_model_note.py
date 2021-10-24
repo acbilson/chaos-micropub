@@ -1,5 +1,5 @@
 import unittest
-from app.micropub.models import Note
+from app.note.models import Note
 
 
 class NoteTests(unittest.TestCase):
@@ -10,7 +10,7 @@ backlinks = []
 comments = true
 date = "2021-09-23T18:53:39.240457"
 epistemic = "seedling"
-lastmod = "2021-09-23T18:53:39.240457"
+lastmod = 2021-09-23T18:53:39.240457
 tags = [ "fake", "tag",]
 title = "Test Title"
 +++
@@ -18,6 +18,8 @@ Test Content"""
 
         note = Note(
             base_path="/path/here",
+            notename="test-title.md",
+            aliases=None,
             backlinks=[],
             tags=["fake", "tag"],
             title="Test Title",

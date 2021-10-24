@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime
-from app.micropub.forms import NoteForm
+from app.note.forms import NoteForm
 from base_test import BaseTest
 
 

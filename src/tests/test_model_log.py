@@ -1,5 +1,5 @@
 import unittest
-from app.micropub.models import Log
+from app.log.models import Log
 
 
 class LogTests(unittest.TestCase):
@@ -7,11 +7,14 @@ class LogTests(unittest.TestCase):
         expected = """+++
 author = "Alex Bilson"
 date = "2021-09-23T18:53:39.240457"
+aliases = [ "/note/example/alias",]
 +++
 Test Content"""
 
         log = Log(
             base_path="/path/here",
+            logname="20210923.md",
+            aliases=["/note/example/alias"],
             date="2021-09-23T18:53:39.240457",
             author="Alex Bilson",
             content="Test Content",

@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
-from app.micropub.forms import NoteForm
-from app.micropub import note_factory as NoteFactory
+from app.note.forms import NoteForm
+from app.note import note_factory as NoteFactory
 from base_test import BaseTest
 
 

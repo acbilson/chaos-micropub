@@ -37,7 +37,7 @@ def create_log():
             )
 
         user = get_user()
-        log = LogFactory.fromForm(user, form)
+        log = LogFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
         filehelper.save(log.path, log.content)
         scripthelper.run_build_script(log.path)

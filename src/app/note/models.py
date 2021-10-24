@@ -115,7 +115,7 @@ class Note:
         }
 
         # adds optional tags 
-        if self.aliases is not None:
+        if self.aliases is not None and self.aliases != "":
             top["aliases"] = self.aliases
 
         top_matter = toml.dumps(top)
