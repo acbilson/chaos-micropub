@@ -42,7 +42,7 @@ def create_log():
         app.logger.info(f"creating log: {log.path}")
         app.logger.debug(log.compose())
 
-        filehelper.save(log.path, log.content)
+        filehelper.save(log.path, log.compose())
         scripthelper.run_build_script(log.path)
 
         return redirect(app.config["SITE"])
