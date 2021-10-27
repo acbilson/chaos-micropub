@@ -34,9 +34,8 @@ COPY ./src /app/src
 
 FROM base as dev
 
-# makes content directories
-RUN mkdir -p /mnt/chaos/content/logs; \
-    mkdir -p /mnt/chaos/content/notes
+# mount content directories here
+RUN mkdir -p /mnt/chaos/content
 
 # mount source code volume here
 WORKDIR /mnt/src

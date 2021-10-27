@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="edit">
+  <form id="edit-form" action="{{ save_route }}" method="POST">
+    {{ form.csrf_token }}
+
+    <div class="view-set">
+      {{ form.title.label }}
+      {{ form.title(readonly=True, class="title") }}
+    </div>
+    <div class="view-set">
+      {{ form.filename.label }}
+      {{ form.filename(readonly=True, class="title") }}
+    </div>
+    <div class="view-set">
+      {{ form.author.label }}
+      {{ form.author(readonly=True) }}
+    </div>
+    <div class="view-set">
+      {{ form.current_date.label }}
+      {{ form.current_date(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.modified_date.label }}
+      {{ form.modified_date(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.epistemic.label }}
+      {{ form.epistemic(readonly=True) }}
+    </div>
+    <div class="view-set">
+      {{ form.tags.label }}
+      {{ form.tags(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.backlinks.label }}
+      {{ form.backlinks(readonly=True, class="tags") }}
+    </div>
+    <div class="view-set">
+      {{ form.comments.label }}
+      {{ form.comments() }}
+    </div>
+    {{ form.content(rows=20, class="content") }}
+    {{ form.aliases }}
+    {{ form.submit }}
+  </form>
+</div>
+  <script type="text/javascript" src="{{ script }}"></script>
+{% endblock %}
