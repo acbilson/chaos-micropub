@@ -32,7 +32,10 @@ class Log:
 
     @property
     def filename(self):
-        return self._filename if self._filename else self.timestamp.strftime("%Y%m%d-%H%M%S")
+        if self._filename:
+          return self._filename.removesuffix(".md")
+        else:
+          return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
     @property
     def date(self):
