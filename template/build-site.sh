@@ -14,6 +14,7 @@ echo "configuring bot git user"
 echo "############"
 git config user.name "Micropub Bot"
 git config user.email "micropub@bot.dev"
+git config core.autoclrf "true"
 
 echo ""
 echo "switching to master branch"

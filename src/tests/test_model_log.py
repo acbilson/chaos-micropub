@@ -1,36 +1,25 @@
 import unittest
-from unittest.mock import create_autospec
-from pathlib import Path
-from datetime import datetime
-from flask_wtf import FlaskForm
-from wtforms import Field
-from app.micropub.models import LogFile
-from helpers import mock_field
+from app.log.models import Log
 
 
-class LogFileTests(unittest.TestCase):
-    def setUp(self):
-      self.form = create_autospec(FlaskForm)
-      self.form.content = mock_field(Field, "Test content")
-      self.form.current_date = mock_field(Field, "2021-09-23T18:53:39.240457")
-
-
-    def test_model_composes_file(self):
+class LogTests(unittest.TestCase):
+    def test_model_composes(self):
         expected = """+++
 author = "Alex Bilson"
 date = "2021-09-23T18:53:39.240457"
+lastmod = "2021-09-23T18:53:39.240457"
+aliases = [ "/note/example/alias",]
 +++
-Test content"""
-        model = LogFile("/path/here", self.form, "acbilson")
-        content = model.compose()
-        self.assertEqual(content, expected)
+Test Content"""
 
-
-    def test_model_builds_path(self):
-      expected = Path("/path/here/20210923-185339.md")
-      model = LogFile(Path("/path/here"), self.form, "acbilson")
-      self.assertEqual(model.path, expected)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        log = Log(
+            base_path="/path/here",
+            filename="20210923.md",
+            aliases=["/note/example/alias"],
+            date="2021-09-23T18:53:39.240457",
+            lastmod="2021-09-23T18:53:39.240457",
+            author="Alex Bilson",
+            content="Test Content",
+        )
+        result = log.compose()
+        self.assertEqual(expected, result)

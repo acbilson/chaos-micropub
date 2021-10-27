@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="entry">
+  <form
+    id="entry-form"
+    method="POST"
+    action="{{ create_route }}"
+    >
+    {{ form.csrf_token }}
+    <p>What would you like to do?</p>
+    {{ form.action(class="entry-action") }}
+    {{ form.submit }}
+  </form>
+</div>
+{% endblock %}
