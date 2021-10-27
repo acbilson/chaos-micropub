@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="edit">
+  <form id="edit-form" action="{{ load_route }}" method="POST">
+    {{ form.csrf_token }}
+
+    <p>Select a note to edit:</p>
+    {{ form.selected_note }}
+    {{ form.submit }}
+  </form>
+</div>
+  <script type="text/javascript" src="{{ script }}"></script>
+{% endblock %}

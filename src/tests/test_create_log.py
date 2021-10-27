@@ -1,16 +1,11 @@
 import unittest
 from unittest import mock
-from datetime import datetime
-from flask import Flask
-from app import create_app
+from unittest.mock import Mock
 from app.config import TestConfig
-from app.micropub import views
+from base_test import BaseTest
 
 
-class CreateLogTests(unittest.TestCase):
-    def setUp(self):
-        self.app = create_app(TestConfig).test_client()
-
+class CreateLogTests(BaseTest):
     def test_create_log_missing_request_data(self):
         bodies = [
             dict(),
@@ -18,20 +13,26 @@ class CreateLogTests(unittest.TestCase):
         ]
 
         for body in bodies:
-            resp = self.app.post("/", data=body)
+            resp = self.client.post("/", data=body)
             self.assertEqual(resp.status, "400 BAD REQUEST")
 
-    @mock.patch("app.open")
-    @mock.patch("app.micropub.scripthelper.run_build_script")
-    def test_create_log_file_output(self, mock_open, mock_sp):
+    @mock.patch("app.core.helpers.filehelper.save")
+    @mock.patch("app.core.helpers.scripthelper.run_build_script")
+    def test_create_log_file_output(self, mock_build: Mock, mock_save: Mock):
         # setup
         data = dict(
-            content="a fake post here",
+            content="a fake log here",
             current_date="2021-01-01T12:12:12",
         )
-        resp = self.app.post("/create/log", data=data)
+        resp = self.client.post("/log", data=data)
         self.assertEqual(resp.status, "302 FOUND", resp.data)
         self.assertEqual(resp.location, TestConfig.SITE)
+        self.assertEqual(len(mock_save.call_args), 2)
+
+        path, content = mock_save.call_args[0]
+        self.assertTrue(str(path).endswith(".md"))
+        self.assertTrue(data.get("content") in content)
+        self.assertTrue(data.get("current_date") in content)
 
 
 if __name__ == "__main__":
