@@ -42,7 +42,10 @@ class Note:
 
     @property
     def filename(self):
-        return self._filename if self._filename else self.title.lower().replace(" ", "-")
+        if self._filename:
+          return self._filename.removesuffix(".md")
+        else:
+          return self.title.lower().replace(" ", "-")
 
     @property
     def backlinks(self):
@@ -102,7 +105,7 @@ class Note:
             "title": self.title,
         }
 
-        # adds optional tags 
+        # adds optional tags
         if self.aliases:
             top["aliases"] = self.aliases
 
