@@ -1,4 +1,4 @@
-FROM python:3.9.2-alpine3.12 as build
+FROM python:3.9.7-alpine3.14 as build
 
 # used by app to determine where the client-side code lives
 ENV STATIC_PATH /app/app/static
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY ./src/requirements.txt /app/
 RUN pip install --user -r requirements.txt
 
-FROM python:3.9.2-alpine3.12 as base
+FROM python:3.9.7-alpine3.14 as base
 COPY --from=build /root/.local /root/.local
 
 # (re)installs a few dependencies

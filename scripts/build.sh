@@ -15,7 +15,7 @@ dev)
   docker build -f Dockerfile \
     --target=dev \
     --build-arg EXPOSED_PORT=${EXPOSED_PORT} \
-    -t acbilson/micropub-dev:alpine-3.12 .
+    -t acbilson/micropub-dev:alpine .
 ;;
 
 uat)
@@ -38,7 +38,7 @@ uat)
     sudo podman build \
       -f /mnt/msata/build/uat/Dockerfile \
       --target=uat \
-      -t acbilson/micropub-uat:alpine-3.12 \
+      -t acbilson/micropub-uat:alpine \
       /mnt/msata/build/uat
 ;;
 
@@ -63,7 +63,7 @@ prod)
     sudo podman build \
       -f /mnt/msata/build/prod/Dockerfile \
       --target=prod \
-      -t acbilson/micropub:alpine-3.12 \
+      -t acbilson/micropub:alpine \
       /mnt/msata/build/prod
 ;;
 

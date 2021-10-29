@@ -18,7 +18,7 @@ docker run --rm \
   -v ${SOURCE_PATH}/src:/mnt/src \
   -v ${SOURCE_PATH}/content:/mnt/chaos/content \
   --name micropub \
-  acbilson/micropub-dev:alpine-3.12
+  acbilson/micropub-dev:alpine
 ;;
 
 test)
@@ -28,7 +28,7 @@ docker run --rm \
   -v ${SOURCE_PATH}/content:/mnt/chaos/content \
   --name micropub-test \
   --entrypoint "python" \
-  acbilson/micropub-dev:alpine-3.12 \
+  acbilson/micropub-dev:alpine \
   -m unittest discover tests
 ;;
 

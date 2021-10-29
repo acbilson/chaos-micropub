@@ -36,7 +36,7 @@ The processor architecture and container tooling I use in production differs fro
 
 ### Artifacts
 
-Docker image: acbilson/micropub-dev:alpine-3.12
+Docker image: acbilson/micropub-dev:alpine
 Hugo config: config-dev.toml
 Hugo build script: build-site.sh
 Hugo theme: [acbilson/chaos-theme](https://github.com/acbilson/chaos-theme.git)
@@ -78,7 +78,7 @@ When I'm making changes, I like to get immediate feedback from my unit tests on 
 
 ### Artifacts
 
-Docker image: acbilson/micropub-uat:alpine-3.12
+Docker image: acbilson/micropub-uat:alpine
 Hugo config: config.toml
 Hugo build script: build-site.sh
 UWSGI config: micropub.ini
@@ -111,7 +111,7 @@ The UAT image runs the Flask application behind UWSGI to mimic the production in
 
 ### Artifacts
 
-Docker image: acbilson/micropub:alpine-3.12
+Docker image: acbilson/micropub:alpine
 Hugo config: config-uat.toml
 Hugo build script: build-site.sh
 UWSGI config: micropub.ini
