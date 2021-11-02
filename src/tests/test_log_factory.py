@@ -8,14 +8,14 @@ from base_test import BaseTest
 class LogFactoryTests(BaseTest):
     def setUp(self):
         super().setUp()
-        with open(
-            "/mnt/chaos/content/logs/20200627-132146.md", "r"
-        ) as f:
+        with open("/mnt/chaos/content/logs/20200627-132146.md", "r") as f:
             self.content = f.readlines()
 
     def test_factory_creates_form_from_body(self):
         with self.app.app_context():
-            note = LogFactory.fromBody("/mnt/chaos/content/logs/20200627-132146.md", self.content)
+            note = LogFactory.fromBody(
+                "/mnt/chaos/content/logs/20200627-132146.md", self.content
+            )
             self.assertEqual(note.author.data, "Alex Bilson")
             self.assertGreater(len(str(note.current_date.data)), 0)
             self.assertGreater(len(str(note.modified_date.data)), 0)

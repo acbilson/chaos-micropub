@@ -12,5 +12,6 @@ class LogFormTests(BaseTest):
             self.assertFalse(form.validate())
             self.assertEqual(form.errors.get("content"), ["No content entered"])
 
+
 if __name__ == "__main__":
     unittest.main()

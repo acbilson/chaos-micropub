@@ -33,9 +33,9 @@ class Log:
     @property
     def filename(self):
         if self._filename:
-          return self._filename.removesuffix(".md")
+            return self._filename.removesuffix(".md")
         else:
-          return self.timestamp.strftime("%Y%m%d-%H%M%S")
+            return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
     @property
     def date(self):
@@ -47,7 +47,11 @@ class Log:
 
     @property
     def lastmod(self):
-        return datetime.fromisoformat(self._lastmod).isoformat() if self._lastmod else datetime.now().isoformat()
+        return (
+            datetime.fromisoformat(self._lastmod).isoformat()
+            if self._lastmod
+            else datetime.now().isoformat()
+        )
 
     @property
     def author(self):
@@ -55,11 +59,15 @@ class Log:
 
     @property
     def aliases(self):
-        return toml.loads(f"aliases = {self._aliases}").get("aliases") if self._aliases else None
+        return (
+            toml.loads(f"aliases = {self._aliases}").get("aliases")
+            if self._aliases
+            else None
+        )
 
     @property
     def content(self):
-        return self._content
+        return self._content.replace("\r\n", "\n")
 
     def compose(self):
         separator = "+++\n"

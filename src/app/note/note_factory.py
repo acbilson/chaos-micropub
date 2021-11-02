@@ -54,7 +54,7 @@ def fromBody(note_path: Path, body: list) -> NoteForm:
         modified_date=top.get("lastmod") if "lastmod" in top else None,
         comments=top.get("comments"),
         content="".join(content),
-        aliases=top.get("aliases")
+        aliases=top.get("aliases"),
     )
 
 

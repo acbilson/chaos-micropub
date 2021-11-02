@@ -41,6 +41,7 @@ def create_log():
 
         app.logger.info(f"creating log: {log.path}")
         app.logger.debug(log.compose())
+        app.logger.info("\r\n" in log.compose())
 
         filehelper.save(log.path, log.compose())
         scripthelper.run_build_script(log.path)

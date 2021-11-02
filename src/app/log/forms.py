@@ -7,10 +7,7 @@ from wtforms import (
     HiddenField,
 )
 from wtforms.widgets import TextArea
-from wtforms.validators import (
-    InputRequired,
-    ValidationError
-)
+from wtforms.validators import InputRequired, ValidationError
 
 
 class LogForm(FlaskForm):
@@ -34,7 +31,6 @@ class LogForm(FlaskForm):
             toml.loads(f"aliases = {field.data}")
         except:
             raise ValidationError("Invalid TOML syntax")
-
 
     def __init__(self, *args, **kwargs):
         FlaskForm.__init__(self, *args, **kwargs)
