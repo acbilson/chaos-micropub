@@ -27,12 +27,19 @@ class Log:
         self._folder = "logs"
 
     @property
+    def folder(self):
+        return path.join(self._folder, self.timestamp.strftime('%Y'), self.timestamp.strftime('%m'))
+
+    @property
     def path(self):
-        return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
+        return Path(path.join(self._base_path, self.folder, f"{self.filename}.md"))
 
     @property
     def filename(self):
-        return self._filename if self._filename else self.timestamp.strftime("%Y%m%d-%H%M%S")
+        if self._filename:
+            return self._filename.removesuffix(".md")
+        else:
+            return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
     @property
     def date(self):
@@ -44,7 +51,11 @@ class Log:
 
     @property
     def lastmod(self):
-        return datetime.fromisoformat(self._lastmod).isoformat() if self._lastmod else datetime.now().isoformat()
+        return (
+            datetime.fromisoformat(self._lastmod).isoformat()
+            if self._lastmod
+            else datetime.now().isoformat()
+        )
 
     @property
     def author(self):
@@ -52,11 +63,15 @@ class Log:
 
     @property
     def aliases(self):
-        return toml.loads(f"aliases = {self._aliases}").get("aliases") if self._aliases else None
+        return (
+            toml.loads(f"aliases = {self._aliases}").get("aliases")
+            if self._aliases
+            else None
+        )
 
     @property
     def content(self):
-        return self._content
+        return self._content.replace("\r\n", "\n")
 
     def compose(self):
         separator = "+++\n"

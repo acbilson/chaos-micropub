@@ -42,12 +42,18 @@ class Note:
 
     @property
     def filename(self):
-        return self._filename if self._filename else self.title.lower().replace(" ", "-")
+        if self._filename:
+            return self._filename.removesuffix(".md")
+        else:
+            return self.title.lower().replace(" ", "-")
 
     @property
     def backlinks(self):
-        return toml.loads(f"backlinks = {self._backlinks}").get("backlinks") if self._backlinks else None
-
+        return (
+            toml.loads(f"backlinks = {self._backlinks}").get("backlinks")
+            if self._backlinks
+            else None
+        )
 
     @property
     def tags(self):
@@ -67,7 +73,11 @@ class Note:
 
     @property
     def lastmod(self):
-        return datetime.fromisoformat(self._lastmod).isoformat() if self._lastmod else datetime.now().isoformat()
+        return (
+            datetime.fromisoformat(self._lastmod).isoformat()
+            if self._lastmod
+            else datetime.now().isoformat()
+        )
 
     @property
     def epistemic(self):
@@ -83,11 +93,15 @@ class Note:
 
     @property
     def content(self):
-        return self._content
+        return self._content.replace("\r\n", "\n")
 
     @property
     def aliases(self):
-        return toml.loads(f"aliases = {self._aliases}").get("aliases") if self._aliases else None
+        return (
+            toml.loads(f"aliases = {self._aliases}").get("aliases")
+            if self._aliases
+            else None
+        )
 
     def compose(self):
         separator = "+++\n"
@@ -102,7 +116,7 @@ class Note:
             "title": self.title,
         }
 
-        # adds optional tags 
+        # adds optional tags
         if self.aliases:
             top["aliases"] = self.aliases
 

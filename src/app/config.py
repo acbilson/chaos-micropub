@@ -9,7 +9,7 @@ class BaseConfig(object):
     FLASK_ENV = environ.get("FLASK_ENV")
     SITE = environ.get("SITE")
     # TODO: figure out why this doesn't work in prod
-    #CONTENT_PATH = environ.get("CONTENT_PATH")
+    # CONTENT_PATH = environ.get("CONTENT_PATH")
     CONTENT_PATH = "/mnt/chaos/content"
 
     FLASK_SECRET_KEY = environ.get("FLASK_SECRET_KEY")

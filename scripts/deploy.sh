@@ -17,7 +17,7 @@ uat)
       -e "SESSION_SECRET=${SESSION_SECRET}" \
       -v ${PRD_CONTENT_PATH}/chaos-content:/mnt/chaos/content \
       --name micropub-uat \
-      acbilson/micropub-uat:alpine-3.12
+      acbilson/micropub-uat:alpine
 ;;
 
 prod)

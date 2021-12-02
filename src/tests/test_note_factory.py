@@ -15,7 +15,10 @@ class NoteFactoryTests(BaseTest):
 
     def test_factory_creates_form_from_body(self):
         with self.app.app_context():
-            note = NoteFactory.fromBody("/mnt/chaos/content/notes/add-snippets-to-your-text-input.md", self.content)
+            note = NoteFactory.fromBody(
+                "/mnt/chaos/content/notes/add-snippets-to-your-text-input.md",
+                self.content,
+            )
             self.assertEqual(note.title.data, "Add Snippets to Your Text Input")
             self.assertEqual(note.author.data, "Alex Bilson")
             self.assertEqual(note.tags.data, ["snippet", "javascript", "software"])
