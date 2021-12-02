@@ -7,6 +7,8 @@ def read_files(dir):
 
 
 def save(path: Path, content: str):
+    if not os.path.exists(path.parent):
+        os.makedirs(path.parent)
     with open(path, "x", newline="\n") as f:
         f.write(content)
 
