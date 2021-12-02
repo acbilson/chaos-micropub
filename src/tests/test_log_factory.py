@@ -1,3 +1,4 @@
+# TODO: fix test and create dir when missing
 import unittest
 from datetime import datetime
 from app.log.forms import LogForm
@@ -21,19 +22,19 @@ class LogFactoryTests(BaseTest):
             self.assertGreater(len(str(note.modified_date.data)), 0)
             self.assertGreater(len(note.content.data), 0)
 
-    def test_factory_creates_note_from_form(self):
+    def test_factory_creates_log_from_form(self):
         with self.app.app_context():
             form = LogForm()
-            form.filename.data = "2021010-21324"
+            form.filename.data = "20200627-533924"
             form.author.data = "Alex Bilson"
             form.content.data = "Test Content"
-            form.current_date.data = datetime.now().isoformat()
+            form.current_date.data = datetime.fromisoformat("2020-06-27T18:53:39.240457").isoformat()
             form.modified_date.data = datetime.now().isoformat()
 
             note = LogFactory.fromForm("/mnt/chaos/content", "Alex Bilson", form)
 
             self.assertEqual(note.author, "Alex Bilson")
-            self.assertEqual(str(note.path), "/mnt/chaos/content/logs/2021010-21324.md")
+            self.assertEqual(str(note.path), "/mnt/chaos/content/logs/2020/06/20200627-533924.md")
             self.assertGreater(len(str(note.date)), 0)
             self.assertGreater(len(str(note.lastmod)), 0)
             self.assertGreater(len(note.content), 0)
