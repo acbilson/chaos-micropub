@@ -3,6 +3,7 @@ Title = "Resumé"
 displayInMenu = true
 kind = "page"
 toc = "true"
+narrow = true
 +++
 {{< raw >}}
 <style>
@@ -113,7 +114,7 @@ events="2016|pioneers the technical business analyst (TBA) position. Sets the ba
     <div class="timeline__year">2019</div>
   </div>
 <span class="timeline__title">SPR Consulting</span>
-<p class="timeline__content">crafts a <a href="{{< ref "/posts/achievements/multi-repository-madness" >}}">PowerShell script</a> that simplifies collaboration and prevents build conflicts across 8+ GitLab repositories.
+<p class="timeline__content">crafts a <a href="{{< ref "/resume/multi-repository-madness" >}}">PowerShell script</a> that simplifies collaboration and prevents build conflicts across 8+ GitLab repositories.
 </p>
 </div>
 
@@ -121,7 +122,7 @@ events="2016|pioneers the technical business analyst (TBA) position. Sets the ba
   <div class="timeline__attr">
     <div class="timeline__year">2019</div>
   </div>
-<p class="timeline__content">conducts a 16-point consultation for Alexandra Hoerr's <a href="https://optimumjoyclinicalcounseling.com/">counseling startup</a>. The capstone of my <abbr title="Masters in Business Administration">MBA</abbr>, <a href="{{< ref "/posts/achievements/mba-thesis" >}}">the result</a> is 100-pages of observations, analysis, and recommendations.
+<p class="timeline__content">conducts a 16-point consultation for Alexandra Hoerr's <a href="https://optimumjoyclinicalcounseling.com/">counseling startup</a>. The capstone of my <abbr title="Masters in Business Administration">MBA</abbr>, <a href="{{< ref "/resume/mba-thesis" >}}">the result</a> is 100-pages of observations, analysis, and recommendations.
 </p>
 </div>
 
@@ -165,7 +166,7 @@ events="2020|incorporates my second business, a technology consulting firm.^2020
   <div class="timeline__attr">
     <div class="timeline__year">2021</div>
   </div>
-<p class="timeline__content">completes the initial requirements for my first project on time. If you're curious about what that entails, see <a href="{{< ref "/posts/achievements/angular-architecture" >}}">Angular Architecture</a>. It was a fun project!
+<p class="timeline__content">completes the initial requirements for my first project on time. If you're curious about what that entails, see <a href="{{< ref "/resume/angular-architecture" >}}">Angular Architecture</a>. It was a fun project!
 </p>
 </div>
 {{< / raw >}}
@@ -281,5 +282,6 @@ examples="Budget App|https://github.com/acbilson/plaintext-budget"
 <p>You have more questions? <a href=mailto:acbilson@gmail.com">Email me</a> and your question may be featured here!</p>
 {{< / raw >}}
 
-Ta ta for now! &#128075;&#127995;
+# Achievement Stories
 
+For those with the endurance to read to the end, I've also listed a few stories of my accomplishments over the years.

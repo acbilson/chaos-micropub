@@ -5,7 +5,7 @@ from flask_dance.contrib.google import make_google_blueprint
 
 from app.core import core_bp
 from app.log import log_bp
-from app.note import note_bp
+from app.quip import quip_bp
 from app.assets import assets
 from app import config
 
@@ -42,7 +42,7 @@ def create_app(config=config.BaseConfig):
 
         app.register_blueprint(core_bp)
         app.register_blueprint(log_bp)
-        app.register_blueprint(note_bp)
+        app.register_blueprint(quip_bp)
 
         @app.route("/healthcheck", methods=["GET"])
         def health():

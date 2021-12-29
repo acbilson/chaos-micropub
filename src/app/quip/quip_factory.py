@@ -1,24 +1,24 @@
-"""Log Factory
+"""Quip Factory
 
-Converts data into objects of Log* type
+Converts data into objects of Quip* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
-from flask import current_app as app
-from app.log.forms import LogForm
-from app.log.models import Log
+from app.quip.forms import QuipForm
+from app.quip.models import Quip
 from os import path
 from pathlib import Path
+from datetime import datetime
 import toml
 
 
-def fromForm(base_path: Path, user: str, form: LogForm) -> Log:
-    """returns a Log obj
+def fromForm(base_path: Path, user: str, form: QuipForm) -> Quip:
+    """returns a Quip obj
 
-    converts a LogForm obj into a Log
+    converts a QuipForm obj into a Quip
     """
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
-    return Log(
+    return Quip(
         base_path=base_path,
         filename=form.filename.data,
         date=form.current_date.data,
@@ -29,21 +29,21 @@ def fromForm(base_path: Path, user: str, form: LogForm) -> Log:
     )
 
 
-def fromBody(log_path: Path, body: list) -> LogForm:
-    """returns a LogForm obj
+def fromBody(quip_path: Path, body: list) -> QuipForm:
+    """returns a QuipForm obj
 
-    converts a list of content into a LogForm
+    converts a list of content into a QuipForm
     """
-    logname = path.basename(log_path)
+    filename = path.basename(quip_path)
 
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
-    return LogForm(
+    return QuipForm(
         author=top.get("author") if "author" in top else "Alex Bilson",
         current_date=top.get("date"),
         modified_date=top.get("lastmod") if "lastmod" in top else None,
         content="".join(content),
-        logname=logname,
+        filename=filename,
         aliases=top.get("aliases") if "aliases" in top else None,
     )
 
