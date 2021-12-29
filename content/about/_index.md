@@ -2,7 +2,7 @@
 Title = "About"
 displayInMenu = true
 kind = "page"
-
+narrow = true
 +++
 My name's Alex, and I'm a refiner by trade and passion, an engineer of software and systems, a husband to the lovely Amie, father to Graham and baby incoming, and a follower of Jesus.
 
@@ -16,7 +16,7 @@ To see what I've done with code, check out my [Github Page](https://github.com/a
 
 From the perspective of the Enneagram, my results are a tie between a One (Reformer) and a Five (Investigator). My assessment is that I lean towards a One. Here's a summary.
 
-<img style="width: 200px; margin: auto;" src="../img/enneagram.png" />
+{{< raw >}}<img style="width: 200px; margin: auto;" src="/data/img/enneagram.png" />{{< /raw >}}
 
 >"Type One exemplifies the desire to be good, to live up to the highest ethical standards, and to effect positive changes in the world. While a number of types care about achieving goals, Ones are particularly aware of **how** they achieve their goals. Were they honorable? Did they use their resources wisely? They tend to see things in terms of long-range objectives, and they can be aware of how current actions might affect future situations.<br /><br />
 

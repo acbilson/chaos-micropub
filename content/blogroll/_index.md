@@ -2,6 +2,7 @@
 Title = "Blog Roll"
 displayInMenu = true
 kind = "page"
+narrow = true
 +++
 Here's a list of other independent blog writers that I follow and from whom I draw inspiration.
 
@@ -45,6 +46,12 @@ Here's a list of other independent blog writers that I follow and from whom I dr
 
 {{< outref src="https://brendanschlagel.com" name="Brendan Schlagel" >}} - Brendan has several thoughtful posts about the subject of writing on the web.
 
-{{< outref src="https://barnesworthburning.net" name="Barns Worth Burning" >}} - I honestly don't know what to make of this site, but I _love_ the way it operates. Magical.
+{{< outref src="https://barnsworthburning.net" name="Nick Trombley" >}} - I honestly don't know what to make of this site, but I _love_ the way it operates. Magical.
 
 {{< outref src="https://laurakalbag.com/" name="Laura Kalbag" >}} - I haven't spent a lot of time on her personal site (yet), but Laura's work for the {{< outref src="https://small-tech.org/" name="Small Technology Foundation" >}} has definitely influenced me.
+
+{{< outref src="https://www.robinrendle.com/" name="Robin Rendle" >}} - Robin's writing on design and reflections on the web are first-rate. Love discovering the beauty of the web with her.
+
+{{< outref src="https://www.jefftk.com/" name="Jeff Kaufman" >}} - Jeff's practical writing about parenthood has more than once encouraged or informed my own stumbling fatherhood. Thanks for being so practical and example-driven!
+
+{{< outref src="https://www.shiftingculturepodcast.com/" name="Shifting Culture Podcast" >}} - Ok, so this isn't an RSS feed, but I've been deeply encouraged and informed by the interviews Joshua Johnson conducts on this podcast. Making my way through the whole list!
