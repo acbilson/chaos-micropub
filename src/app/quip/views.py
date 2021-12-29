@@ -60,7 +60,10 @@ def select_quip():
         quip_path = path.join(app.config.get("CONTENT_PATH"), "quips")
         quips = filehelper.read_files([quip_path])
         form = QuipSelectionForm(request.form)
-        form.selected_quip.choices = [(quip.path, quip.name) for quip in quips]
+
+        # sorts quip files by last modified descending
+        form.selected_quip.choices = [(quip.path, quip.name) for quip in sorted(quips, key=lambda q: q.stat().st_mtime, reverse=True)]
+
         return render_template(
             "select_quip.html",
             form=form,
