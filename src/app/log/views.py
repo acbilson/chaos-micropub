@@ -1,4 +1,5 @@
 from os import path
+from datetime import datetime
 from flask import (
     request,
     render_template,
@@ -56,9 +57,19 @@ def select_log():
 
     if request.method == "GET":
         log_path = path.join(app.config.get("CONTENT_PATH"), "logs")
-        logs = filehelper.read_files(log_path)
+
+        # gets logs from the past two months
+        now = datetime.now()
+        log_paths = [
+                path.join(log_path, str(now.year), str(now.month)),
+                path.join(log_path, str(now.year), str(now.month - 1))
+                ]
+        logs = filehelper.read_files(log_paths)
         form = LogSelectionForm(request.form)
-        form.selected_log.choices = [(log, log) for log in logs]
+
+        # sorts log files by last modified descending
+        form.selected_log.choices = [(log.path, log.name) for log in sorted(logs, key=lambda l: l.stat().st_mtime, reverse=True)]
+
         return render_template(
             "select_log.html",
             form=form,
