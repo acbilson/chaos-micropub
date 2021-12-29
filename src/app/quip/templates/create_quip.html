@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="create">
+  <form id="create-form" action="{{ create_route }}" method="POST">
+    {{ form.csrf_token }}
+
+    <p>Enter your quip. <a href="https://www.markdownguide.org/cheat-sheet">Markdown</a> supported.</p>
+    {{ form.content(rows=20, class="content") }}
+    {{ form.current_date(hidden=True) }}
+    {{ form.submit }}
+  </form>
+</div>
+
+  <script type="text/javascript" src="{{ script }}"></script>
+{% endblock %}

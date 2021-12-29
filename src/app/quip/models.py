@@ -4,64 +4,42 @@ from os import path
 from datetime import datetime
 
 
-class Note:
-    """read-only note representation"""
+class Quip:
+    """read-only quip representation"""
 
     def __init__(
         self,
-        base_path: Path,
+        base_path: str,
         filename: str,
-        backlinks: str,
-        tags: str,
-        title: str,
         date: str,
         lastmod: str,
-        epistemic: str,
         author: str,
         content: str,
-        comments: str,
         aliases: str,
     ):
         self._base_path = base_path
         self._filename = filename
-        self._backlinks = backlinks
-        self._tags = tags
-        self._title = title
         self._date = date
         self._lastmod = lastmod
-        self._epistemic = epistemic
         self._author = author
         self._content = content
-        self._comments = comments
         self._aliases = aliases
-        self._folder = "notes"
+        self._folder = "quips"
+
+    @property
+    def folder(self):
+        return self._folder
 
     @property
     def path(self):
-        return Path(path.join(self._base_path, self._folder, f"{self.filename}.md"))
+        return Path(path.join(self._base_path, self.folder, f"{self.filename}.md"))
 
     @property
     def filename(self):
         if self._filename:
             return self._filename.removesuffix(".md")
         else:
-            return self.title.lower().replace(" ", "-")
-
-    @property
-    def backlinks(self):
-        return (
-            toml.loads(f"backlinks = {self._backlinks}").get("backlinks")
-            if self._backlinks
-            else None
-        )
-
-    @property
-    def tags(self):
-        return toml.loads(f"tags = {self._tags}").get("tags") if self._tags else None
-
-    @property
-    def title(self):
-        return self._title
+            return self.timestamp.strftime("%Y%m%d-%H%M%S")
 
     @property
     def date(self):
@@ -80,20 +58,8 @@ class Note:
         )
 
     @property
-    def epistemic(self):
-        return self._epistemic if self._epistemic else "seedling"
-
-    @property
     def author(self):
         return self._author
-
-    @property
-    def comments(self):
-        return self._comments
-
-    @property
-    def content(self):
-        return self._content.replace("\r\n", "\n")
 
     @property
     def aliases(self):
@@ -103,17 +69,16 @@ class Note:
             else None
         )
 
+    @property
+    def content(self):
+        return self._content.replace("\r\n", "\n")
+
     def compose(self):
         separator = "+++\n"
         top = {
             "author": self.author,
-            "backlinks": self.backlinks,
-            "comments": self.comments,
             "date": self.date,
-            "epistemic": self.epistemic,
             "lastmod": self.lastmod,
-            "tags": self.tags,
-            "title": self.title,
         }
 
         # adds optional tags

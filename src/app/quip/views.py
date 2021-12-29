@@ -11,25 +11,25 @@ from app.core.helpers import filehelper
 from app.core.helpers import scripthelper
 from app.core.helpers.authhelper import get_user, authorized
 
-from ..note import note_bp
-from app.note import note_factory as NoteFactory
-from app.note.forms import (
-    NoteForm,
-    NoteSelectionForm,
+from ..quip import quip_bp
+from app.quip import quip_factory as QuipFactory
+from app.quip.forms import (
+    QuipForm,
+    QuipSelectionForm,
 )
 
 
-@note_bp.route("/note", methods=["GET", "POST"])
-def create_note():
+@quip_bp.route("/quip", methods=["GET", "POST"])
+def create_quip():
     if (exits := authorized()) != None:
         return exits
-    form = NoteForm(request.form)
+    form = QuipForm(request.form)
 
     if request.method == "GET":
         return render_template(
-            "create_note.html",
+            "create_quip.html",
             form=form,
-            create_route=url_for("note_bp.create_note"),
+            create_route=url_for("quip_bp.create_quip"),
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
@@ -40,44 +40,44 @@ def create_note():
             )
 
         user = get_user()
-        note = NoteFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
+        quip = QuipFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
-        app.logger.info(f"creating note: {note.path}")
-        app.logger.debug(note.compose())
+        app.logger.info(f"creating quip: {quip.path}")
+        app.logger.debug(quip.compose())
 
-        filehelper.save(note.path, note.compose())
-        scripthelper.run_build_script(note.path)
+        filehelper.save(quip.path, quip.compose())
+        scripthelper.run_build_script(quip.path)
 
         return redirect(app.config["SITE"])
 
 
-@note_bp.route("/note/select", methods=["GET", "POST"])
-def select_note():
+@quip_bp.route("/quip/select", methods=["GET", "POST"])
+def select_quip():
     if (exits := authorized()) != None:
         return exits
 
     if request.method == "GET":
-        note_path = path.join(app.config.get("CONTENT_PATH"), "notes")
-        notes = filehelper.read_files(note_path)
-        form = NoteSelectionForm(request.form)
-        form.selected_note.choices = [(note, note) for note in notes]
+        quip_path = path.join(app.config.get("CONTENT_PATH"), "quips")
+        quips = filehelper.read_files([quip_path])
+        form = QuipSelectionForm(request.form)
+        form.selected_quip.choices = [(quip.path, quip.name) for quip in quips]
         return render_template(
-            "select_note.html",
+            "select_quip.html",
             form=form,
-            load_route=url_for("note_bp.select_note"),
+            load_route=url_for("quip_bp.select_quip"),
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
-        selectionForm = NoteSelectionForm(request.form)
+        selectionForm = QuipSelectionForm(request.form)
         # code=303 redirects as GET
         return redirect(
-            url_for("note_bp.edit_note", path=selectionForm.selected_note.data),
+            url_for("quip_bp.edit_quip", path=selectionForm.selected_quip.data),
             code=303,
         )
 
 
-@note_bp.route("/note/edit", methods=["GET", "POST"])
-def edit_note():
+@quip_bp.route("/quip/edit", methods=["GET", "POST"])
+def edit_quip():
     if (exits := authorized()) != None:
         return exits
 
@@ -85,18 +85,18 @@ def edit_note():
         if "path" not in request.args:
             return f"path not present in query string {request.args}", 400
 
-        note_path = request.args.get("path")
-        with open(note_path, "r") as f:
-            form = NoteFactory.fromBody(note_path, f.readlines())
+        quip_path = request.args.get("path")
+        with open(quip_path, "r") as f:
+            form = QuipFactory.fromBody(quip_path, f.readlines())
 
         return render_template(
-            "edit_note.html",
+            "edit_quip.html",
             form=form,
-            save_route=url_for("note_bp.edit_note"),
+            save_route=url_for("quip_bp.edit_quip"),
             script=url_for("static", filename="js/micropub.js"),
         )
     else:
-        form = NoteForm(request.form)
+        form = QuipForm(request.form)
         if not form.validate():
             return (
                 f"form could not be validated because {form.errors}. aborting.",
@@ -107,12 +107,12 @@ def edit_note():
         # nullifies lastmod so it refreshes to now
         form.modified_date.data = None
 
-        note = NoteFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
+        quip = QuipFactory.fromForm(app.config.get("CONTENT_PATH"), user, form)
 
-        app.logger.info(f"editing note: {note.path}")
-        app.logger.debug(note.compose())
+        app.logger.info(f"editing quip: {quip.path}")
+        app.logger.debug(quip.compose())
 
-        filehelper.update(note.path, note.compose())
-        scripthelper.run_build_script(note.path)
+        filehelper.update(quip.path, quip.compose())
+        scripthelper.run_build_script(quip.path)
 
         return redirect(app.config["SITE"])

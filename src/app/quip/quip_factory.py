@@ -1,60 +1,50 @@
-"""Note Factory
+"""Quip Factory
 
-Converts data into objects of Note* type
+Converts data into objects of Quip* type
 
 Currently supports TOML-style content, with YAML as a possible future implementation
 """
-from app.note.forms import NoteForm
-from app.note.models import Note
+from app.quip.forms import QuipForm
+from app.quip.models import Quip
 from os import path
 from pathlib import Path
 from datetime import datetime
 import toml
 
 
-def fromForm(base_path: Path, user: str, form: NoteForm) -> Note:
-    """returns a Note obj
+def fromForm(base_path: Path, user: str, form: QuipForm) -> Quip:
+    """returns a Quip obj
 
-    converts a NoteForm obj into a Note
+    converts a QuipForm obj into a Quip
     """
     user = "Alex Bilson" if user == "acbilson" or user == "Alexander Bilson" else user
-    return Note(
+    return Quip(
         base_path=base_path,
         filename=form.filename.data,
-        backlinks=form.backlinks.data,
-        tags=form.tags.data,
-        title=form.title.data,
         date=form.current_date.data,
         lastmod=form.modified_date.data,
-        epistemic=form.epistemic.data,
         content=form.content.data,
-        comments=form.comments.data,
         author=user,
         aliases=form.aliases.data,
     )
 
 
-def fromBody(note_path: Path, body: list) -> NoteForm:
-    """returns a NoteForm obj
+def fromBody(quip_path: Path, body: list) -> QuipForm:
+    """returns a QuipForm obj
 
-    converts a list of content into a NoteForm
+    converts a list of content into a QuipForm
     """
-    filename = path.basename(note_path)
+    filename = path.basename(quip_path)
 
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
-    return NoteForm(
-        title=top.get("title"),
-        filename=filename,
-        author=top.get("author"),
-        tags=top.get("tags"),
-        backlinks=top.get("backlinks") if "backlinks" in top else None,
-        epistemic=top.get("epistemic"),
+    return QuipForm(
+        author=top.get("author") if "author" in top else "Alex Bilson",
         current_date=top.get("date"),
         modified_date=top.get("lastmod") if "lastmod" in top else None,
-        comments=top.get("comments"),
         content="".join(content),
-        aliases=top.get("aliases"),
+        filename=filename,
+        aliases=top.get("aliases") if "aliases" in top else None,
     )
 
 

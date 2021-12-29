@@ -38,7 +38,6 @@ def fromBody(log_path: Path, body: list) -> LogForm:
 
     top_matter, content = _parseBody(body)
     top = toml.loads("".join(top_matter))
-    app.logger.info(top)
     return LogForm(
         author=top.get("author") if "author" in top else "Alex Bilson",
         current_date=top.get("date"),
