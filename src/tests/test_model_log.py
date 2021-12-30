@@ -2,6 +2,7 @@ import unittest
 from pathlib import Path
 from app.log.models import Log
 
+
 class LogTests(unittest.TestCase):
     def test_model_composes(self):
         expected = """+++

@@ -61,14 +61,17 @@ def select_log():
         # gets logs from the past two months
         now = datetime.now()
         log_paths = [
-                path.join(log_path, str(now.year), str(now.month)),
-                path.join(log_path, str(now.year), str(now.month - 1))
-                ]
+            path.join(log_path, str(now.year), str(now.month)),
+            path.join(log_path, str(now.year), str(now.month - 1)),
+        ]
         logs = filehelper.read_files(log_paths)
         form = LogSelectionForm(request.form)
 
         # sorts log files by last modified descending
-        form.selected_log.choices = [(log.path, log.name) for log in sorted(logs, key=lambda l: l.stat().st_mtime, reverse=True)]
+        form.selected_log.choices = [
+            (log.path, log.name)
+            for log in sorted(logs, key=lambda l: l.stat().st_mtime, reverse=True)
+        ]
 
         return render_template(
             "select_log.html",

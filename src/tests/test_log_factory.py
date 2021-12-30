@@ -28,13 +28,17 @@ class LogFactoryTests(BaseTest):
             form.filename.data = "20200627-533924"
             form.author.data = "Alex Bilson"
             form.content.data = "Test Content"
-            form.current_date.data = datetime.fromisoformat("2020-06-27T18:53:39.240457").isoformat()
+            form.current_date.data = datetime.fromisoformat(
+                "2020-06-27T18:53:39.240457"
+            ).isoformat()
             form.modified_date.data = datetime.now().isoformat()
 
             log = LogFactory.fromForm("/mnt/chaos/content", "Alex Bilson", form)
 
             self.assertEqual(log.author, "Alex Bilson")
-            self.assertEqual(str(log.path), "/mnt/chaos/content/logs/2020/06/20200627-533924.md")
+            self.assertEqual(
+                str(log.path), "/mnt/chaos/content/logs/2020/06/20200627-533924.md"
+            )
             self.assertGreater(len(str(log.date)), 0)
             self.assertGreater(len(str(log.lastmod)), 0)
             self.assertGreater(len(log.content), 0)

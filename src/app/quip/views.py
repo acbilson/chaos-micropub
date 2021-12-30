@@ -62,7 +62,10 @@ def select_quip():
         form = QuipSelectionForm(request.form)
 
         # sorts quip files by last modified descending
-        form.selected_quip.choices = [(quip.path, quip.name) for quip in sorted(quips, key=lambda q: q.stat().st_mtime, reverse=True)]
+        form.selected_quip.choices = [
+            (quip.path, quip.name)
+            for quip in sorted(quips, key=lambda q: q.stat().st_mtime, reverse=True)
+        ]
 
         return render_template(
             "select_quip.html",

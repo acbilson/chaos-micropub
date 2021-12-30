@@ -28,7 +28,9 @@ class Log:
 
     @property
     def folder(self):
-        return path.join(self._folder, self.timestamp.strftime('%Y'), self.timestamp.strftime('%m'))
+        return path.join(
+            self._folder, self.timestamp.strftime("%Y"), self.timestamp.strftime("%m")
+        )
 
     @property
     def path(self):
