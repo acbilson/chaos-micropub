@@ -1,8 +1,6 @@
-# chaos-micropub
-
 An ~IndieWeb~ original micropub server, written in Python Flask.
 
-chaos-micropub began as an IndieWeb micropub server and retains the name, but to get started it's locked into a specific Hugo workflow. To me, the capacity to publish personal comments to my site is more important than interoperability. It does not presently do anything particularly IndieWeb-like, except perhaps by abiding by the rule to eat one's own dogfood.
+chaos-micropub began as an IndieWeb micropub server and retains the name, but to get started it's locked into a specific Hugo workflow. To me the capacity to publish personal comments to my site is more important than interoperability. It does not presently do anything particularly IndieWeb-like, except perhaps by abiding by the rule to eat one's own dogfood.
 
 # Images
 
