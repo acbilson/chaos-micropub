@@ -18,12 +18,12 @@ COPY --from=build /root/.local /root/.local
 RUN apk add pcre-dev git
 
 # load deployment script
-COPY ./dist/build-site.sh /usr/local/bin/
+COPY ./template/build-site.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/build-site.sh
 
 # load uwsgi config
 RUN mkdir -p /etc/micropub
-COPY ./dist/micropub.ini /etc/micropub
+COPY ./template/micropub.ini /etc/micropub
 
 # install source code
 COPY ./src /app/src
