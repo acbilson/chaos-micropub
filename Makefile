@@ -22,6 +22,10 @@ clean: ## cleans remnants of the build process
 build: clean ## builds a local development Docker image
 	. ./scripts/build.sh dev
 
+.PHONY: just-build
+just-build: ## builds only a podman image
+	podman build --target=prod -t acbilson/micropub-test:alpine .
+
 .PHONY: start
 start: ## starts a local development Docker container
 	. ./scripts/start.sh dev
