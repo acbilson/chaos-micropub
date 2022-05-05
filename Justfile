@@ -4,7 +4,7 @@ build:
 
 # restarts the systemd service
 restart:
-	sudo systemd restart container-micropub.service
+	sudo systemctl restart container-micropub.service
 
 # builds a production-ready podman image
 redeploy: build restart
