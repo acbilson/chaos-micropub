@@ -1,2 +1,10 @@
 #!/bin/bash
-rev=${1:0:7}; podman build --target=prod -t acbilson/micropub-$rev:alpine .
+
+selected_rev=${1:0:7}
+current_rev=$(git rev-parse --short HEAD)
+
+if [ $selected_rev = $current_rev ]; then
+   podman build --target=prod -t acbilson/micropub-$current_rev:alpine .;
+else
+   echo "the current git commit and the selected commit do not match";
+fi
