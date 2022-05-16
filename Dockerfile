@@ -15,7 +15,7 @@ FROM python:3.9.7-alpine3.14 as base
 COPY --from=build /root/.local /root/.local
 
 # (re)installs a few dependencies
-RUN apk add pcre-dev git
+RUN apk add pcre-dev git openssh
 
 # load deployment script
 COPY ./template/build-site.sh /usr/local/bin/
