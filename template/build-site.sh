@@ -1,4 +1,5 @@
 #!/bin/sh
+export GIT_SSH_COMMAND="/usr/bin/ssh -i /root/.ssh/git_rsa"
 
 echo ""
 echo "new file at $1"
