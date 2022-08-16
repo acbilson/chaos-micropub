@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.9.7-alpine3.14 as build
+FROM docker.io/library/python:3.10.6-alpine3.15 as build
 
 # used by app to determine where the client-side code lives
 ENV STATIC_PATH /app/app/static
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY ./src/requirements.txt /app/
 RUN pip install --user -r requirements.txt
 
-FROM docker.io/library/python:3.9.7-alpine3.14 as base
+FROM docker.io/library/python:3.10.6-alpine3.15 as base
 COPY --from=build /root/.local /root/.local
 
 # (re)installs a few dependencies
