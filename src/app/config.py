@@ -12,6 +12,9 @@ class BaseConfig(object):
     # CONTENT_PATH = environ.get("CONTENT_PATH")
     CONTENT_PATH = "/mnt/chaos/content"
 
+    ADMIN_USER = environ.get("ADMIN_USER")
+    ADMIN_PASSWORD = environ.get("ADMIN_PASSWORD")
+
     FLASK_SECRET_KEY = environ.get("FLASK_SECRET_KEY")
     SESSION_SECRET = environ.get("SESSION_SECRET")
 

@@ -1,4 +1,18 @@
 set dotenv-load
+set shell := ["/opt/homebrew/bin/fish", "-c"]
+
+# instantiates a local python virtualenv
+init:
+	if not test -d src/venv; python -m venv src/venv; end;
+	if not test -d src/venv/lib/python3.10/site-packages/werkzeug; echo 'install packages to continue'; end
+
+# tests that we're using a virtualenv
+venv:
+	if test (which python) = "/usr/local/bin/python"; echo 'not a virtualenv, please activate' && return 1; else; return 0; end
+
+# runs a local development instance
+run: init venv
+	python src/main.py
 
 # builds a development docker image.
 build:

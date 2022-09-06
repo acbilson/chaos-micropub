@@ -1,8 +1,10 @@
+Flask-HTTPAuth
 Flask-Assets
 Flask-Login
 Flask-WTF
 Flask
 flask-dance
+PyJWT
 uwsgi
 beautifulsoup4
 mf2py

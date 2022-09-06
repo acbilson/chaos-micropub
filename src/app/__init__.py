@@ -3,6 +3,7 @@ from flask import Flask, Response
 from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint
 
+from app.auth import auth_bp
 from app.core import core_bp
 from app.log import log_bp
 from app.quip import quip_bp
@@ -40,6 +41,7 @@ def create_app(config=config.BaseConfig):
         app.register_blueprint(github_bp, url_prefix="/login")
         app.register_blueprint(google_bp, url_prefix="/login")
 
+        app.register_blueprint(auth_bp)
         app.register_blueprint(core_bp)
         app.register_blueprint(log_bp)
         app.register_blueprint(quip_bp)
