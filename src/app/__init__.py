@@ -1,5 +1,6 @@
 import logging
 from flask import Flask, Response
+from flask_cors import CORS
 from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint
 
@@ -14,6 +15,7 @@ from app import config
 def create_app(config=config.BaseConfig):
     """Initialize the core application"""
     app = Flask(__name__, instance_relative_config=False)
+    cors = CORS(app)
     app.config.from_object(config)
 
     app.logger.info(app.config.get("CONTENT_PATH"))

@@ -1,4 +1,5 @@
 Flask-HTTPAuth
+Flask-CORS
 Flask-Assets
 Flask-Login
 Flask-WTF
@@ -11,3 +12,4 @@ mf2py
 python-dotenv
 requests
 toml
+black
