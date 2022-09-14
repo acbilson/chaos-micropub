@@ -1,5 +1,7 @@
+import os
 from os import path
 from datetime import datetime, timedelta
+import requests
 import jwt
 from http import HTTPStatus
 from flask import (
@@ -11,43 +13,56 @@ from flask import (
     jsonify
 )
 from flask import current_app as app
-from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
+from flask_httpauth import HTTPTokenAuth
 
 from ..auth import auth_bp
 
-basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
-
-
-@basic_auth.verify_password
-def verify_password(username, password):
-    username_match = username == 'alex'
-    password_match = password == 'example'
-    if username_match and password_match:
-        return username
-
 
 @token_auth.verify_token
 def verify_token(token):
-    data = jwt.decode(token, 'my-secret-key', algorithms=["HS256"])
-    id, exp = data.get("id"), data.get("exp")
-    return id
+    print("verifying token in micropub")
+    if token == null:
+        return False
+    authorized = requests.get("http://localhost:7000/auth", headers={'Authorization': f"Bearer {token}"})
+    print(authorized)
+    return True
 
+@token_auth.verify_token
+@auth_bp.route("/read", methods=["GET"])
+def read():
+    file_type, file_name = request.args.get("type"), request.args.get("name")
+    if None in (file_type, file_name):
+        return Response(
+        "missing either type or name from query params",
+        status=HTTPStatus.BAD_REQUEST,
+        )
 
-def generate_token():
-    obj = dict(
-        id='alex', exp=datetime.utcnow() + timedelta(minutes=20)
-    )
-    return jwt.encode(obj, 'my-secret-key', algorithm="HS256")
+    type_path = os.path.join(app.config["CONTENT_PATH"], file_type)
 
+    if not os.path.exists(type_path):
+        raise Exception(f"{type_path} does not exist")
 
-@auth_bp.route("/authenticate", methods=["GET"])
-@token_auth.login_required
-def authenticate():
-    return Response(status=HTTPStatus.OK)
+    all_matches = [];
+    for root, _, files in os.walk(type_path):
+        matches = [os.path.join(root,f) for f in files if f.startswith(file_name)]
+        all_matches += matches
 
+    my_file_path = all_matches[0] if len(all_matches) else ""
+    my_file_content = ""
+    if my_file_path != "":
+        with open(my_file_path, "r") as my_file:
+            my_file_content = my_file.readlines()
 
-@auth_bp.route("/login", methods=["GET"])
-@basic_auth.login_required
-def login():
-    return jsonify(token=generate_token())
+    return jsonify(
+            my_file_path=my_file_path,
+            my_file_content=my_file_content,
+            matches=all_matches
+            )
+
+@token_auth.verify_token
+@auth_bp.route("/update", methods=["POST"])
+def update():
+    body = request.json()
+    content = body.get("content")
+    return jsonify(content=content)

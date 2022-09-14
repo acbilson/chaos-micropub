@@ -33,6 +33,6 @@ start:
   -e "SESSION_SECRET=$SESSION_SECRET" \
   -e "CONTENT_PATH=/mnt/chaos/content" \
   -v $SOURCE_PATH/src:/mnt/src \
-  -v $SOURCE_PATH/content:/mnt/chaos/content \
+  -v $CONTENT_PATH:/mnt/chaos/content \
   --name micropub \
   acbilson/micropub:latest
