@@ -6,6 +6,7 @@ from flask_dance.contrib.google import make_google_blueprint
 
 from app.auth import auth_bp
 from app.core import core_bp
+from app.edit import edit_bp
 from app.log import log_bp
 from app.quip import quip_bp
 from app.assets import assets
@@ -45,6 +46,7 @@ def create_app(config=config.BaseConfig):
 
         app.register_blueprint(auth_bp)
         app.register_blueprint(core_bp)
+        app.register_blueprint(edit_bp)
         app.register_blueprint(log_bp)
         app.register_blueprint(quip_bp)
 

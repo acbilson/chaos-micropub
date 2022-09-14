@@ -2,7 +2,6 @@ import os
 from os import path
 from datetime import datetime, timedelta
 import requests
-import jwt
 from http import HTTPStatus
 from flask import (
     Response,
@@ -13,23 +12,12 @@ from flask import (
     jsonify
 )
 from flask import current_app as app
-from flask_httpauth import HTTPTokenAuth
+from app.auth import token_auth
 
-from ..auth import auth_bp
-
-token_auth = HTTPTokenAuth()
+from ..edit import edit_bp
 
 @token_auth.verify_token
-def verify_token(token):
-    print("verifying token in micropub")
-    if token == null:
-        return False
-    authorized = requests.get("http://localhost:7000/auth", headers={'Authorization': f"Bearer {token}"})
-    print(authorized)
-    return True
-
-@token_auth.verify_token
-@auth_bp.route("/read", methods=["GET"])
+@edit_bp.route("/read", methods=["GET"])
 def read():
     file_type, file_name = request.args.get("type"), request.args.get("name")
     if None in (file_type, file_name):
@@ -61,7 +49,7 @@ def read():
             )
 
 @token_auth.verify_token
-@auth_bp.route("/update", methods=["POST"])
+@edit_bp.route("/update", methods=["POST"])
 def update():
     body = request.json
     file_path, content = body.get("filePath"), body.get("fileContent")
