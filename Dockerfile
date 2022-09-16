@@ -43,15 +43,6 @@ WORKDIR /mnt/src
 ENV FLASK_ENV development
 ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]
 
-#####
-# UAT
-#####
-
-FROM base as uat
-WORKDIR /app/src
-ENV FLASK_ENV production
-ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]
-
 ############
 # Production
 ############

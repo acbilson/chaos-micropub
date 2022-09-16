@@ -14,17 +14,22 @@ venv:
 run: init venv
 	python src/main.py
 
-# builds a development docker image.
+# builds a production podman image.
 build:
   set COMMIT_ID (git rev-parse --short HEAD); \
-  docker build \
-  --target dev \
+  podman build \
   -t acbilson/micropub:latest \
   -t acbilson/micropub:$COMMIT_ID .
 
-# starts a development docker image.
-start:
-  docker run --rm \
+# builds a development podman image.
+build-dev:
+  podman build \
+  --target dev \
+  -t acbilson/micropub-dev:latest .
+
+# starts a development podman image.
+start: build-dev
+  podman run --rm \
   --expose $EXPOSED_PORT -p $EXPOSED_PORT:80 \
   -e "SITE=http://localhost:$EXPOSED_PORT" \
   -e "CLIENT_ID=$GITHUB_CLIENT_ID" \
@@ -35,4 +40,4 @@ start:
   -v $SOURCE_PATH/src:/mnt/src \
   -v $CONTENT_PATH:/mnt/chaos/content \
   --name micropub \
-  acbilson/micropub:latest
+  acbilson/micropub-dev:latest

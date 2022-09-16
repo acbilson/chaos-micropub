@@ -5,7 +5,7 @@ class BaseConfig(object):
     """Set Flask configuration variables"""
 
     FLASK_HOST = "0.0.0.0"
-    FLASK_PORT = 80
+    FLASK_PORT = 5000
     FLASK_ENV = environ.get("FLASK_ENV")
     SITE = environ.get("SITE")
     # TODO: figure out why this doesn't work in prod
