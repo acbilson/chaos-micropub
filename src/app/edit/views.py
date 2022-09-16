@@ -12,12 +12,22 @@ from flask import (
     jsonify
 )
 from flask import current_app as app
-from app.auth import token_auth
+from flask_httpauth import HTTPTokenAuth
 
 from ..edit import edit_bp
 
+token_auth = HTTPTokenAuth()
+
 @token_auth.verify_token
+def verify_token(token):
+    resp = requests.get("http://localhost:7000/auth", headers={'Authorization': f"Bearer {token}"})
+    if resp.status_code == HTTPStatus.OK:
+        return token
+    else:
+        return None
+
 @edit_bp.route("/read", methods=["GET"])
+@token_auth.login_required
 def read():
     file_type, file_name = request.args.get("type"), request.args.get("name")
     if None in (file_type, file_name):
@@ -48,8 +58,8 @@ def read():
             matches=all_matches
             )
 
-@token_auth.verify_token
 @edit_bp.route("/update", methods=["POST"])
+@token_auth.login_required
 def update():
     body = request.json
     file_path, content = body.get("filePath"), body.get("fileContent")

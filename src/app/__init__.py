@@ -44,7 +44,6 @@ def create_app(config=config.BaseConfig):
         app.register_blueprint(github_bp, url_prefix="/login")
         app.register_blueprint(google_bp, url_prefix="/login")
 
-        app.register_blueprint(auth_bp)
         app.register_blueprint(core_bp)
         app.register_blueprint(edit_bp)
         app.register_blueprint(log_bp)
