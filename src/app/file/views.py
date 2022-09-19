@@ -8,6 +8,7 @@ from flask import current_app as app
 from flask_httpauth import HTTPTokenAuth
 
 from ..file import file_bp
+from ../operators import run_build_script
 
 token_auth = HTTPTokenAuth()
 
@@ -79,6 +80,7 @@ def update():
     with open(file_path, "w", newline="\n") as my_file:
         my_file.write(content)
 
+    run_build_script(file_path)
     return jsonify(filePath=file_path, fileContent=content)
 
 @file_bp.route("/file", methods=["POST"])
@@ -103,4 +105,5 @@ def create():
     with open(file_path, "x", newline="\n") as my_file:
         my_file.write(content)
 
+    run_build_script(file_path)
     return jsonify(filePath=file_path, fileContent=content)
