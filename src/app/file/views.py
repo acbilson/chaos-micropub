@@ -7,7 +7,7 @@ from flask import Response, request, render_template, url_for, redirect, jsonify
 from flask import current_app as app
 from flask_httpauth import HTTPTokenAuth
 
-from ..edit import edit_bp
+from ..file import file_bp
 
 token_auth = HTTPTokenAuth()
 
@@ -23,38 +23,39 @@ def verify_token(token):
         return None
 
 
-@edit_bp.route("/read", methods=["GET"])
+@file_bp.route("/file", methods=["GET"])
 @token_auth.login_required
 def read():
-    file_type, file_name = request.args.get("type"), request.args.get("name")
-    if None in (file_type, file_name):
+    file_path = request.args.get("path")
+    if None in (file_path):
         return Response(
-            "missing either type or name from query params",
+            "missing path from query params",
             status=HTTPStatus.BAD_REQUEST,
         )
 
-    type_path = os.path.join(app.config["CONTENT_PATH"], file_type)
+    abs_path = os.path.join(app.config["CONTENT_PATH"], file_path)
+    abs_dir = os.path.getdir(abs_path)
+    file_name = os.path.filename(abs_path)
 
-    if not os.path.exists(type_path):
-        raise Exception(f"{type_path} does not exist")
+    if not os.path.exists(abs_dir):
+        raise Exception(f"{abs_dir} does not exist")
 
-    all_matches = []
-    for root, _, files in os.walk(type_path):
-        matches = [os.path.join(root, f) for f in files if f.startswith(file_name)]
-        all_matches += matches
+    matches = [f for f in os.listdirs(abs_dir) if f.startswith(file_name)]
 
-    my_file_path = all_matches[0] if len(all_matches) else ""
-    my_file_content = ""
-    if my_file_path != "":
-        with open(my_file_path, "r") as my_file:
-            my_file_content = my_file.readlines()
+    if len(matches) == 0 or len(matches) < 2:
+        return Response(
+            f"There were too many or two few matches",
+            status=HTTPStatus.INTERNAL_SERVER_ERROR,
+        )
 
-    return jsonify(
-        filePath=my_file_path, fileContent=my_file_content, matches=all_matches
-    )
+    content = ""
+    with open(matches[0], "r") as my_file:
+        content = my_file.read()
+
+    return jsonify(filePath=file_path, fileContent=content)
 
 
-@edit_bp.route("/update", methods=["POST"])
+@file_bp.route("/update", methods=["PUT"])
 @token_auth.login_required
 def update():
     body = request.json
