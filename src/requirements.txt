@@ -1,15 +1,8 @@
 Flask-HTTPAuth
 Flask-CORS
-Flask-Assets
-Flask-Login
-Flask-WTF
 Flask
-flask-dance
 PyJWT
 uwsgi
-beautifulsoup4
-mf2py
 python-dotenv
 requests
 toml
-black
