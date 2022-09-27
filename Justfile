@@ -41,3 +41,9 @@ start: build-dev
   -v $CONTENT_PATH:/mnt/chaos/content \
   --name micropub \
   acbilson/micropub-dev:latest
+
+# launches a tmux session with everything I need to interactively develop
+develop: init
+	tmux new-session -s micropub -n serve -d '. src/venv/bin/activate.fish; find ./src/app -name "*.py" | entr -r python ./src/main.py';
+	tmux new-window  -t micropub:1 -n edit   'nvim src/main.py';
+	tmux attach
