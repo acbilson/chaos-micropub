@@ -35,9 +35,7 @@ class InitializeRepo(unittest.TestCase):
         try_run_cmd(["git", "init", "--bare"], REPO_DIR_ABS)
 
         # clones content from bare origin
-        print(
-            try_run_cmd(["git", "clone", REPO_DIR_ABS, TestConfig.CONTENT_PATH], "/mnt")
-        )
+        try_run_cmd(["git", "clone", REPO_DIR_ABS, TestConfig.CONTENT_PATH], "/mnt")
 
         # creates a few test files
         os.makedirs(os.path.join(TestConfig.CONTENT_PATH, TEST_DIR))
@@ -62,8 +60,6 @@ class InitializeRepo(unittest.TestCase):
         )
         try_run_cmd(["git", "push"], TestConfig.CONTENT_PATH)
 
-        print("Repo cloned and initialized")
-
     def tearDown(self):
         try_run_cmd(["rm", "-rf", TestConfig.CONTENT_PATH], "/mnt")
         try_run_cmd(["rm", "-rf", REPO_DIR_ABS], "/mnt")
@@ -84,9 +80,12 @@ class ReadTests(InitializeRepo):
         data = response.json
         self.assertTrue(data.get("success"), data.get("message"))
 
-        result = data.get("result")
-        with open(os.path.join(TEST_DIR_ABS, READ_FILE), "r") as f:
-            self.assertEqual(result.get("content"), f.read())
+        content = data.get("content")
+        front_matter, body = content.get("frontmatter"), content.get("body")
+
+        self.assertEqual(file_path, content.get("filepath"))
+        self.assertIn("test content to read", content.get("body"))
+        self.assertIn("author", content.get("frontmatter"))
 
 
 class UpdateTests(InitializeRepo):
@@ -97,8 +96,9 @@ class UpdateTests(InitializeRepo):
 
     def test_update_returns_correct_json(self):
         file_path = os.path.join(TEST_DIR, UPDATE_FILE.split(".")[0])
+        new_front_matter = dict(author="Bob Wiley")
         new_content = "This is what I have updated the file to"
-        body = dict(options=dict(filepath=file_path), content=new_content)
+        body = dict(path=file_path, body=new_content, frontmatter=new_front_matter)
         response = self.client.put(f"/file", json=body)
 
         # assert
@@ -106,9 +106,15 @@ class UpdateTests(InitializeRepo):
         data = response.json
         self.assertTrue(data.get("success"), data.get("message"))
 
-        result = data.get("result")
-        with open(os.path.join(TEST_DIR_ABS, UPDATE_FILE), "r") as f:
-            self.assertEqual(new_content, f.read())
+        content = data.get("content")
+        front_matter, body = content.get("frontmatter"), content.get("body")
+
+        self.assertEqual(file_path, content.get("path"))
+        self.assertIsNotNone(body)
+        self.assertIsNotNone(front_matter)
+        self.assertIn("what I have updated", body)
+        self.assertIn("Bob Wiley", front_matter.values())
+
 
 class CreateTests(InitializeRepo):
     def setUp(self):
@@ -118,8 +124,9 @@ class CreateTests(InitializeRepo):
 
     def test_create_returns_correct_json(self):
         file_path = os.path.join(TEST_DIR, CREATE_FILE.split(".")[0])
+        new_front_matter = dict(author="Gerry Witte")
         new_content = "This is the content of my new file"
-        body = dict(options=dict(filepath=file_path), content=new_content)
+        body = dict(path=file_path, body=new_content, frontmatter=new_front_matter)
         response = self.client.post(f"/file", json=body)
 
         # assert
@@ -127,7 +134,11 @@ class CreateTests(InitializeRepo):
         data = response.json
         self.assertTrue(data.get("success"), data.get("message"))
 
-        result = data.get("result")
-        self.assertTrue(os.path.exists(os.path.join(TEST_DIR_ABS, CREATE_FILE)))
-        with open(os.path.join(TEST_DIR_ABS, CREATE_FILE), "r") as f:
-            self.assertIn(new_content, f.read())
+        content = data.get("content")
+        front_matter, body = content.get("frontmatter"), content.get("body")
+
+        self.assertEqual(file_path, content.get("path"))
+        self.assertIsNotNone(body)
+        self.assertIsNotNone(front_matter)
+        self.assertIn("content of my new file", body)
+        self.assertIn("Gerry Witte", front_matter.values())
