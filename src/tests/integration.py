@@ -1,17 +1,21 @@
 import unittest
 import subprocess
+from subprocess import CalledProcessError
 import os
 import json
 from http import HTTPStatus
 from flask import Flask
 from app.config import TestConfig
 from app import create_app
+from app.operators import try_run_cmd
 
-TEST_DIR = "/Users/alexbilson/temp/test_dir"
+TEST_DIR = "test_dir"
+TEST_DIR_ABS = os.path.join(TestConfig.CONTENT_PATH, TEST_DIR)
+REPO_DIR_ABS = "/mnt/repo/test"
+READ_FILE = "read_file.md"
+UPDATE_FILE = "update_file.md"
+CREATE_FILE = "create_file.md"
 
-def run_cmd(cmds):
-    output = subprocess.run(cmds, capture_output=True, check=True)
-    return output.stdout.decode()
 
 class BasicTests(unittest.TestCase):
     def test_create_app(self):
@@ -24,60 +28,106 @@ class BasicTests(unittest.TestCase):
         self.assertEqual(resp.status, "200 OK")
 
 
-class ReadTests(unittest.TestCase):
+class InitializeRepo(unittest.TestCase):
     def setUp(self):
+        # generate the origin repo
+        os.makedirs(REPO_DIR_ABS)
+        try_run_cmd(["git", "init", "--bare"], REPO_DIR_ABS)
+
+        # clones content from bare origin
+        print(
+            try_run_cmd(["git", "clone", REPO_DIR_ABS, TestConfig.CONTENT_PATH], "/mnt")
+        )
+
+        # creates a few test files
+        os.makedirs(os.path.join(TestConfig.CONTENT_PATH, TEST_DIR))
+        content = (
+            '+++\nauthor = "Alex Bilson"\n+++\nThis is some test content to read\n'
+        )
+        with open(os.path.join(TestConfig.CONTENT_PATH, TEST_DIR, READ_FILE), "w") as f:
+            f.write(content)
+
+        content = (
+            '+++\nauthor = "Alex Bilson"\n+++\nThis is some test content to update\n'
+        )
+        with open(
+            os.path.join(TestConfig.CONTENT_PATH, TEST_DIR, UPDATE_FILE), "w"
+        ) as f:
+            f.write(content)
+
+        # commits my files to origin
+        try_run_cmd(["git", "add", "-v", "."], TestConfig.CONTENT_PATH)
+        try_run_cmd(
+            ["git", "commit", "-m", f'"adds initial files"'], TestConfig.CONTENT_PATH
+        )
+        try_run_cmd(["git", "push"], TestConfig.CONTENT_PATH)
+
+        print("Repo cloned and initialized")
+
+    def tearDown(self):
+        try_run_cmd(["rm", "-rf", TestConfig.CONTENT_PATH], "/mnt")
+        try_run_cmd(["rm", "-rf", REPO_DIR_ABS], "/mnt")
+
+
+class ReadTests(InitializeRepo):
+    def setUp(self):
+        super().setUp()
         self.app = create_app(TestConfig)
         self.client = self.app.test_client()
-
-        # create file to read
-        os.makedirs(TEST_DIR)
-        self.file_path = os.path.join(TEST_DIR, "test_file")
-        self.file_content = (
-            '+++\nauthor = "Alex Bilson"\n+++\nThis is some test content\n'
-        )
-        with open(f"{self.file_path}.md", "w") as f:
-            f.write(self.file_content)
 
     def test_read_returns_correct_json(self):
-        response = self.client.get(f"/file?path={self.file_path}")
+        file_path = os.path.join(TEST_DIR, READ_FILE.split(".")[0])
+        response = self.client.get(f"/file?path={file_path}")
+
+        # assert
         self.assertEqual(HTTPStatus.OK, response.status_code)
         data = response.json
         self.assertTrue(data.get("success"), data.get("message"))
+
         result = data.get("result")
-        self.assertEqual(result.get("content"), self.file_content)
+        with open(os.path.join(TEST_DIR_ABS, READ_FILE), "r") as f:
+            self.assertEqual(result.get("content"), f.read())
 
-    def tearDown(self):
-        run_cmd(["rm", "-rf", TEST_DIR])
 
-class UpdateTests(unittest.TestCase):
+class UpdateTests(InitializeRepo):
     def setUp(self):
+        super().setUp()
         self.app = create_app(TestConfig)
         self.client = self.app.test_client()
 
-        # add folder and git init
-        os.makedirs(TEST_DIR)
-        run_cmd(["git", "init", TEST_DIR])
-
-        # creates a test file and adds it
-        self.file_path = os.path.join(TEST_DIR, "test_file")
-        self.file_content = (
-            '+++\nauthor = "Alex Bilson"\n+++\nThis is some test content\n'
-        )
-        with open(f"{self.file_path}.md", "w") as f:
-            f.write(self.file_content)
-
-        run_cmd(["git", "add", "."])
-        run_cmd(["git", "commit", "-m", "adds a file to update"])
-
     def test_update_returns_correct_json(self):
-        body = dict(options=dict(filepath=self.file_path), content="This is new test content")
+        file_path = os.path.join(TEST_DIR, UPDATE_FILE.split(".")[0])
+        new_content = "This is what I have updated the file to"
+        body = dict(options=dict(filepath=file_path), content=new_content)
         response = self.client.put(f"/file", json=body)
+
+        # assert
         self.assertEqual(HTTPStatus.OK, response.status_code)
-        print(response)
         data = response.json
         self.assertTrue(data.get("success"), data.get("message"))
-        result = data.get("result")
-        self.assertEqual(result.get("content"), self.file_content)
 
-    def tearDown(self):
-        run_cmd(["rm", "-rf", TEST_DIR])
+        result = data.get("result")
+        with open(os.path.join(TEST_DIR_ABS, UPDATE_FILE), "r") as f:
+            self.assertEqual(new_content, f.read())
+
+class CreateTests(InitializeRepo):
+    def setUp(self):
+        super().setUp()
+        self.app = create_app(TestConfig)
+        self.client = self.app.test_client()
+
+    def test_create_returns_correct_json(self):
+        file_path = os.path.join(TEST_DIR, CREATE_FILE.split(".")[0])
+        new_content = "This is the content of my new file"
+        body = dict(options=dict(filepath=file_path), content=new_content)
+        response = self.client.post(f"/file", json=body)
+
+        # assert
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        data = response.json
+        self.assertTrue(data.get("success"), data.get("message"))
+
+        result = data.get("result")
+        self.assertTrue(os.path.exists(os.path.join(TEST_DIR_ABS, CREATE_FILE)))
+        with open(os.path.join(TEST_DIR_ABS, CREATE_FILE), "r") as f:
+            self.assertIn(new_content, f.read())

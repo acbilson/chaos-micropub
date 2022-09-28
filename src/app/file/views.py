@@ -31,7 +31,10 @@ def read():
         )
 
     file_path = request.args.get("path")
-    abs_path = os.path.join(app.config.get("CONTENT_PATH"), f"{file_path[1:]}.md")
+    strip_first_slash = lambda x: x.strip("/") if x[0] == os.path.sep else x
+    abs_path = os.path.join(
+        app.config.get("CONTENT_PATH"), f"{strip_first_slash(file_path)}.md"
+    )
 
     if not os.path.exists(abs_path):
         return jsonify(success=False, message=f"{abs_path} does not exist")
@@ -79,19 +82,27 @@ def update():
         return jsonify(success=False, message=f"file path was not included in options.")
 
     file_path = options.get("filepath")
+    strip_first_slash = lambda x: x.strip("/") if x[0] == os.path.sep else x
+    abs_path = os.path.join(
+        app.config.get("CONTENT_PATH"), f"{strip_first_slash(file_path)}.md"
+    )
 
-    if not os.path.exists(f"{file_path}.md"):
+    if not os.path.exists(abs_path):
         return jsonify(
             success=False,
             message=f"The file {file_path} to update does not exist. Please use /file POST to create.",
         )
 
-    git_pull()
+    git_pull(app.config.get("CONTENT_PATH"))
 
-    with open(file_path, "w", newline="\n") as my_file:
+    with open(abs_path, "w", newline="\n") as my_file:
         my_file.write(content)
 
-    git_message = git_commit(file_path, f"edited {os.path.basename(file_path)}")
+    git_message = git_commit(
+        file_path,
+        app.config.get("CONTENT_PATH"),
+        f"edited {os.path.basename(file_path)}",
+    )
 
     if git_message is not None:
         return jsonify(
@@ -120,18 +131,24 @@ def create():
     if "filepath" not in options.keys():
         return jsonify(success=False, message=f"file path was not included in options.")
 
-    if os.path.exists(file_path):
+    file_path = options.get("filepath")
+    strip_first_slash = lambda x: x.strip("/") if x[0] == os.path.sep else x
+    abs_path = os.path.join(
+        app.config.get("CONTENT_PATH"), f"{strip_first_slash(file_path)}.md"
+    )
+
+    if os.path.exists(abs_path):
         return jsonify(
             success=False,
             message="The file to create already exists. Please use /file PUT to update.",
         )
 
-    git_pull()
+    git_pull(app.config.get("CONTENT_PATH"))
 
-    with open(file_path, "x", newline="\n") as my_file:
-        my_file.write(f"{compose_header(options)}\ncontent")
+    with open(abs_path, "x", newline="\n") as my_file:
+        my_file.write(f"{compose_header(options)}\n{content}")
 
-    git_message = git_commit(file_path, f"added {os.path.basename(file_path)}")
+    git_message = git_commit(file_path, app.config.get("CONTENT_PATH"), f"added {os.path.basename(file_path)}")
     if git_message is not None:
         return jsonify(
             success=False,

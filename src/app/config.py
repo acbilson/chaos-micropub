@@ -25,7 +25,7 @@ class TestConfig(object):
     FLASK_PORT = 80
     FLASK_ENV = "development"
     SITE = "http://localhost/"
-    CONTENT_PATH = "/Users/alexbilson/source/chaos-micropub/src"
+    CONTENT_PATH = "/mnt/chaos/content"
 
     FLASK_SECRET_KEY = "my secret test key"
     SESSION_SECRET = "my secret test session"

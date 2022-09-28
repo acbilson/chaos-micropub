@@ -47,3 +47,7 @@ develop: init
 	tmux new-session -s micropub -n serve -d '. src/venv/bin/activate.fish; find ./src/app -name "*.py" | entr -r python ./src/main.py';
 	tmux new-window  -t micropub:1 -n edit   'nvim src/main.py';
 	tmux attach
+
+# runs the specified tests. Options are: unit, integration
+test TEST_TYPE: init
+  . src/venv/bin/activate.fish; set FLASK_ENV "testing"; pushd src; python -m unittest -v tests.{{TEST_TYPE}}; popd
