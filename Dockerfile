@@ -54,4 +54,11 @@ RUN python -m unittest tests.integration
 FROM test as prod
 WORKDIR /app/src
 ENV FLASK_ENV production
+
+# adding repo
+ENV GIT_SSH_COMMAND "/usr/bin/ssh -i /root/.ssh/micropub_git_rsa"
+RUN mkdir -p "/root/.ssh"
+COPY ./safe/micropub_git_rsa /root/.ssh
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN git clone --depth 1 git@github.com:acbilson/chaos-content.git /mnt/chaos/content
 ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]

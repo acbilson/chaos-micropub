@@ -38,7 +38,6 @@ start: build-dev
   -e "SESSION_SECRET=$SESSION_SECRET" \
   -e "CONTENT_PATH=/mnt/chaos/content" \
   -v $SOURCE_PATH/src:/mnt/src \
-  -v $CONTENT_PATH:/mnt/chaos/content \
   --name micropub \
   acbilson/micropub-dev:latest
 
