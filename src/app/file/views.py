@@ -64,7 +64,7 @@ def read():
     return jsonify(
         success=True,
         message="",
-        content=dict(filepath=file_path, frontmatter=front_matter, body="".join(body)),
+        content=dict(path=file_path, frontmatter=front_matter, body="".join(body)),
     )
 
 

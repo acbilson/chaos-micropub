@@ -84,7 +84,7 @@ class ReadTests(InitializeRepo):
         content = data.get("content")
         front_matter, body = content.get("frontmatter"), content.get("body")
 
-        self.assertEqual(file_path, content.get("filepath"))
+        self.assertEqual(file_path, content.get("path"))
         self.assertIn("test content to read", content.get("body"))
         self.assertIn("author", content.get("frontmatter"))
 

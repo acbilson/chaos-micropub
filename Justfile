@@ -27,19 +27,20 @@ build-dev:
   --target dev \
   -t acbilson/micropub-dev:latest .
 
-# starts a development podman image.
-start: build-dev
+# starts a production podman image.
+start: build
   podman run --rm \
-  --expose $EXPOSED_PORT -p $EXPOSED_PORT:80 \
+  --expose $EXPOSED_PORT -p $EXPOSED_PORT:$EXPOSED_PORT \
   -e "SITE=http://localhost:$EXPOSED_PORT" \
+  -e "ADMIN_USER=$ADMIN_USER" \
+  -e "ADMIN_PASSWORD=$ADMIN_PASSWORD" \
   -e "CLIENT_ID=$GITHUB_CLIENT_ID" \
   -e "CLIENT_SECRET=$GITHUB_CLIENT_SECRET" \
   -e "FLASK_SECRET_KEY=$FLASK_SECRET_KEY" \
   -e "SESSION_SECRET=$SESSION_SECRET" \
   -e "CONTENT_PATH=/mnt/chaos/content" \
-  -v $SOURCE_PATH/src:/mnt/src \
   --name micropub \
-  acbilson/micropub-dev:latest
+  acbilson/micropub:latest
 
 # launches a tmux session with everything I need to interactively develop
 develop: init
