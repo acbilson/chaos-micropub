@@ -7,6 +7,7 @@ class BaseConfig(object):
     FLASK_HOST = "0.0.0.0"
     FLASK_PORT = 5000
     FLASK_ENV = environ.get("FLASK_ENV")
+    FLASK_DEBUG = environ.get("FLASK_DEBUG")
     SITE = environ.get("SITE")
     # TODO: figure out why this doesn't work in prod
     CONTENT_PATH = environ.get("CONTENT_PATH") or "/mnt/chaos/content"
@@ -27,5 +28,9 @@ class TestConfig(object):
     SITE = "http://localhost/"
     CONTENT_PATH = "/mnt/chaos/content"
 
+    ADMIN_USER = "alex"
+    ADMIN_PASSWORD = "example"
+
     FLASK_SECRET_KEY = "my secret test key"
     SESSION_SECRET = "my secret test session"
+

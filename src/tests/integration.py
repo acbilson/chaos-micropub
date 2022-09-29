@@ -1,4 +1,5 @@
 import unittest
+import base64
 import subprocess
 from subprocess import CalledProcessError
 import os
@@ -83,7 +84,7 @@ class ReadTests(InitializeRepo):
         content = data.get("content")
         front_matter, body = content.get("frontmatter"), content.get("body")
 
-        self.assertEqual(file_path, content.get("filepath"))
+        self.assertEqual(file_path, content.get("path"))
         self.assertIn("test content to read", content.get("body"))
         self.assertIn("author", content.get("frontmatter"))
 
@@ -142,3 +143,28 @@ class CreateTests(InitializeRepo):
         self.assertIsNotNone(front_matter)
         self.assertIn("content of my new file", body)
         self.assertIn("Gerry Witte", front_matter.values())
+
+
+class AuthTests(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app(TestConfig)
+        self.client = self.app.test_client()
+        dir(self.app)
+        dir(self.client)
+
+    def test_basic_login_returns_token(self):
+        creds = base64.b64encode(b"{TestConfig.ADMIN_USER}:{TestConfig.ADMIN_PASSWORD}").decode("utf-8")
+
+        response = self.client.get("/token", headers=dict(Authorization=f"Basic {creds}"))
+
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertIn("token", response.json)
+
+    def test_auth_token_returns_ok(self):
+        creds = base64.b64encode(b"{TestConfig.ADMIN_USER}:{TestConfig.ADMIN_PASSWORD}").decode("utf-8")
+        token_resp = self.client.get("/token", headers=dict(Authorization=f"Basic {creds}"))
+        token = token_resp.json.get("token")
+
+        response = self.client.get("/auth", headers=dict(Authorization=f"Bearer {token}"))
+
+        self.assertEqual(HTTPStatus.OK, response.status_code)
