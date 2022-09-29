@@ -3,6 +3,7 @@ from flask import Flask, Response
 from flask_cors import CORS
 
 from app.file import file_bp
+from app.auth import auth_bp
 from app import config
 
 
@@ -21,6 +22,7 @@ def create_app(config=config.BaseConfig):
 
         # register blueprints
         app.register_blueprint(file_bp)
+        app.register_blueprint(auth_bp)
 
         @app.route("/healthcheck", methods=["GET"])
         def health():
