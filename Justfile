@@ -32,6 +32,7 @@ start: build
   podman run --rm \
   --expose $EXPOSED_PORT -p $EXPOSED_PORT:$EXPOSED_PORT \
   -e "SITE=http://localhost:$EXPOSED_PORT" \
+  -e "EXPOSED_PORT=$EXPOSED_PORT" \
   -e "ADMIN_USER=$ADMIN_USER" \
   -e "ADMIN_PASSWORD=$ADMIN_PASSWORD" \
   -e "CLIENT_ID=$GITHUB_CLIENT_ID" \
