@@ -7,6 +7,10 @@
 PROD_HOST=web
 UAT_HOST=web
 
+# Authorized User
+ADMIN_USER=me
+ADMIN_PASSWORD=my-secret-password
+
 # Session keys
 FLASK_SECRET_KEY="mysecretflaskkey"
 SESSION_SECRET="mysessionsecret"

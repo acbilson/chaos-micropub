@@ -43,20 +43,25 @@ WORKDIR /mnt/src
 ENV FLASK_ENV development
 ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]
 
-#####
-# UAT
-#####
-
-FROM base as uat
+FROM base as test
 WORKDIR /app/src
-ENV FLASK_ENV production
-ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]
+ENV FLASK_ENV testing
+ENV FLASK_DEBUG 1
+RUN python -m unittest tests.integration
 
 ############
 # Production
 ############
 
-FROM base as prod
+FROM test as prod
 WORKDIR /app/src
 ENV FLASK_ENV production
+
+# adding repo
+ENV GIT_SSH_COMMAND "/usr/bin/ssh -i /root/.ssh/micropub_git_rsa"
+RUN mkdir -p "/root/.ssh"
+COPY ./safe/micropub_git_rsa /root/.ssh
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN git clone --depth 1 git@github.com:acbilson/chaos-content.git /mnt/chaos/content
+
 ENTRYPOINT ["/root/.local/bin/uwsgi", "--ini", "/etc/micropub/micropub.ini"]
