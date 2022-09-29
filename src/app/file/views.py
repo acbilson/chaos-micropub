@@ -5,9 +5,10 @@ import requests
 from http import HTTPStatus
 from flask import Response, request, render_template, url_for, redirect, jsonify
 from flask import current_app as app
-from flask_httpauth import HTTPTokenAuth
+from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from ..file import file_bp
 
+from app.auth import token_auth
 from app.operators import (
     compose_header,
     combine_file_content,
@@ -17,19 +18,9 @@ from app.operators import (
     git_commit,
 )
 
-token_auth = HTTPTokenAuth()
-
-
-@token_auth.verify_token
-def verify_token(token):
-    resp = requests.get(
-        "http://localhost:7000/auth", headers={"Authorization": f"Bearer {token}"}
-    )
-    return token if resp.status_code == HTTPStatus.OK else None
-
 
 @file_bp.route("/file", methods=["GET"])
-# @token_auth.login_required
+@token_auth.login_required
 def read():
     if "path" not in request.args:
         return jsonify(
@@ -78,7 +69,7 @@ def read():
 
 
 @file_bp.route("/file", methods=["PUT"])
-# @token_auth.login_required
+@token_auth.login_required
 def update():
     data = request.json
     file_path, front_matter, body = (
@@ -136,7 +127,7 @@ def update():
 
 
 @file_bp.route("/file", methods=["POST"])
-# @token_auth.login_required
+@token_auth.login_required
 def create():
     data = request.json
     file_path, front_matter, body = (

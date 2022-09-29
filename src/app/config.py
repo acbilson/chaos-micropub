@@ -27,5 +27,9 @@ class TestConfig(object):
     SITE = "http://localhost/"
     CONTENT_PATH = "/mnt/chaos/content"
 
+    ADMIN_USER = "alex"
+    ADMIN_PASSWORD = "example"
+
     FLASK_SECRET_KEY = "my secret test key"
     SESSION_SECRET = "my secret test session"
+

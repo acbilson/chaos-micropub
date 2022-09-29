@@ -12,4 +12,4 @@ app.logger.info(f"Flask app running in {env} mode at {host}:{port}")
 app.logger.info(f"View the site at {site}")
 
 if __name__ == "__main__":
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port, debug=(env in ["testing","development"]))
