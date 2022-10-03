@@ -46,4 +46,5 @@ start: build
 develop: init
 	tmux new-session -s micropub -n serve -d '. src/venv/bin/activate.fish; find ./src/app -name "*.py" | entr -r python ./src/main.py';
 	tmux new-window  -t micropub:1 -n edit   'nvim src/main.py';
+	tmux new-window  -t micropub:2 -n safari   'open \"http://localhost:5000/file?path=/plants/writing/how-to-get-started-writing-online\"';
 	tmux attach
