@@ -109,7 +109,7 @@ def update():
     git_message = git_commit(
         file_path,
         app.config.get("CONTENT_PATH"),
-        f"edited {os.path.basename(file_path)}",
+        f"edited {os.path.basename(abs_path)}",
     )
 
     if git_message is not None:
@@ -167,7 +167,7 @@ def create():
     git_message = git_commit(
         file_path,
         app.config.get("CONTENT_PATH"),
-        f"added {os.path.basename(file_path)}",
+        f"added {os.path.basename(abs_path)}",
     )
     if git_message is not None:
         return jsonify(
