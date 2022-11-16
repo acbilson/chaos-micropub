@@ -43,7 +43,7 @@ def verify_token(token):
 
 def generate_token():
     obj = dict(
-        id='alex', exp=datetime.utcnow() + timedelta(minutes=20)
+        id='alex', exp=datetime.utcnow() + timedelta(minutes=60)
     )
     return jwt.encode(obj, app.config.get("FLASK_SECRET_KEY"), algorithm="HS256")
 
