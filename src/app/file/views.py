@@ -163,7 +163,8 @@ def create():
 
     is_syndicated = False
     syn_msg = ""
-    if front_matter.get("syndicate") == "true":
+    token = request.cookies.get("masto_token")
+    if front_matter.get("syndicate") == "true" and token != "":
         headers = {
             "Authorization": "Bearer UOnJ3OCDQOazHgldv97zfob6IcQhXXIA8HRA3j58TDI",
             "Content-Type": "application/json",
@@ -202,9 +203,10 @@ def create():
         message += " and syndicated"
     elif not is_syndicated and syn_msg != "":
         message += f" but syndication returned {syn_msg}"
+    elif not is_syndicated and token == "":
+        message += " but not syndicated (and no token)"
     else:
         message += " but not syndicated"
-
 
     return jsonify(
         success=True,

@@ -2,9 +2,18 @@ import os
 from os import path
 from datetime import datetime, timedelta
 import jwt
+import json
 import requests
 from http import HTTPStatus
-from flask import Response, request, render_template, url_for, redirect, jsonify
+from flask import (
+    Response,
+    make_response,
+    request,
+    render_template,
+    url_for,
+    redirect,
+    jsonify,
+)
 from flask import current_app as app
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from ..auth import auth_bp
@@ -56,3 +65,43 @@ def authenticate():
 @basic_auth.login_required
 def login():
     return jsonify(token=generate_token())
+
+
+@auth_bp.route("/mastoauth", methods=["GET"])
+@token_auth.login_required
+def masto_login():
+    client_id = "8MOfoRYQVmPOLRDjO-tE90X8EU7ZQwwAOyg8RkDtv08"
+    redirect_uri = "https://pub.alexbilson.dev/masto_redirect"
+    scope = "write:statuses"
+    requests.get(
+        f"https://indieweb.social/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
+    )
+
+
+@auth_bp.route("/masto_redirect", methods=["GET"])
+def masto_redirect():
+    if "code" not in request.args:
+        return
+
+    code = request.args.get("code")
+    client_id = "8MOfoRYQVmPOLRDjO-tE90X8EU7ZQwwAOyg8RkDtv08"
+    redirect_uri = "https://pub.alexbilson.dev/masto_redirect"
+    scope = "write:statuses"
+    code = request.args.get("code")
+
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "client_id": client_id,
+        "redirect_uri": redirect_uri,
+        "scope": scope,
+    }
+    response = requests.post(
+        "https://indieweb.social/oauth/token", headers=headers, data=json.dumps(payload)
+    )
+
+    token = response.json().get("access_token")
+    resp = make_response()
+    resp.set_cookie("masto_token", value=token)
+    return resp
