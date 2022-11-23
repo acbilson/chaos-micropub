@@ -179,7 +179,7 @@ def create():
             }
             is_syndicated = True
         else:
-            syn_msg = f"status: {str(reason)}, reason: {response.reason}, txt: {response.text}"
+            syn_msg = f"status: {str(response)}, reason: {response.reason}, txt: {response.text}"
 
     content = combine_file_content(front_matter, body)
     with open(abs_path, "x", newline="\n") as my_file:
