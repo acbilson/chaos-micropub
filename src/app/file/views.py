@@ -201,7 +201,7 @@ def create():
     if is_syndicated and syn_msg == "":
         message += " and syndicated"
     elif not is_syndicated:
-        message += " but syndication returned {syn_msg}"
+        message += f" but syndication returned {syn_msg}"
 
     return jsonify(
         success=True,
