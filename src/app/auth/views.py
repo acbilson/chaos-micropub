@@ -9,6 +9,7 @@ from flask import (
     Response,
     make_response,
     request,
+    redirect,
     render_template,
     url_for,
     redirect,
@@ -71,9 +72,9 @@ def login():
 @token_auth.login_required
 def masto_login():
     client_id = "8MOfoRYQVmPOLRDjO-tE90X8EU7ZQwwAOyg8RkDtv08"
-    redirect_uri = "https://pub.alexbilson.dev/masto_redirect"
+    redirect_uri = "http://localhost:5000/masto_redirect"
     scope = "write:statuses"
-    requests.get(
+    return redirect(
         f"https://indieweb.social/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
     )
 
@@ -85,7 +86,8 @@ def masto_redirect():
 
     code = request.args.get("code")
     client_id = "8MOfoRYQVmPOLRDjO-tE90X8EU7ZQwwAOyg8RkDtv08"
-    redirect_uri = "https://pub.alexbilson.dev/masto_redirect"
+    client_secret = "lsLLQZEVbTQG4qirgtPTWFhpixcHacwHUiyVIyq4vq4"
+    redirect_uri = "http://localhost:5000/masto_redirect"
     scope = "write:statuses"
     code = request.args.get("code")
 
@@ -94,13 +96,17 @@ def masto_redirect():
         "grant_type": "authorization_code",
         "code": code,
         "client_id": client_id,
+        "client_secret": client_secret,
         "redirect_uri": redirect_uri,
         "scope": scope,
     }
+    print(payload)
     response = requests.post(
         "https://indieweb.social/oauth/token", headers=headers, data=json.dumps(payload)
     )
 
+    print(response)
+    print(response.json())
     token = response.json().get("access_token")
     resp = make_response()
     resp.set_cookie("masto_token", value=token)
