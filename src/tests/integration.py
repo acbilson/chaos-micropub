@@ -153,18 +153,28 @@ class AuthTests(unittest.TestCase):
         dir(self.client)
 
     def test_basic_login_returns_token(self):
-        creds = base64.b64encode(b"{TestConfig.ADMIN_USER}:{TestConfig.ADMIN_PASSWORD}").decode("utf-8")
+        creds = base64.b64encode(
+            b"{TestConfig.ADMIN_USER}:{TestConfig.ADMIN_PASSWORD}"
+        ).decode("utf-8")
 
-        response = self.client.get("/token", headers=dict(Authorization=f"Basic {creds}"))
+        response = self.client.get(
+            "/token", headers=dict(Authorization=f"Basic {creds}")
+        )
 
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertIn("token", response.json)
 
     def test_auth_token_returns_ok(self):
-        creds = base64.b64encode(b"{TestConfig.ADMIN_USER}:{TestConfig.ADMIN_PASSWORD}").decode("utf-8")
-        token_resp = self.client.get("/token", headers=dict(Authorization=f"Basic {creds}"))
+        creds = base64.b64encode(
+            b"{TestConfig.ADMIN_USER}:{TestConfig.ADMIN_PASSWORD}"
+        ).decode("utf-8")
+        token_resp = self.client.get(
+            "/token", headers=dict(Authorization=f"Basic {creds}")
+        )
         token = token_resp.json.get("token")
 
-        response = self.client.get("/auth", headers=dict(Authorization=f"Bearer {token}"))
+        response = self.client.get(
+            "/auth", headers=dict(Authorization=f"Bearer {token}")
+        )
 
         self.assertEqual(HTTPStatus.OK, response.status_code)
