@@ -194,6 +194,6 @@ def create():
 
     return jsonify(
         success=True,
-        message="added and syndicated" if is_syndicated else "added",
+        message="created and syndicated" if is_syndicated else f"created but syndication returned {response.text}",
         content=dict(path=file_path, body=body, frontmatter=front_matter),
     )
