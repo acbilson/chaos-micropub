@@ -79,7 +79,7 @@ def git_commit(file_path, cwd: str, msg: str) -> str:
         ["git", "config", "user.name", "Micropub Bot"],
         ["git", "config", "user.email", "acbilson@gmail.com"],
         ["git", "add", "-v", "."],
-        ["git", "commit", "-m", f'{msg}'],
+        ["git", "commit", "-m", f"{msg}"],
         ["git", "push"],
     ]
     for cmd in commands:
