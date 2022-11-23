@@ -163,7 +163,7 @@ def create():
 
     is_syndicated = False
     syn_msg = ""
-    if front_matter.get("syndicated") == "true":
+    if front_matter.get("syndicate") == "true":
         headers = {
             "Authorization": "Bearer UOnJ3OCDQOazHgldv97zfob6IcQhXXIA8HRA3j58TDI",
             "Content-Type": "application/json",
@@ -200,8 +200,11 @@ def create():
     message = "created"
     if is_syndicated and syn_msg == "":
         message += " and syndicated"
-    elif not is_syndicated:
+    elif not is_syndicated and syn_msg != "":
         message += f" but syndication returned {syn_msg}"
+    else:
+        message += " but not syndicated"
+
 
     return jsonify(
         success=True,
