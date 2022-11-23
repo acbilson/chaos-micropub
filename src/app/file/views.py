@@ -161,20 +161,25 @@ def create():
 
     git_pull(app.config.get("CONTENT_PATH"))
 
-    headers = {
-        "Authorization": "Bearer UOnJ3OCDQOazHgldv97zfob6IcQhXXIA8HRA3j58TDI",
-        "Content-Type": "application/json",
-    }
-    payload = {"status": body}
-    response = requests.post(
-        "https://indieweb.social/api/v1/statuses", data=json.dumps(payload)
-    )
-    is_syndicated = response.ok
-
-    if is_syndicated:
-        front_matter["syndicated"] = {
-            "mastodon": f"https://indieweb.social/@acbilson/{response.json().get('id')}"
+    is_syndicated = False
+    syn_msg = ""
+    if front_matter.get("syndicated") == "true":
+        headers = {
+            "Authorization": "Bearer UOnJ3OCDQOazHgldv97zfob6IcQhXXIA8HRA3j58TDI",
+            "Content-Type": "application/json",
         }
+        payload = {"status": body}
+        response = requests.post(
+            "https://indieweb.social/api/v1/statuses", data=json.dumps(payload)
+        )
+
+        if response.ok:
+            front_matter["syndicated"] = {
+                "mastodon": f"https://indieweb.social/@acbilson/{response.json().get('id')}"
+            }
+            is_syndicated = True
+        else:
+            syn_msg = response.text
 
     content = combine_file_content(front_matter, body)
     with open(abs_path, "x", newline="\n") as my_file:
@@ -192,8 +197,14 @@ def create():
             content=dict(path=file_path, body=body, frontmatter=front_matter),
         )
 
+    message = "created"
+    if is_syndicated and syn_msg == "":
+        message += " and syndicated"
+    elif not is_syndicated:
+        message += " but syndication returned {syn_msg}"
+
     return jsonify(
         success=True,
-        message="created and syndicated" if is_syndicated else f"created but syndication returned {response.text}",
+        message=message,
         content=dict(path=file_path, body=body, frontmatter=front_matter),
     )
