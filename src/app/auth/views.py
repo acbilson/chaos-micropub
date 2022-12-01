@@ -91,7 +91,7 @@ def masto_redirect():
     code = request.args.get("code")
     client_id = app.config.get("MASTODON_CLIENT_ID")
     client_secret = app.config.get("MASTODON_CLIENT_SECRET")
-    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
+    redirect_uri = "https://alexbilson.dev/login"
     scope = "write:statuses"
 
     headers = {"Content-Type": "application/json"}
@@ -110,7 +110,14 @@ def masto_redirect():
         f"{host}/oauth/token", headers=headers, data=json.dumps(payload)
     )
 
+    if not response.ok:
+        return Response(f"token retrieval failed: {str(response)}", status=HTTPStatus.UNAUTHORIZED)
+
     token = response.json().get("access_token")
+
+    if token == "":
+        return Response(f"no token retrieved: {token}", status=HTTPStatus.UNAUTHORIZED)
+
     resp = make_response()
     resp.set_cookie("masto_token", value=token)
     return resp
