@@ -211,7 +211,7 @@ def create():
     elif not is_syndicated and token == "":
         message += " but not syndicated (and no token)"
     else:
-        message += f" but not syndicated (token {token[:10]})"
+        message += f" but not syndicated (token {token})"
 
     return jsonify(
         success=True,
