@@ -71,11 +71,17 @@ def login():
 @auth_bp.route("/mastoauth", methods=["GET"])
 @token_auth.login_required
 def masto_login():
-    client_id = "8MOfoRYQVmPOLRDjO-tE90X8EU7ZQwwAOyg8RkDtv08"
-    redirect_uri = "http://localhost:5000/masto_redirect"
+    """
+    redirects to Mastodon /authorization endpoint
+
+    requires my token auth
+    """
+    client_id = app.config.get("MASTODON_CLIENT_ID")
+    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
+    host = app.config.get("MASTODON_HOST")
     scope = "write:statuses"
     return redirect(
-        f"https://indieweb.social/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
+        f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
     )
 
 
@@ -85,11 +91,10 @@ def masto_redirect():
         return
 
     code = request.args.get("code")
-    client_id = "8MOfoRYQVmPOLRDjO-tE90X8EU7ZQwwAOyg8RkDtv08"
-    client_secret = "lsLLQZEVbTQG4qirgtPTWFhpixcHacwHUiyVIyq4vq4"
-    redirect_uri = "http://localhost:5000/masto_redirect"
+    client_id = app.config.get("MASTODON_CLIENT_ID")
+    client_secret = app.config.get("MASTODON_CLIENT_SECRET")
+    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
     scope = "write:statuses"
-    code = request.args.get("code")
 
     headers = {"Content-Type": "application/json"}
     payload = {
@@ -100,13 +105,13 @@ def masto_redirect():
         "redirect_uri": redirect_uri,
         "scope": scope,
     }
-    print(payload)
+
+    host = app.config.get("MASTODON_HOST")
+
     response = requests.post(
-        "https://indieweb.social/oauth/token", headers=headers, data=json.dumps(payload)
+        f"{host}/oauth/token", headers=headers, data=json.dumps(payload)
     )
 
-    print(response)
-    print(response.json())
     token = response.json().get("access_token")
     resp = make_response()
     resp.set_cookie("masto_token", value=token)

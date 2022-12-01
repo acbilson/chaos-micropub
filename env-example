@@ -1,44 +1,22 @@
-########
-# Global
-########
-# remote hosts
-# I use an ssh config file to specify the user/ip combination
-# for ssh interaction. These are hosts specified in ~/.ssh/config
-PROD_HOST=web
-UAT_HOST=web
+# Settings
+FLASK_DEBUG=1
 
 # Authorized User
-ADMIN_USER=me
-ADMIN_PASSWORD=my-secret-password
+ADMIN_USER=alex
+ADMIN_PASSWORD=example
 
 # Session keys
-FLASK_SECRET_KEY="mysecretflaskkey"
-SESSION_SECRET="mysessionsecret"
-
-######################
-# Environment-Specific
-######################
+FLASK_SECRET_KEY=fkajptiwuatapowivjdskqrioeubdksj
+SESSION_SECRET=piujkasdlkfjwpoitulasjfklaj
 
 # The port exposed by the service.
 EXPOSED_PORT=5000
-UAT_EXPOSED_PORT=5001
 
-# The public-facing url. May be routed behind a proxy. Must match OAuth redirect.
-DEV_SITE=http://localhost:${EXPOSED_PORT}
-UAT_SITE=http://uat-env:${UAT_EXPOSED_PORT}
-PRD_SITE=https://prod-env
-
-
-# OAuth authentication keys
-UAT_GITHUB_CLIENT_ID=myuatclientid
-UAT_GITHUB_CLIENT_SECRET=myuatclientsecret
-
-PRD_GITHUB_CLIENT_ID=myprodclientid
-UAT_GITHUB_CLIENT_SECRET=myprodclientsecret
-PRD_GOOGLE_CLIENT_ID=myprodclientid
-PRD_GOOGLE_CLIENT_SECRET=myprodclientsecret
+MASTODON_HOST=https://my-masto-host
+MASTODON_OAUTH_REDIRECT=http://localhost:5000/masto_redirect
+MASTODON_CLIENT_ID=my-masto-client-id
+MASTODON_CLIENT_SECRET=my-masto-client-secret
 
 # paths
-CONTENT_PATH=/path/to/markdown/content
-SITE_PATH=/path/to/hugo/output
-SOURCE_PATH=/path/to/micropub/src
+SOURCE_PATH=/Users/alexbilson/source/chaos-micropub
+CONTENT_PATH=/Users/alexbilson/source/chaos-content

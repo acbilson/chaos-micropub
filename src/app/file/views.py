@@ -161,22 +161,26 @@ def create():
 
     git_pull(app.config.get("CONTENT_PATH"))
 
+    # TODO: abstract syndication somehow
     is_syndicated = False
     syn_msg = ""
     token = request.cookies.get("masto_token")
     if front_matter.get("syndicate") == "true" and token != "":
+        host = app.config.get("MASTODON_HOST")
         headers = {
-            "Authorization": "Bearer UOnJ3OCDQOazHgldv97zfob6IcQhXXIA8HRA3j58TDI",
+            "Authorization": f"Bearer {masto_token}",
             "Content-Type": "application/json",
         }
         payload = {"status": body}
+
+        # TODO: create a Mastodon API layer
         response = requests.post(
-            "https://indieweb.social/api/v1/statuses", data=json.dumps(payload)
+            f"{host}/api/v1/statuses", data=json.dumps(payload)
         )
 
         if response.ok:
             front_matter["syndicated"] = {
-                "mastodon": f"https://indieweb.social/@acbilson/{response.json().get('id')}"
+                "mastodon": f"{host}/@acbilson/{response.json().get('id')}"
             }
             is_syndicated = True
         else:
@@ -198,6 +202,7 @@ def create():
             content=dict(path=file_path, body=body, frontmatter=front_matter),
         )
 
+    # TODO: clean up response messaging
     message = "created"
     if is_syndicated and syn_msg == "":
         message += " and syndicated"
