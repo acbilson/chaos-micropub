@@ -168,7 +168,7 @@ def create():
     if front_matter.get("syndicate") == "true" and token != "":
         host = app.config.get("MASTODON_HOST")
         headers = {
-            "Authorization": f"Bearer {masto_token}",
+            "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
         payload = {"status": body}
