@@ -164,7 +164,7 @@ def create():
     # TODO: abstract syndication somehow
     is_syndicated = False
     syn_msg = ""
-    token = request.cookies.get("masto_token")
+    token = data.get("mastotoken")
     if front_matter.get("syndicate") == "true" and token != "":
         host = app.config.get("MASTODON_HOST")
         headers = {
