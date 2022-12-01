@@ -165,7 +165,7 @@ def create():
     is_syndicated = False
     syn_msg = ""
     token = data.get("mastotoken")
-    if front_matter.get("syndicate") == "true" and token != "":
+    if front_matter.get("syndicate") in ["true", "True", "yes", "Yes"] and token != "":
         host = app.config.get("MASTODON_HOST")
         headers = {
             "Authorization": f"Bearer {token}",
@@ -211,10 +211,10 @@ def create():
     elif not is_syndicated and token == "":
         message += " but not syndicated (and no token)"
     else:
-        message += f" but not syndicated (token {token})"
+        message += " but not syndicated"
 
     return jsonify(
         success=True,
         message=message,
-        content=dict(path=file_path, body=body, frontmatter=front_matter),
+        content=dict(path=file_path, body=body, frontmatter=front_matter, token=token),
     )
