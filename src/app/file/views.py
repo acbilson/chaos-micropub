@@ -175,7 +175,7 @@ def create():
 
         # TODO: create a Mastodon API layer
         response = requests.post(
-            f"{host}/api/v1/statuses", data=json.dumps(payload)
+            f"{host}/api/v1/statuses", data=json.dumps(payload), headers=headers
         )
 
         if response.ok:
