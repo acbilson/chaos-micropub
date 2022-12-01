@@ -77,7 +77,7 @@ def masto_login():
     requires my token auth
     """
     client_id = app.config.get("MASTODON_CLIENT_ID")
-    redirect_uri = 'https://alexbilson.dev'
+    redirect_uri = 'https://alexbilson.dev/login'
     host = app.config.get("MASTODON_HOST")
     scope = "write:statuses"
     return jsonify(authentication_url=f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}")
