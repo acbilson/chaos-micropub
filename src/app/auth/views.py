@@ -2,9 +2,19 @@ import os
 from os import path
 from datetime import datetime, timedelta
 import jwt
+import json
 import requests
 from http import HTTPStatus
-from flask import Response, request, render_template, url_for, redirect, jsonify
+from flask import (
+    Response,
+    make_response,
+    request,
+    redirect,
+    render_template,
+    url_for,
+    redirect,
+    jsonify,
+)
 from flask import current_app as app
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from ..auth import auth_bp
@@ -56,3 +66,53 @@ def authenticate():
 @basic_auth.login_required
 def login():
     return jsonify(token=generate_token())
+
+
+@auth_bp.route("/mastoauth", methods=["GET"])
+@token_auth.login_required
+def masto_login():
+    """
+    redirects to Mastodon /authorization endpoint
+
+    requires my token auth
+    """
+    client_id = app.config.get("MASTODON_CLIENT_ID")
+    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
+    host = app.config.get("MASTODON_HOST")
+    scope = "write:statuses"
+    return redirect(
+        f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
+    )
+
+
+@auth_bp.route("/masto_redirect", methods=["GET"])
+def masto_redirect():
+    if "code" not in request.args:
+        return
+
+    code = request.args.get("code")
+    client_id = app.config.get("MASTODON_CLIENT_ID")
+    client_secret = app.config.get("MASTODON_CLIENT_SECRET")
+    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
+    scope = "write:statuses"
+
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "redirect_uri": redirect_uri,
+        "scope": scope,
+    }
+
+    host = app.config.get("MASTODON_HOST")
+
+    response = requests.post(
+        f"{host}/oauth/token", headers=headers, data=json.dumps(payload)
+    )
+
+    token = response.json().get("access_token")
+    resp = make_response()
+    resp.set_cookie("masto_token", value=token)
+    return resp
