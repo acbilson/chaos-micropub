@@ -118,6 +118,4 @@ def masto_redirect():
     if token == "":
         return Response(f"no token retrieved: {token}", status=HTTPStatus.UNAUTHORIZED)
 
-    resp = make_response()
-    resp.set_cookie("masto_token", value=token)
-    return resp
+    return jsonify(masto_token=token)
