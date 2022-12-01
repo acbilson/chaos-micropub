@@ -80,12 +80,7 @@ def masto_login():
     redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
     host = app.config.get("MASTODON_HOST")
     scope = "write:statuses"
-    response = redirect(
-        f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
-    )
-    response.headers['Access-Control-Allow-Origin'] = f"{host}"
-    response.headers['Origin'] = app.config["FLASK_HOST"]
-    return response
+    return jsonify(authentication_url=f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}")
 
 
 @auth_bp.route("/masto_redirect", methods=["GET"])
