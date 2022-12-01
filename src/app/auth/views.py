@@ -84,6 +84,7 @@ def masto_login():
         f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
     )
     response.headers['Access-Control-Allow-Origin'] = f"{host}"
+    response.headers['Origin'] = app.config["FLASK_HOST"]
     return response
 
 
