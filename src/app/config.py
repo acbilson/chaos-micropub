@@ -24,7 +24,6 @@ class BaseConfig(object):
     MASTODON_CLIENT_SECRET = environ.get("MASTODON_CLIENT_SECRET")
 
 
-
 class TestConfig(object):
     """Set Flask test configuration variables"""
 
@@ -44,4 +43,3 @@ class TestConfig(object):
     MASTODON_OAUTH_REDIRECT = "http://localhost:5000/masto_redirect"
     MASTODON_CLIENT_ID = "masto client id"
     MASTODON_CLIENT_SECRET = "masto client secret"
-
