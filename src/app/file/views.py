@@ -164,8 +164,11 @@ def create():
     # TODO: abstract syndication somehow
     is_syndicated = False
     syn_msg = ""
-    token = data.get("mastotoken")
-    if front_matter.get("syndicate") in ["true", "True", "yes", "Yes"] and token != "":
+    token = data.get("token")
+    if (
+        front_matter.get("syndicate") in ["true", "True", "yes", "Yes", True]
+        and token != ""
+    ):
         host = app.config.get("MASTODON_HOST")
         headers = {
             "Authorization": f"Bearer {token}",

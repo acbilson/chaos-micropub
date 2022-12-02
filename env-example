@@ -13,7 +13,6 @@ SESSION_SECRET=piujkasdlkfjwpoitulasjfklaj
 EXPOSED_PORT=5000
 
 MASTODON_HOST=https://my-masto-host
-MASTODON_OAUTH_REDIRECT=http://localhost:5000/masto_redirect
 MASTODON_CLIENT_ID=my-masto-client-id
 MASTODON_CLIENT_SECRET=my-masto-client-secret
 
