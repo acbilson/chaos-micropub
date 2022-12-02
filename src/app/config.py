@@ -19,7 +19,6 @@ class BaseConfig(object):
     SESSION_SECRET = environ.get("SESSION_SECRET")
 
     MASTODON_HOST = environ.get("MASTODON_HOST")
-    MASTODON_OAUTH_REDIRECT = environ.get("MASTODON_OAUTH_REDIRECT")
     MASTODON_CLIENT_ID = environ.get("MASTODON_CLIENT_ID")
     MASTODON_CLIENT_SECRET = environ.get("MASTODON_CLIENT_SECRET")
 
@@ -39,7 +38,6 @@ class TestConfig(object):
     FLASK_SECRET_KEY = "my secret test key"
     SESSION_SECRET = "my secret test session"
 
-    MASTODON_HOST = "http://localhost:3131"
-    MASTODON_OAUTH_REDIRECT = "http://localhost:5000/masto_redirect"
+    MASTODON_HOST = "https://indieweb.social"
     MASTODON_CLIENT_ID = "masto client id"
     MASTODON_CLIENT_SECRET = "masto client secret"

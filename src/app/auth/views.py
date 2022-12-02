@@ -76,8 +76,14 @@ def masto_login():
 
     requires my token auth
     """
+    if "redirect" not in request.args:
+        return jsonify(
+            success=False,
+            message="missing redirect from query params",
+        )
+
+    redirect_uri = request.args.get('redirect')
     client_id = app.config.get("MASTODON_CLIENT_ID")
-    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
     host = app.config.get("MASTODON_HOST")
     scope = "write:statuses"
     return jsonify(
@@ -125,12 +131,21 @@ def masto_revoke():
 @auth_bp.route("/mastodon/redirect", methods=["GET"])
 def masto_redirect():
     if "code" not in request.args:
-        return
+        return jsonify(
+            success=False,
+            message="missing code from query params",
+        )
+
+    if "redirect" not in request.args:
+        return jsonify(
+            success=False,
+            message="missing redirect from query params",
+        )
 
     code = request.args.get("code")
+    redirect_uri = request.args.get("redirect")
     client_id = app.config.get("MASTODON_CLIENT_ID")
     client_secret = app.config.get("MASTODON_CLIENT_SECRET")
-    redirect_uri = app.config.get("MASTODON_OAUTH_REDIRECT")
     scope = "write:statuses"
 
     headers = {"Content-Type": "application/json"}
