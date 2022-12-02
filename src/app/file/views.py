@@ -164,18 +164,18 @@ def create():
     # TODO: abstract syndication somehow
     is_syndicated = False
     syn_msg = ""
-    token = request.cookies.get("masto_token")
-    if front_matter.get("syndicate") == "true" and token != "":
+    token = data.get("mastotoken")
+    if front_matter.get("syndicate") in ["true", "True", "yes", "Yes"] and token != "":
         host = app.config.get("MASTODON_HOST")
         headers = {
-            "Authorization": f"Bearer {masto_token}",
+            "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
         payload = {"status": body}
 
         # TODO: create a Mastodon API layer
         response = requests.post(
-            f"{host}/api/v1/statuses", data=json.dumps(payload)
+            f"{host}/api/v1/statuses", data=json.dumps(payload), headers=headers
         )
 
         if response.ok:
@@ -216,5 +216,5 @@ def create():
     return jsonify(
         success=True,
         message=message,
-        content=dict(path=file_path, body=body, frontmatter=front_matter),
+        content=dict(path=file_path, body=body, frontmatter=front_matter, token=token),
     )
