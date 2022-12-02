@@ -68,30 +68,84 @@ def login():
     return jsonify(token=generate_token())
 
 
-@auth_bp.route("/mastoauth", methods=["GET"])
+@auth_bp.route("/mastodon/auth", methods=["GET"])
 @token_auth.login_required
 def masto_login():
     """
-    redirects to Mastodon /authorization endpoint
+    returns my mastodon authentication uri for redirection
 
     requires my token auth
     """
+    if "redirect" not in request.args:
+        return jsonify(
+            success=False,
+            message="missing redirect from query params",
+        )
+
+    redirect_uri = request.args.get('redirect')
     client_id = app.config.get("MASTODON_CLIENT_ID")
-    redirect_uri = 'https://alexbilson.dev/login'
     host = app.config.get("MASTODON_HOST")
     scope = "write:statuses"
-    return jsonify(authentication_url=f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}")
+    return jsonify(
+        authenticationUri=f"{host}/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
+    )
 
 
-@auth_bp.route("/masto_redirect", methods=["GET"])
-def masto_redirect():
-    if "code" not in request.args:
-        return
+@auth_bp.route("/mastodon/revoke", methods=["GET"])
+@token_auth.login_required
+def masto_revoke():
+    """
+    revokes the mastodon token
 
-    code = request.args.get("code")
+    requires my token auth
+    """
+    token = request.json.get("token")
+
+    if null_or_empty(token):
+        return jsonify(success=False, message=f"token was missing. {token}")
+
     client_id = app.config.get("MASTODON_CLIENT_ID")
     client_secret = app.config.get("MASTODON_CLIENT_SECRET")
-    redirect_uri = "https://alexbilson.dev/login"
+
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "token": token,
+    }
+
+    host = app.config.get("MASTODON_HOST")
+
+    response = requests.post(
+        f"{host}/oauth/revoke", headers=headers, data=json.dumps(payload)
+    )
+
+    if not response.ok:
+        return Response(
+            f"token revocation failed: {str(response)}", status=HTTPStatus.FORBIDDEN
+        )
+
+    return jsonify(success=True, message="")
+
+
+@auth_bp.route("/mastodon/redirect", methods=["GET"])
+def masto_redirect():
+    if "code" not in request.args:
+        return jsonify(
+            success=False,
+            message="missing code from query params",
+        )
+
+    if "redirect" not in request.args:
+        return jsonify(
+            success=False,
+            message="missing redirect from query params",
+        )
+
+    code = request.args.get("code")
+    redirect_uri = request.args.get("redirect")
+    client_id = app.config.get("MASTODON_CLIENT_ID")
+    client_secret = app.config.get("MASTODON_CLIENT_SECRET")
     scope = "write:statuses"
 
     headers = {"Content-Type": "application/json"}
@@ -111,11 +165,15 @@ def masto_redirect():
     )
 
     if not response.ok:
-        return Response(f"token retrieval failed: {str(response)}", status=HTTPStatus.UNAUTHORIZED)
+        return Response(
+            f"token retrieval failed: {str(response)}", status=HTTPStatus.FORBIDDEN
+        )
 
     token = response.json().get("access_token")
 
     if token == "":
-        return Response(f"no token retrieved: {token}", status=HTTPStatus.UNAUTHORIZED)
+        return Response(
+            f"no token retrieved: {token}", status=HTTPStatus.INTERNAL_SERVER_ERROR
+        )
 
-    return jsonify(mastotoken=token)
+    return jsonify(token=token)
