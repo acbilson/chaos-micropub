@@ -6,6 +6,10 @@ from datetime import datetime
 from typing import Tuple, List
 
 
+def replace_url_suffix(path: str, suffix: str) -> str:
+    return ".".join(path.split(".")[0:-1]) + suffix
+
+
 def null_or_empty(v) -> bool:
     return v in [None, ""]
 
@@ -19,10 +23,21 @@ def compose_header(options: dict):
 
 
 # combines top matter and content into one file
-def combine_file_content(top: dict, body: List[str]) -> List[str]:
+def combine_file_content(top: dict, body: List[str], photo: dict) -> List[str]:
     separator = "+++\n"
     top_matter = toml.dumps(top)
-    return separator + top_matter + separator + body
+
+    photo_entry = ""
+    if photo is not None:
+        add_key = lambda k, v: "" if null_or_empty(v) else f'{k}="{v}" '
+
+        photo_entry = "\n{{< caption "
+        photo_entry += add_key("caption", photo["caption"])
+        photo_entry += add_key("alt", photo["alt"])
+        photo_entry += add_key("src", photo["src"])
+        photo_entry += ">}}"
+
+    return separator + top_matter + separator + body + photo_entry
 
 
 # splits a file into its top matter and content
@@ -46,6 +61,10 @@ def split_file_content(body: List[str]) -> Tuple[List[str], dict]:
             content.append(line)
 
     return toml.loads("".join(top_matter)), content
+
+
+def convert_to_webp(start_path: str, filename: str, new_filename: str):
+    try_run_cmd(["magick", "-quality", "50", filename, new_filename], start_path)
 
 
 def try_run_cmd(cmds: List[str], cwd: str) -> Tuple[str, str]:
