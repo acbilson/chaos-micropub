@@ -4,6 +4,10 @@ from datetime import datetime, timedelta
 import json
 import requests
 from http import HTTPStatus
+from pathlib import Path
+from wand.image import Image
+
+Path("/root/dir/sub/file.ext").stem
 from flask import Response, request, render_template, url_for, redirect, jsonify
 from flask import current_app as app
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
@@ -177,6 +181,7 @@ def create():
         payload = {"status": body}
 
         # TODO: create a Mastodon API layer
+        # TODO: figure out how to submit a photo and alt-text when it exists.
         response = requests.post(
             f"{host}/api/v1/statuses", data=json.dumps(payload), headers=headers
         )
@@ -189,7 +194,20 @@ def create():
         else:
             syn_msg = f"status: {str(response)}, reason: {response.reason}, txt: {response.text}"
 
-    content = combine_file_content(front_matter, body)
+    photo = None
+    if front_matter.get("photoSrc"):
+        photo = dict(
+            src=front_matter.get("photoSrc"),
+            alt=front_matter.get("photoAlt"),
+            caption=front_matter.get("photoCaption"),
+        )
+
+        # removes photo attributes from front_matter
+        front_matter.pop("photoSrc")
+        front_matter.pop("photoAlt")
+        front_matter.pop("photoCaption")
+
+    content = combine_file_content(front_matter, body, photo)
     with open(abs_path, "x", newline="\n") as my_file:
         my_file.write(content)
 
@@ -202,7 +220,7 @@ def create():
         return jsonify(
             success=False,
             message=git_message,
-            content=dict(path=file_path, body=body, frontmatter=front_matter),
+            content=dict(path=file_path, body=content, frontmatter=front_matter),
         )
 
     # TODO: clean up response messaging
@@ -219,5 +237,33 @@ def create():
     return jsonify(
         success=True,
         message=message,
-        content=dict(path=file_path, body=body, frontmatter=front_matter, token=token),
+        content=dict(
+            path=file_path, body=content, frontmatter=front_matter, token=token
+        ),
     )
+
+
+@file_bp.route("/photo", methods=["POST"])
+@token_auth.login_required
+def create_photo():
+    data = request.form
+    photo = request.files.get("photo")
+
+    if photo is None:
+        return jsonify(success=False, message=f"photo was missing. {photo}")
+
+    # store photo to image path
+    new_filename = f"{Path(photo.filename).stem}.webp"
+    photo_path = os.path.join(app.config["IMAGE_PATH"], photo.filename)
+    photo.save(photo_path)
+
+    with Image(filename=photo_path) as img:
+        with img.convert("webp") as converted:
+            converted.save(
+                filename=os.path.join(app.config["IMAGE_PATH"], new_filename)
+            )
+
+    # remove original
+    os.remove(photo_path)
+
+    return jsonify(success=True, message="", content=dict(filename=new_filename))

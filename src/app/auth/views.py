@@ -82,7 +82,7 @@ def masto_login():
             message="missing redirect from query params",
         )
 
-    redirect_uri = request.args.get('redirect')
+    redirect_uri = request.args.get("redirect")
     client_id = app.config.get("MASTODON_CLIENT_ID")
     host = app.config.get("MASTODON_HOST")
     scope = "write:statuses"
