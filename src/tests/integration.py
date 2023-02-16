@@ -184,13 +184,17 @@ class CreateTests(InitializeRepo):
         self.assertIsNotNone(body)
         self.assertIsNotNone(front_matter)
         self.assertIn("{{< caption", body)
-        self.assertIn(f"caption=\"{photoCaption}\"", body)
-        self.assertIn(f"alt=\"{photoAlt}\"", body)
-        self.assertIn(f"src=\"{photo}\"", body)
+        self.assertIn(f'caption="{photoCaption}"', body)
+        self.assertIn(f'alt="{photoAlt}"', body)
+        self.assertIn(f'src="{photo}"', body)
 
     def test_create_file_saves_to_path(self):
         filename = "photo.heic"
-        image_path = f"/mnt/data/{filename}" if environ.get("IS_DOCKER") else f"/Users/alexbilson/source/chaos-micropub/src/tests/test_data/{filename}"
+        image_path = (
+            f"/mnt/data/{filename}"
+            if environ.get("IS_DOCKER")
+            else f"/Users/alexbilson/source/chaos-micropub/src/tests/test_data/{filename}"
+        )
         with open(image_path, "rb") as f:
             file_content = BytesIO(f.read())
         data = dict(photo=(file_content, filename))

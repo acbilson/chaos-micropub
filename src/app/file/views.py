@@ -20,7 +20,7 @@ from app.operators import (
     git_pull,
     git_commit,
     convert_to_webp,
-    replace_url_suffix
+    replace_url_suffix,
 )
 
 
@@ -204,8 +204,12 @@ def create():
 
         # removes photo attributes from front_matter
         front_matter.pop("photo")
-        front_matter.pop("photoAlt")
-        front_matter.pop("photoCaption")
+
+        if front_matter.get("photoAlt"):
+            front_matter.pop("photoAlt")
+
+        if front_matter.get("photoCaption"):
+            front_matter.pop("photoCaption")
 
     content = combine_file_content(front_matter, body, photo)
     with open(abs_path, "x", newline="\n") as my_file:
