@@ -6,6 +6,10 @@ from datetime import datetime
 from typing import Tuple, List
 
 
+def replace_url_suffix(path: str, suffix: str) -> str:
+    return '.'.join(path.split('.')[0:-1]) + suffix
+
+
 def null_or_empty(v) -> bool:
     return v in [None, ""]
 
@@ -31,7 +35,7 @@ def combine_file_content(top: dict, body: List[str], photo: dict) -> List[str]:
         photo_entry += add_key("caption", photo["caption"])
         photo_entry += add_key("alt", photo["alt"])
         photo_entry += add_key("src", photo["src"])
-        photo_entry += "}}>"
+        photo_entry += ">}}"
 
     return separator + top_matter + separator + body + photo_entry
 
@@ -58,6 +62,9 @@ def split_file_content(body: List[str]) -> Tuple[List[str], dict]:
 
     return toml.loads("".join(top_matter)), content
 
+
+def convert_to_webp(start_path: str, filename: str, new_filename: str):
+    try_run_cmd(["magick", "-quality", "50", filename, new_filename], start_path)
 
 def try_run_cmd(cmds: List[str], cwd: str) -> Tuple[str, str]:
     output = None

@@ -6,4 +6,3 @@ uwsgi
 python-dotenv
 requests
 toml
-Wand

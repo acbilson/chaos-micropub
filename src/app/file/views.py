@@ -5,9 +5,7 @@ import json
 import requests
 from http import HTTPStatus
 from pathlib import Path
-from wand.image import Image
 
-Path("/root/dir/sub/file.ext").stem
 from flask import Response, request, render_template, url_for, redirect, jsonify
 from flask import current_app as app
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
@@ -21,6 +19,8 @@ from app.operators import (
     null_or_empty,
     git_pull,
     git_commit,
+    convert_to_webp,
+    replace_url_suffix
 )
 
 
@@ -107,7 +107,7 @@ def update():
 
     git_pull(app.config.get("CONTENT_PATH"))
 
-    content = combine_file_content(front_matter, body)
+    content = combine_file_content(front_matter, body, photo=None)
     with open(abs_path, "w", newline="\n") as my_file:
         my_file.write(content)
 
@@ -195,15 +195,15 @@ def create():
             syn_msg = f"status: {str(response)}, reason: {response.reason}, txt: {response.text}"
 
     photo = None
-    if front_matter.get("photoSrc"):
+    if front_matter.get("photo"):
         photo = dict(
-            src=front_matter.get("photoSrc"),
+            src=replace_url_suffix(front_matter.get("photo"), ".webp"),
             alt=front_matter.get("photoAlt"),
             caption=front_matter.get("photoCaption"),
         )
 
         # removes photo attributes from front_matter
-        front_matter.pop("photoSrc")
+        front_matter.pop("photo")
         front_matter.pop("photoAlt")
         front_matter.pop("photoCaption")
 
@@ -253,15 +253,12 @@ def create_photo():
         return jsonify(success=False, message=f"photo was missing. {photo}")
 
     # store photo to image path
-    new_filename = f"{Path(photo.filename).stem}.webp"
     photo_path = os.path.join(app.config["IMAGE_PATH"], photo.filename)
     photo.save(photo_path)
 
-    with Image(filename=photo_path) as img:
-        with img.convert("webp") as converted:
-            converted.save(
-                filename=os.path.join(app.config["IMAGE_PATH"], new_filename)
-            )
+    # convert the file to WebP
+    new_filename = str(Path(photo.filename).with_suffix(".webp"))
+    convert_to_webp(app.config["IMAGE_PATH"], photo.filename, new_filename)
 
     # remove original
     os.remove(photo_path)

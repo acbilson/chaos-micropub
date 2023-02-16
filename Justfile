@@ -16,6 +16,7 @@ venv:
 
 # runs a local development instance
 run: init venv
+	mkdir -p /tmp/micropub_images;
 	python src/main.py
 
 # builds a production podman image, running integration tests along the way
@@ -50,7 +51,7 @@ start:
 
 # runs integration tests
 test: init venv
-	pushd src; python -m unittest tests.integration.CreateTests.test_create_with_file_appends_caption; popd
+	pushd src; python -m unittest tests.integration; popd
 
 # launches a tmux session with everything I need to interactively develop
 develop: init

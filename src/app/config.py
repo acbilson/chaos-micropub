@@ -10,8 +10,8 @@ class BaseConfig(object):
     FLASK_DEBUG = environ.get("FLASK_DEBUG")
     SITE = environ.get("SITE")
     # TODO: figure out why this doesn't work in prod
-    CONTENT_PATH = environ.get("CONTENT_PATH") or "/mnt/chaos/content"
-    IMAGE_PATH = environ.get("IMAGE_PATH") or "/mnt/images/alexbilson"
+    CONTENT_PATH = environ.get("CONTENT_PATH")
+    IMAGE_PATH = environ.get("IMAGE_PATH")
 
     ADMIN_USER = environ.get("ADMIN_USER")
     ADMIN_PASSWORD = environ.get("ADMIN_PASSWORD")

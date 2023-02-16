@@ -159,11 +159,14 @@ class CreateTests(InitializeRepo):
 
     def test_create_with_file_appends_caption(self):
         file_path = CREATE_FILE.split(".")[0]
+        photo = "https://images.alexbilson.dev/photo.webp"
+        photoAlt = "Alternative text for my photo"
+        photoCaption = "A test photo caption"
         new_front_matter = dict(
             author="Gerry Witte",
-            photoSrc="http://images.alexbilson.dev/photo.webp",
-            photoAlt="Alternative text for my photo",
-            photoCaption="A test photo caption",
+            photo=photo,
+            photoAlt=photoAlt,
+            photoCaption=photoCaption,
         )
         new_content = "This is the content of my new file"
         body = dict(path=file_path, body=new_content, frontmatter=new_front_matter)
@@ -177,23 +180,18 @@ class CreateTests(InitializeRepo):
         content = data.get("content")
         front_matter, body = content.get("frontmatter"), content.get("body")
 
-        import pdb
-
-        pdb.set_trace()
         self.assertEqual(file_path, content.get("path"))
         self.assertIsNotNone(body)
         self.assertIsNotNone(front_matter)
         self.assertIn("{{< caption", body)
-        self.assertIn(f"caption=\"{new_front_matter.get('photoCaption')}\"", body)
-        self.assertIn(f"alt=\"{new_front_matter.get('photoAlt')}\"", body)
-        self.assertIn(f"src=\"{new_front_matter.get('photoSrc')}\"", body)
+        self.assertIn(f"caption=\"{photoCaption}\"", body)
+        self.assertIn(f"alt=\"{photoAlt}\"", body)
+        self.assertIn(f"src=\"{photo}\"", body)
 
     def test_create_file_saves_to_path(self):
         filename = "photo.heic"
-        with open(
-            f"/Users/alexbilson/source/chaos-micropub/src/tests/test_data/{filename}",
-            "rb",
-        ) as f:
+        image_path = f"/mnt/data/{filename}" if environ.get("IS_DOCKER") else f"/Users/alexbilson/source/chaos-micropub/src/tests/test_data/{filename}"
+        with open(image_path, "rb") as f:
             file_content = BytesIO(f.read())
         data = dict(photo=(file_content, filename))
         response = self.client.post(
