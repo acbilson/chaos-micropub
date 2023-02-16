@@ -1,6 +1,10 @@
 set dotenv-load
 set shell := ["/opt/homebrew/bin/fish", "-c"]
 
+# runs black formatter
+fmt:
+	black src
+
 # instantiates a local python virtualenv
 init:
 	if not test -d src/venv; python -m venv src/venv; end;
@@ -12,6 +16,7 @@ venv:
 
 # runs a local development instance
 run: init venv
+	mkdir -p /tmp/micropub_images;
 	python src/main.py
 
 # builds a production podman image, running integration tests along the way
@@ -28,7 +33,7 @@ build-dev:
   -t acbilson/micropub-dev:latest .
 
 # starts a production podman image.
-start: build
+start:
   podman run --rm \
   --expose $EXPOSED_PORT -p $EXPOSED_PORT:$EXPOSED_PORT \
   -e "SITE=http://localhost:$EXPOSED_PORT" \
@@ -43,6 +48,10 @@ start: build
   -e "CONTENT_PATH=/mnt/chaos/content" \
   --name micropub \
   acbilson/micropub:latest
+
+# runs integration tests
+test: init venv
+	pushd src; python -m unittest tests.integration; popd
 
 # launches a tmux session with everything I need to interactively develop
 develop: init

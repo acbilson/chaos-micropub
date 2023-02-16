@@ -15,7 +15,7 @@ FROM docker.io/library/python:3.10.6-alpine3.15 as base
 COPY --from=build /root/.local /root/.local
 
 # (re)installs a few dependencies
-RUN apk add pcre-dev git openssh
+RUN apk add pcre-dev git openssh imagemagick
 
 # load deployment script
 COPY ./template/build-site.sh /usr/local/bin/
@@ -40,13 +40,21 @@ RUN mkdir -p /mnt/chaos/content
 # mount source code volume here
 WORKDIR /mnt/src
 
+# mount image volume here
+WORKDIR /mnt/images/alexbilson
+
 ENV FLASK_ENV development
 ENTRYPOINT ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=80"]
 
 FROM base as test
 WORKDIR /app/src
+
+# photo for testing
+COPY src/tests/test_data/photo.heic /mnt/data/
+
 ENV FLASK_ENV testing
 ENV FLASK_DEBUG 1
+ENV IS_DOCKER 1
 RUN python -m unittest tests.integration
 
 ############
