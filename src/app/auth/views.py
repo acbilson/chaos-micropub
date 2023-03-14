@@ -1,5 +1,3 @@
-import os
-from os import path
 from datetime import datetime, timedelta
 import jwt
 import json
@@ -7,26 +5,14 @@ import requests
 from http import HTTPStatus
 from flask import (
     Response,
-    make_response,
     request,
-    redirect,
-    render_template,
-    url_for,
-    redirect,
     jsonify,
 )
 from flask import current_app as app
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from ..auth import auth_bp
 
-from app.operators import (
-    compose_header,
-    combine_file_content,
-    split_file_content,
-    null_or_empty,
-    git_pull,
-    git_commit,
-)
+from app.operators import null_or_empty
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()

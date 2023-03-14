@@ -1,4 +1,3 @@
-from urllib.parse import urlparse
 from app import create_app
 
 app = create_app()

@@ -9,7 +9,7 @@ class BaseConfig(object):
     FLASK_ENV = environ.get("FLASK_ENV")
     FLASK_DEBUG = environ.get("FLASK_DEBUG")
     SITE = environ.get("SITE")
-    # TODO: figure out why this doesn't work in prod
+
     CONTENT_PATH = environ.get("CONTENT_PATH")
     IMAGE_PATH = environ.get("IMAGE_PATH")
 
@@ -24,7 +24,7 @@ class BaseConfig(object):
     MASTODON_CLIENT_SECRET = environ.get("MASTODON_CLIENT_SECRET")
 
 
-class LocalTestConfig(object):
+class LocalTestConfig(BaseConfig):
     """Set Flask test configuration variables"""
 
     FLASK_HOST = "0.0.0.0"
@@ -46,7 +46,7 @@ class LocalTestConfig(object):
     MASTODON_CLIENT_SECRET = "masto client secret"
 
 
-class DockerTestConfig(object):
+class DockerTestConfig(BaseConfig):
     """Set Flask Docker test configuration variables"""
 
     FLASK_HOST = "0.0.0.0"

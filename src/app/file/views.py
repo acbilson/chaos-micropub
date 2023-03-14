@@ -1,19 +1,14 @@
 import os
-from os import path
-from datetime import datetime, timedelta
 import json
 import requests
-from http import HTTPStatus
 from pathlib import Path
 
-from flask import Response, request, render_template, url_for, redirect, jsonify
+from flask import Response, request, jsonify
 from flask import current_app as app
-from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from ..file import file_bp
 
 from app.auth import token_auth
 from app.operators import (
-    compose_header,
     combine_file_content,
     split_file_content,
     null_or_empty,
@@ -111,16 +106,15 @@ def update():
     with open(abs_path, "w", newline="\n") as my_file:
         my_file.write(content)
 
-    git_message = git_commit(
-        file_path,
+    _, git_error = git_commit(
         app.config.get("CONTENT_PATH"),
         f"edited {os.path.basename(abs_path)}",
     )
 
-    if git_message is not None:
+    if git_error is not None:
         return jsonify(
             success=False,
-            message=git_message,
+            message=git_error,
             result=dict(path=file_path, front_matter=front_matter, body=body),
         )
 
@@ -215,15 +209,14 @@ def create():
     with open(abs_path, "x", newline="\n") as my_file:
         my_file.write(content)
 
-    git_message = git_commit(
-        file_path,
+    _, git_error = git_commit(
         app.config.get("CONTENT_PATH"),
         f"added {os.path.basename(abs_path)}",
     )
-    if git_message is not None:
+    if git_error is not None:
         return jsonify(
             success=False,
-            message=git_message,
+            message=git_error,
             content=dict(path=file_path, body=content, frontmatter=front_matter),
         )
 
@@ -250,7 +243,6 @@ def create():
 @file_bp.route("/photo", methods=["POST"])
 @token_auth.login_required
 def create_photo():
-    data = request.form
     photo = request.files.get("photo")
 
     if photo is None:
