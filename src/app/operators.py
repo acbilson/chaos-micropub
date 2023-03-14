@@ -21,7 +21,7 @@ def compose_header(options: dict) -> str:
 
 
 # combines top matter and content into one file
-def combine_file_content(top: dict, body: list[str], photo: dict) -> str:
+def combine_file_content(top: dict, body: list[str], photo: dict | None) -> str:
     separator = "+++\n"
     top_matter = toml.dumps(top)
 
@@ -30,9 +30,9 @@ def combine_file_content(top: dict, body: list[str], photo: dict) -> str:
         add_key = lambda k, v: "" if null_or_empty(v) else f'{k}="{v}" '
 
         photo_entry = "\n{{< caption "
-        photo_entry += add_key("caption", photo["caption"])
-        photo_entry += add_key("alt", photo["alt"])
-        photo_entry += add_key("src", photo["src"])
+        photo_entry += add_key("caption", photo.get("caption"))
+        photo_entry += add_key("alt", photo.get("alt"))
+        photo_entry += add_key("src", photo.get("src"))
         photo_entry += ">}}"
 
     return separator + top_matter + separator + "".join(body) + photo_entry
@@ -78,8 +78,9 @@ def try_run_cmd(cmds: list[str], cwd: str) -> tuple[str | None, str]:
         return output.stdout.decode(), output.stderr.decode()
 
 
-def git_pull(cwd: str) -> str | None:
+def git_pull(cwd: str) -> str:
     commands = [["git", "pull", "--rebase"]]
+    outputs = []
     for cmd in commands:
         output, error = try_run_cmd(cmd, cwd)
         # print(f"command was: {cmd}")
@@ -89,8 +90,8 @@ def git_pull(cwd: str) -> str | None:
             # print(f"ending with {cmd}, {error}")
             return str(error)
         else:
-            return output
-    return None
+            outputs.append(output)
+    return "\n".join(outputs)
 
 
 def git_commit(cwd: str, msg: str) -> tuple[str | None, str | None]:
@@ -101,6 +102,7 @@ def git_commit(cwd: str, msg: str) -> tuple[str | None, str | None]:
         ["git", "commit", "-m", f"{msg}"],
         ["git", "push"],
     ]
+    outputs = []
     for cmd in commands:
         # print(f"command was: {cmd} at {cwd}")
         output, error = try_run_cmd(cmd, cwd)
@@ -110,5 +112,5 @@ def git_commit(cwd: str, msg: str) -> tuple[str | None, str | None]:
             # print(f"ending with {cmd}, {error}")
             return None, str(error)
         else:
-            return output, None
-    return None, None
+            outputs.append(output)
+    return "\n".join(outputs), None

@@ -29,10 +29,9 @@ def read():
         )
 
     file_path = request.args.get("path")
+    content_path: str = app.config.get("CONTENT_PATH")
     strip_first_slash = lambda x: x.strip("/") if x[0] == os.path.sep else x
-    abs_path = os.path.join(
-        app.config.get("CONTENT_PATH"), f"{strip_first_slash(file_path)}.md"
-    )
+    abs_path = os.path.join(content_path, f"{strip_first_slash(file_path)}.md")
 
     if not os.path.exists(abs_path):
         return jsonify(success=False, message=f"{abs_path} does not exist")
@@ -89,10 +88,9 @@ def update():
     if null_or_empty(file_path):
         return jsonify(success=False, message=f"file path was missing. {file_path}")
 
+    content_path: str = app.config.get("CONTENT_PATH")
     strip_first_slash = lambda x: x.strip("/") if x[0] == os.path.sep else x
-    abs_path = os.path.join(
-        app.config.get("CONTENT_PATH"), f"{strip_first_slash(file_path)}.md"
-    )
+    abs_path = os.path.join(content_path, f"{strip_first_slash(file_path)}.md")
 
     if not os.path.exists(abs_path):
         return jsonify(
@@ -100,14 +98,14 @@ def update():
             message=f"The file {file_path} to update does not exist. Please use /file POST to create.",
         )
 
-    git_pull(app.config.get("CONTENT_PATH"))
+    git_pull(content_path)
 
     content = combine_file_content(front_matter, body, photo=None)
     with open(abs_path, "w", newline="\n") as my_file:
         my_file.write(content)
 
     _, git_error = git_commit(
-        app.config.get("CONTENT_PATH"),
+        content_path,
         f"edited {os.path.basename(abs_path)}",
     )
 
@@ -146,10 +144,9 @@ def create():
     if null_or_empty(file_path):
         return jsonify(success=False, message=f"file path was missing. {file_path}")
 
+    content_path: str = app.config.get("CONTENT_PATH")
     strip_first_slash = lambda x: x.strip("/") if x[0] == os.path.sep else x
-    abs_path = os.path.join(
-        app.config.get("CONTENT_PATH"), f"{strip_first_slash(file_path)}.md"
-    )
+    abs_path = os.path.join(content_path, f"{strip_first_slash(file_path)}.md")
 
     if os.path.exists(abs_path):
         return jsonify(
@@ -157,12 +154,12 @@ def create():
             message="The file already exists. Please use /file PUT to update.",
         )
 
-    git_pull(app.config.get("CONTENT_PATH"))
+    git_pull(content_path)
 
     # TODO: abstract syndication somehow
     is_syndicated = False
     syn_msg = ""
-    token = data.get("token")
+    token: str = data.get("token")
     if (
         front_matter.get("syndicate") in ["true", "True", "yes", "Yes", True]
         and token != ""
@@ -188,7 +185,7 @@ def create():
         else:
             syn_msg = f"status: {str(response)}, reason: {response.reason}, txt: {response.text}"
 
-    photo = None
+    photo: dict[str, str] | None = None
     if front_matter.get("photo"):
         photo = dict(
             src=replace_url_suffix(front_matter.get("photo"), ".webp"),
@@ -210,7 +207,7 @@ def create():
         my_file.write(content)
 
     _, git_error = git_commit(
-        app.config.get("CONTENT_PATH"),
+        content_path,
         f"added {os.path.basename(abs_path)}",
     )
     if git_error is not None:
